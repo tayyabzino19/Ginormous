@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             IndustrySeeder::class,
             TypeSeeder::class,
             StarterSeeder::class,
+            LeaveSeeder::class,
         ]);
     }
 }

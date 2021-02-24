@@ -49,10 +49,10 @@
                             <tbody>
 
                                 @foreach($starters as $starter)
-                                
+
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $starter->description }}</td>
+                                    <td>@if(strlen($starter->description) > 80) {{ substr($starter->description, 0, 80) }}.. @else {{ $starter->description }} @endif</td>
                                     <td><span class="label label-rounded label-light-primary">16</span></td>
                                     <td>
                                         @if($starter->status == 'active')

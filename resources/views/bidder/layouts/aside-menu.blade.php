@@ -78,7 +78,7 @@
                 <div class="menu-submenu">
                     <ul class="menu-subnav">
                         <li class="menu-item @yield('leaves_all_leaves_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('bidder.leaves.index') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>

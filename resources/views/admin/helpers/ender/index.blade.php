@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('helpers_nav', 'menu-item-open')
-@section('helpers_portfolio_initiator_nav', 'menu-item-active')
+@section('helpers_ender_nav', 'menu-item-active')
 
 @section("main")
 <div class="container">
@@ -16,7 +16,7 @@
                     Helpers
                 </li>
                 <li class="breadcrumb-item">
-                    Portfolio Initiator
+                    Ender
                 </li>
             </ul>
         </div>
@@ -27,10 +27,10 @@
             <div class="card card-custom">
                 <div class="card-header">
                     <div class="card-title">
-                        <h3 class="card-label">Portfolio Initiator</h3>
+                        <h3 class="card-label">Ender</h3>
                     </div>
                     <div class="card-toolbar">
-                        <button data-toggle="modal" data-target="#add_portfolio_initiator_modal" class="btn btn-primary"><i class="flaticon-add"></i>Add New</button>
+                        <button data-toggle="modal" data-target="#add_ender_modal" class="btn btn-primary"><i class="flaticon-add"></i>Add New</button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -47,21 +47,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($portfolio_initiators as $portfolio_initiator)
+                                @foreach($enders as $ender)
                                 
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>@if(strlen($portfolio_initiator->description) > 80) {{ substr($portfolio_initiator->description, 0, 80) }}.. @else {{ $portfolio_initiator->description }} @endif</td>
+                                    <td>@if(strlen($ender->description) > 80) {{ substr($ender->description, 0, 80) }}.. @else {{ $ender->description }} @endif</td>
                                     <td><span class="label label-rounded label-light-primary">16</span></td>
                                     <td>
-                                        @if($portfolio_initiator->status == 'active')
+                                        @if($ender->status == 'active')
                                         <span class="label font-weight-bold label-light-success label-inline">Active</span>
                                         @else
                                         <span class="label font-weight-bold label-light-danger label-inline">Inactive</span>
                                         @endif
                                     </td>
                                     <td nowrap="nowrap">
-                                        <button onclick="editPortfolioInitiator({{ $portfolio_initiator->id }})" data-toggle="modal" data-target="#edit_portfolio_initiator_modal" class="btn btn-sm btn-icon btn-light-primary mr-2"><i title="View" data-toggle="tooltip" class="far fa-eye"></i></button>
+                                        <button onclick="editEnder({{ $ender->id }})" data-toggle="modal" data-target="#edit_ender_modal" class="btn btn-sm btn-icon btn-light-primary mr-2"><i title="View" data-toggle="tooltip" class="far fa-eye"></i></button>
                                     </td>
                                 </tr>
 
@@ -83,29 +83,29 @@
 @endsection
 
 @section('page_partials')
-@include('admin.helpers.portfolio-initiator.partials.add-modal')
-@include('admin.helpers.portfolio-initiator.partials.edit-modal')
-@include('admin.helpers.portfolio-initiator.partials.delete-form')
+@include('admin.helpers.ender.partials.add-modal')
+@include('admin.helpers.ender.partials.edit-modal')
+@include('admin.helpers.ender.partials.delete-form')
 @endsection
 
 
 @section('page_js')
 <script>
-     function editPortfolioInitiator(id){
+     function editEnder(id){
         $.ajax({
                 method: 'get',
-                url: "{{ route('admin.helpers.portfolio_initiator.edit') }}/"+id,
+                url: "{{ route('admin.helpers.ender.edit') }}/"+id,
                 dataType: 'JSON',
                 success: function(response){
                     //console.log(res);
                     if(response.status == 'success'){
 
-                        $("#edit_portfolio_initiator_form input[name='id']").val(response.portfolio_initiator.id);
-                        $("#edit_portfolio_initiator_form textarea[name='description']").val(response.portfolio_initiator.description);
-                        if(response.portfolio_initiator.status == "active"){
-                            $("#edit_portfolio_initiator_form input[value='active']").prop('checked', true);
+                        $("#edit_ender_form input[name='id']").val(response.ender.id);
+                        $("#edit_ender_form textarea[name='description']").val(response.ender.description);
+                        if(response.ender.status == "active"){
+                            $("#edit_ender_form input[value='active']").prop('checked', true);
                         }else{
-                            $("#edit_portfolio_initiator_form input[value='active']").prop('checked', false);
+                            $("#edit_ender_form input[value='active']").prop('checked', false);
                         }
 
                     }
@@ -113,9 +113,9 @@
             });
     }
 
-    $(".btn_delete_portfolio_initiator").on("click", function(){
+    $(".btn_delete_ender").on("click", function(){
         
-        let id = $("#edit_portfolio_initiator_form input[name='id']").val();
+        let id = $("#edit_ender_form input[name='id']").val();
             Swal.fire({
                 title: "Are you sure?",
                 text: "You won't be able to revert this!",
@@ -126,8 +126,8 @@
             }).then(function(result) {
                 if (result.value) {
 
-                    $("#portfolio_initiator_delete_from input[name='id']").val(id);
-                    $("#portfolio_initiator_delete_from").submit();
+                    $("#ender_delete_from input[name='id']").val(id);
+                    $("#ender_delete_from").submit();
 
                 }
             });

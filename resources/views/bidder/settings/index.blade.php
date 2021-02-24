@@ -1,5 +1,5 @@
 @extends('bidder.layouts.master')
-
+@section('settings_nav', 'menu-item-active')
 
 @section('main')
 <div class="container">

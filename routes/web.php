@@ -61,6 +61,33 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 			Route::post('delete', ['as' => 'delete', 'uses' => 'StarterController@delete']);
 		});
 
+
+		Route::group(['prefix' => 'tech-star', 'as' => 'tech_star.'], function(){
+			Route::get('/', ['as' => 'index', 'uses' => 'TechStarController@index']);
+			Route::post('create', ['as' => 'save', 'uses' => 'TechStarController@save']);
+			Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'TechStarController@edit']);
+			Route::post('update', ['as' => 'update', 'uses' => 'TechStarController@update']);
+			Route::post('delete', ['as' => 'delete', 'uses' => 'TechStarController@delete']);
+		});
+
+		Route::group(['prefix' => 'portfolio-initiator', 'as' => 'portfolio_initiator.'], function(){
+			Route::get('/', ['as' => 'index', 'uses' => 'PortfolioInitiatorController@index']);
+			Route::post('create', ['as' => 'save', 'uses' => 'PortfolioInitiatorController@save']);
+			Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'PortfolioInitiatorController@edit']);
+			Route::post('update', ['as' => 'update', 'uses' => 'PortfolioInitiatorController@update']);
+			Route::post('delete', ['as' => 'delete', 'uses' => 'PortfolioInitiatorController@delete']);
+		});
+
+		Route::group(['prefix' => 'ender', 'as' => 'ender.'], function(){
+			Route::get('/', ['as' => 'index', 'uses' => 'EnderController@index']);
+			Route::post('create', ['as' => 'save', 'uses' => 'EnderController@save']);
+			Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'EnderController@edit']);
+			Route::post('update', ['as' => 'update', 'uses' => 'EnderController@update']);
+			Route::post('delete', ['as' => 'delete', 'uses' => 'EnderController@delete']);
+		});
+
+
+
 	});
 
 
@@ -95,6 +122,14 @@ Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder'
 	Route::group(['prefix' => 'settings', 'as' => 'settings.'], function(){
 		Route::get('/', ['as' => 'index', 'uses' => 'BidderController@settings']);
 		Route::post('update', ['as' => 'update', 'uses' => 'BidderController@updateSettings']);
+	});
+
+	Route::group(['prefix' => 'leaves', 'as' => 'leaves.'], function(){
+		Route::get('/', ['as' => 'index', 'uses' => 'LeaveController@index']);
+		Route::get('request', ['as' => 'create', 'uses' => 'LeaveController@create']);
+		Route::post('create', ['as' => 'save', 'uses' => 'LeaveController@save']);
+		Route::get('view/{id?}', ['as' => 'edit', 'uses' => 'LeaveController@edit']);
+		
 	});
 	
 });

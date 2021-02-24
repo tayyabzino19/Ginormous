@@ -84,7 +84,7 @@
                         </li>
                         
                         <li class="menu-item @yield('helpers_tech_star_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('admin.helpers.tech_star.index') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
@@ -93,7 +93,7 @@
                         </li>
                         
                         <li class="menu-item @yield('helpers_portfolio_initiator_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('admin.helpers.portfolio_initiator.index') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
@@ -101,7 +101,7 @@
                             </a>
                         </li>
                         <li class="menu-item @yield('helpers_ender_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('admin.helpers.ender.index') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
