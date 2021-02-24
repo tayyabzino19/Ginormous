@@ -40,12 +40,8 @@ class DesignationController extends Controller
 
         $designation = Designation::findOrFail($id);
 
-        $response['status'] = 'error';
-
-        if($designation){
-            $response['designation'] = $designation;
-            $response['status'] = 'success';
-        }
+        $response['designation'] = $designation;
+        $response['status'] = 'success';
 
         return json_encode($response);
     }

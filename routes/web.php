@@ -16,6 +16,53 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 		
 	});
 
+	Route::group(['prefix' => 'portfolio', 'as' => 'portfolio.'], function(){
+		
+		Route::group(['prefix' => 'items', 'as' => 'items.'], function(){
+			Route::get('/', ['as' => 'index', 'uses' => 'ItemController@index']);
+			Route::get('create', ['as' => 'create', 'uses' => 'ItemController@create']);
+			Route::post('create', ['as' => 'save', 'uses' => 'ItemController@save']);
+			Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'ItemController@edit']);
+			Route::post('update', ['as' => 'update', 'uses' => 'ItemController@update']);
+		});
+
+
+		Route::group(['prefix' => 'skills', 'as' => 'skills.'], function(){
+			Route::get('/', ['as' => 'index', 'uses' => 'SkillController@index']);
+			Route::post('create', ['as' => 'save', 'uses' => 'SkillController@save']);
+			Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'SkillController@edit']);
+			Route::post('updated', ['as' => 'update', 'uses' => 'SkillController@update']);
+		});
+
+		Route::group(['prefix' => 'industries', 'as' => 'industries.'], function(){
+			Route::get('/', ['as' => 'index', 'uses' => 'IndustryController@index']);
+			Route::post('create', ['as' => 'save', 'uses' => 'IndustryController@save']);
+			Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'IndustryController@edit']);
+			Route::post('updated', ['as' => 'update', 'uses' => 'IndustryController@update']);
+		});
+
+		Route::group(['prefix' => 'type', 'as' => 'types.'], function(){
+			Route::get('/', ['as' => 'index', 'uses' => 'TypeController@index']);
+			Route::post('create', ['as' => 'save', 'uses' => 'TypeController@save']);
+			Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'TypeController@edit']);
+			Route::post('updated', ['as' => 'update', 'uses' => 'TypeController@update']);
+		});
+
+	});
+
+
+	Route::group(['prefix' => 'helpers', 'as' => 'helpers.'], function(){
+		
+		Route::group(['prefix' => 'starter', 'as' => 'starter.'], function(){
+			Route::get('/', ['as' => 'index', 'uses' => 'StarterController@index']);
+			Route::post('create', ['as' => 'save', 'uses' => 'StarterController@save']);
+			Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'StarterController@edit']);
+			Route::post('update', ['as' => 'update', 'uses' => 'StarterController@update']);
+			Route::post('delete', ['as' => 'delete', 'uses' => 'StarterController@delete']);
+		});
+
+	});
+
 
 	Route::group(['prefix' => 'users', 'as' => 'users.'], function(){
 		
