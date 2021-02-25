@@ -110,6 +110,24 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 		});
 
 	});
+
+	Route::group(['prefix' => 'leaves-management', 'as' => 'leaves_management.'], function(){
+
+		Route::group(['prefix' => 'leaves', 'as' => 'leaves.'], function(){
+
+			Route::get('/', ['as' => 'index', 'uses' => 'LeaveController@index']);
+			Route::get('view/{id?}', ['as' => 'edit', 'uses' => 'LeaveController@edit']);
+		});
+
+		Route::group(['prefix' => 'requests', 'as' => 'requests.'], function(){
+			
+			Route::get('/', ['as' => 'index', 'uses' => 'LeaveRequestController@index']);
+			Route::get('view/{id?}', ['as' => 'edit', 'uses' => 'LeaveRequestController@edit']);
+			Route::post('accept', ['as' => 'accept', 'uses' => 'LeaveRequestController@accept']);
+			Route::post('reject', ['as' => 'reject', 'uses' => 'LeaveRequestController@reject']);
+		});
+
+	});
 	
 
 });
@@ -146,3 +164,7 @@ Auth::routes(['register' => false]);
 Route::get('storage/images/{dir}/{filename?}', function ($dir, $filename) {
 	return Storage::get(config('constants.images_dir') . $dir . '/' . $filename);
 })->name('image_source');
+
+View::composer(['admin.layouts.master'], function($view){
+	$view->with('pending_requests', \App\Models\Leave::where('status', 'pending')->count());
+});

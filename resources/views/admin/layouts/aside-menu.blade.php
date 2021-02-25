@@ -198,19 +198,20 @@
                 <div class="menu-submenu">
                     <ul class="menu-subnav">
                         <li class="menu-item @yield('leaves_management_requests_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('admin.leaves_management.requests.index') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
                                 <span class="menu-text">Requests</span>
-
+                                @if($pending_requests)
                                 <span class="menu-label">
-                                    <span class="label label-danger label-inline">1</span>
+                                    <span class="label label-danger label-inline">{{ $pending_requests }}</span>
                                 </span>
+                                @endif
                             </a>
                         </li>
                         <li class="menu-item @yield('leaves_management_all_leaves_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('admin.leaves_management.leaves.index') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
