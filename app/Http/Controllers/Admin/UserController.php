@@ -47,9 +47,10 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
 
         if($picture = request()->file('picture')){
-            $picture_name = time().'-'.date('Ymdhis').rand(0, 999).'.'.$picture->guessExtension();
-            $picture->storeAs(config('constants.user_images_dir'), $picture_name);
-            $user->picture = $picture_name;
+            
+            $picture_name = time().'-'.date('Ymdhis').rand(0, 999);
+            storeImage('user_images_dir',$picture, $picture_name, 200, 200);
+            $user->picture = $picture_name . '.webp';
         }
 
         if($user->save()){

@@ -20,7 +20,7 @@
                 <div class="menu-submenu">
                     <ul class="menu-subnav">
                         <li class="menu-item @yield('projects_missed_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('admin.projects.missed') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>

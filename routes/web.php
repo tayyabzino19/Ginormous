@@ -8,9 +8,19 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 
 	Route::get('/', ['as' => 'index', 'uses' => 'AdminController@index']);
 
+
+	Route::group(['prefix' => 'projects', 'as' => 'projects.'], function(){
+		Route::get('/', ['as' => 'missed', 'uses' => 'ProjectController@missed']);
+		Route::get('details', ['as' => 'details', 'uses' => 'ProjectController@details']);
+		Route::get('details/get-portfolio-items', ['as' => 'details.get_portfolio_items', 'uses' => 'ProjectController@getPortfolioItems']);
+	});
+
+
 	Route::group(['prefix' => 'settings', 'as' => 'settings.'], function(){
 
-		Route::get('api-keys', ['as' => 'api_keys', 'uses' => 'AdminController@APIKeys']);
+		Route::get('api-keys', ['as' => 'api_keys', 'uses' => 'FreelancerApiKeyController@index']);
+		Route::post('api-keys', ['as' => 'api_keys.update', 'uses' => 'FreelancerApiKeyController@update']);
+
 		Route::get('profile', ['as' => 'profile', 'uses' => 'AdminController@profile']);
 		Route::post('profile', ['as' => 'profile_update', 'uses' => 'AdminController@updateProfile']);
 		

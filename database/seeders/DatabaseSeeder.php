@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             TypeSeeder::class,
             StarterSeeder::class,
             LeaveSeeder::class,
+            FreelancerApiKeySeeder::class,
         ]);
     }
 }

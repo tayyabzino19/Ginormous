@@ -11,7 +11,7 @@ use Auth;
 class LeaveController extends Controller
 {
     public function index(){
-        $leaves = Leave::orderBy('id', 'desc')->get();
+        $leaves = Leave::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
         return view('bidder.leaves.index', compact('leaves'));
     }
 

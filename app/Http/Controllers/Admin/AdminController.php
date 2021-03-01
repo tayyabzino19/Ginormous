@@ -9,15 +9,12 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use Auth;
 use Hash;
+use Image;
 
 class AdminController extends Controller
 {
     public function index(){
         return view('admin.dashboard.index');
-    }
-
-    public function APIKeys(){
-        return view('admin.settings.api-keys');
     }
 
     public function profile(){
@@ -26,8 +23,6 @@ class AdminController extends Controller
     }
 
     public function updateProfile(Request $request){
-
-
 
         $validated = $request->validate([
             'name' => 'required|min:3|max:50',
@@ -44,11 +39,11 @@ class AdminController extends Controller
         }
 
         if($picture = request()->file('picture')){
-            $picture_name = time().'-'.date('Ymdhis').rand(0, 999).'.'.$picture->guessExtension();
-            $picture->storeAs(config('constants.user_images_dir'), $picture_name);
-            if($user->picture != 'default.png')
-            Storage::delete(config('constants.user_images_dir') . $user->getOriginal('picture'));
-            $user->picture = $picture_name;
+            
+            $picture_name = time().'-'.date('Ymdhis').rand(0, 999);
+            storeImage('user_images_dir',$picture, $picture_name, 200, 200);
+            deleteImage("user_images_dir", $user->getOriginal('picture'));
+            $user->picture = $picture_name . '.webp';
         }
 
         if($user->save()){
