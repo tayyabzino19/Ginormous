@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             StarterSeeder::class,
             LeaveSeeder::class,
             FreelancerApiKeySeeder::class,
+            OptionSeeder::class,
         ]);
     }
 }

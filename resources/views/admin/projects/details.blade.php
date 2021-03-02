@@ -408,8 +408,9 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="portfolio-tab" role="tabpanel" aria-labelledby="contact-tab-5">
+                                    <form method="get" id="portfolio_form" action="{{ route('admin.projects.details.get_portfolio_items') }}">
                                     <div class="row">
-                                        <form method="get" action="{{ route('admin.projects.details.get_portfolio_items') }}">
+                                        
                                         <div class="col-lg-12">
                                             
                                             <div class="form-group">
@@ -441,21 +442,15 @@
                                             {{-- <button>Submit</button> --}}
 
                                         </div>
-                                    </form>
+                                    
 
                                         <div class="col-lg-12 mt-6">
                                             <div class="form-group">
-                                                @php
-                                                $webs = "1.  http://zino.brhythym.com
-2. http://dream.brhythym.com
-3. http://nclex.brhythym.com
-4. http://jobs.brhythym.com
-5. http://inventory.brhythym.com";
-                                                @endphp
-                                                <textarea style="line-height: 24px;" class="form-control" rows="5">{{ $webs }}</textarea>
+                                                <textarea style="line-height: 24px;" class="form-control related_items" rows="5"></textarea>
                                             </div>
                                         </div>
                                     </div>
+                                </form>
                                 </div>
                                 <div class="tab-pane fade" id="ender-tab" role="tabpanel" aria-labelledby="contact-tab-5">
                                     <div class="scroll scroll-pull" data-scroll="true" style="height: 752px">
@@ -682,7 +677,52 @@
                     placeholder: "Please select skills",
                 });
             }, 200);
+
+
+            $(".select2.industry").change(function(){
+                getPortfolioItems();
+            });
+
+            $(".select2.type").change(function(){
+                getPortfolioItems();
+            });
+
+            $(".select2.skills").change(function(){
+                getPortfolioItems();
+            });
+
+
         });
+
+        function getPortfolioItems(){
+            
+            let filters = $("#portfolio_form").serialize();
+            let items_links = '';
+            let counter = 1;
+            
+            $.ajax({
+                method: 'get',
+                url: "{{ route('admin.projects.details.get_portfolio_items') }}?"+filters,
+                dataType: 'JSON',
+                success: function(response){
+                    //console.log(response);
+                    if(response.status == 'success'){
+                        
+                        $(response.items).each(function(index, value) {
+                            items_links += counter + '. ' + value.url + `
+`;
+                            counter++;
+                        });
+                        $(".related_items").val(items_links);
+                    }else{
+                        $(".related_items").val('');
+                    }
+                }
+            });
+
+        }
+
+       // portfolio_form
 
 
     });

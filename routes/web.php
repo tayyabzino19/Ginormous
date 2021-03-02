@@ -176,5 +176,10 @@ Route::get('storage/images/{dir}/{filename?}', function ($dir, $filename) {
 })->name('image_source');
 
 View::composer(['admin.layouts.master'], function($view){
+	$view->with('phase_2', \App\Models\Option::where('key', 'phase_2')->first());
 	$view->with('pending_requests', \App\Models\Leave::where('status', 'pending')->count());
+});
+
+View::composer(['bidder.layouts.master'], function($view){
+	$view->with('phase_2', \App\Models\Option::where('key', 'phase_2')->first());
 });

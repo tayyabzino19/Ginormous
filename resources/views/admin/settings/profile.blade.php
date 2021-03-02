@@ -30,6 +30,7 @@
 
                         <form id="profile_form" method="post" action="{{ route('admin.settings.profile_update') }}" enctype="multipart/form-data">
                             @csrf
+                            <input type="hidden" name="phase_2" value="inactive">
                             <div class="row">
 
                                 <div class="col-lg-3">
@@ -60,7 +61,7 @@
                                                             <label class="m-auto">
                                                                 Phase 2
                                                                 <br />
-                                                                <input type="checkbox" value="1" name="is_active" />
+                                                                <input type="checkbox" @if($phase_2->value == 'active') checked='checked' @endif value="active" name="phase_2" />
                                                             <span></span>
                                                             </label>
                                                         </span>

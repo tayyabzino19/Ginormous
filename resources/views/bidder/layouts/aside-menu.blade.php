@@ -40,7 +40,8 @@
                     </ul>
                 </div>
             </li>
-
+        
+            @if($phase_2->value == 'active')
             <li class="menu-item menu-item-submenu @yield('shift_nav')" aria-haspopup="true" data-menu-toggle="hover">
                 <a href="javascript:;" class="menu-link menu-toggle">
                     <i class="menu-icon flaticon-clock-1"></i>
@@ -68,6 +69,7 @@
                     </ul>
                 </div>
             </li>
+            @endif
 
             <li class="menu-item menu-item-submenu @yield('leaves_nav')" aria-haspopup="true" data-menu-toggle="hover">
                 <a href="javascript:;" class="menu-link menu-toggle">
@@ -89,6 +91,7 @@
                 </div>
             </li>
 
+            @if($phase_2->value == 'active')
             <li class="menu-item menu-item-submenu @yield('income_nav')" aria-haspopup="true" data-menu-toggle="hover">
                 <a href="javascript:;" class="menu-link menu-toggle">
                     <i class="menu-icon flaticon-coins"></i>
@@ -116,6 +119,7 @@
                     </ul>
                 </div>
             </li>
+            @endif
 
 
             <li class="menu-item menu-item @yield('settings_nav')" aria-haspopup="true" data-menu-toggle="hover">

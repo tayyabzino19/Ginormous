@@ -132,8 +132,7 @@
 
                                 <span class="d-lg-none">
 									
-									</span>
-
+								</span>
                             </p>
                         </div>
                         <!--begin::Topbar-->

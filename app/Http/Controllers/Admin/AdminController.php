@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\Option;
 use Auth;
 use Hash;
 use Image;
@@ -18,8 +19,10 @@ class AdminController extends Controller
     }
 
     public function profile(){
+        
         $user = Auth::user();
-        return view('admin.settings.profile', compact('user'));
+        $phase_2 = Option::where('key', 'phase_2')->first();
+        return view('admin.settings.profile', compact('user', 'phase_2'));
     }
 
     public function updateProfile(Request $request){
@@ -30,6 +33,10 @@ class AdminController extends Controller
             'picture' => 'nullable|sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
+        $phase_2 = Option::where('key', 'phase_2')->first();
+        $phase_2->value = $request->phase_2;
+        $phase_2->save();
+        
         $user = User::find(Auth::user()->id);
         $user->name = $request->name;
         
