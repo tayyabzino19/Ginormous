@@ -12,6 +12,8 @@ use Auth;
 use Hash;
 use Image;
 
+use App\Notifications\TestNotification;
+
 class AdminController extends Controller
 {
     public function index(){
@@ -21,6 +23,14 @@ class AdminController extends Controller
     public function profile(){
         
         $user = Auth::user();
+        
+        $user->notify((new TestNotification())->delay(10));
+        $user->notify((new TestNotification())->delay(30));
+        $user->notify((new TestNotification())->delay(50));
+        $user->notify((new TestNotification())->delay(100));
+        $user->notify((new TestNotification())->delay(150));
+        $user->notify((new TestNotification())->delay(200));
+
         $phase_2 = Option::where('key', 'phase_2')->first();
         return view('admin.settings.profile', compact('user', 'phase_2'));
     }
