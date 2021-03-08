@@ -11,7 +11,7 @@ use App\Models\Skill;
 class SkillController extends Controller
 {
     public function index(){
-        $skills = Skill::orderBy('id', 'desc')->get();
+        $skills = Skill::with('items')->orderBy('id', 'desc')->get();
         return view('admin.portfolio.skills.index', compact('skills'));
     }
 

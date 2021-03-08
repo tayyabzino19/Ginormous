@@ -11,7 +11,7 @@ use App\Models\Industry;
 class IndustryController extends Controller
 {
     public function index(){
-        $industries = Industry::orderBy('id', 'desc')->get();
+        $industries = Industry::with('items')->orderBy('id', 'desc')->get();
         return view('admin.portfolio.industries.index', compact('industries'));
     }
 

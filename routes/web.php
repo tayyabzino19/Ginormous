@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'role:admin'], function(){
 
 	Route::get('/', ['as' => 'index', 'uses' => 'AdminController@index']);
+	Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 
 	Route::group(['prefix' => 'projects', 'as' => 'projects.'], function(){

@@ -14,7 +14,7 @@ use App\Models\Type;
 class ItemController extends Controller
 {
     public function index(){
-        $items = Item::orderBy('id', 'desc')->get();
+        $items = Item::with('skills')->orderBy('id', 'desc')->get();
         return view('admin.portfolio.items.index', compact('items'));
     }
 

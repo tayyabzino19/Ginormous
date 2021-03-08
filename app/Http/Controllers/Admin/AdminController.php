@@ -24,12 +24,12 @@ class AdminController extends Controller
         
         $user = Auth::user();
         
-        $user->notify((new TestNotification())->delay(10));
-        $user->notify((new TestNotification())->delay(30));
-        $user->notify((new TestNotification())->delay(50));
-        $user->notify((new TestNotification())->delay(100));
-        $user->notify((new TestNotification())->delay(150));
-        $user->notify((new TestNotification())->delay(200));
+        // $user->notify((new TestNotification())->delay(10));
+        // $user->notify((new TestNotification())->delay(30));
+        // $user->notify((new TestNotification())->delay(50));
+        // $user->notify((new TestNotification())->delay(100));
+        // $user->notify((new TestNotification())->delay(150));
+        // $user->notify((new TestNotification())->delay(200));
 
         $phase_2 = Option::where('key', 'phase_2')->first();
         return view('admin.settings.profile', compact('user', 'phase_2'));

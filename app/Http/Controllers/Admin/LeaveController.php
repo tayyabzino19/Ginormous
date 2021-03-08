@@ -18,7 +18,7 @@ class LeaveController extends Controller
 
         if(isset($request->search)){
             
-            $leaves = Leave::where(function($query) use ($request){
+            $leaves = Leave::with('user')->where(function($query) use ($request){
 
                 if($request->user != ''){
                     $query->where('user_id', $request->user);
@@ -52,7 +52,7 @@ class LeaveController extends Controller
             })->where('status', '!=', 'pending')->orderBy('id', 'desc')->get();
 
         }else{
-            $leaves = Leave::where('status', '!=', 'pending')->orderBy('id', 'desc')->get();
+            $leaves = Leave::with('user')->where('status', '!=', 'pending')->orderBy('id', 'desc')->get();
         }
 
         $user_id = $this->user_id;

@@ -11,7 +11,7 @@ use App\Models\Type;
 class TypeController extends Controller
 {
     public function index(){
-        $types = Type::orderBy('id', 'desc')->get();
+        $types = Type::with('items')->orderBy('id', 'desc')->get();
         return view('admin.portfolio.types.index', compact('types'));
     }
 

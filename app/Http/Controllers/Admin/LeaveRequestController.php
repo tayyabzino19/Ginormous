@@ -11,7 +11,7 @@ class LeaveRequestController extends Controller
 {
     public function index(){
 
-        $leaves = Leave::where('status', 'pending')->orderBy('id', 'desc')->get();
+        $leaves = Leave::with('user')->where('status', 'pending')->orderBy('id', 'desc')->get();
         return view('admin.leaves-management.requests.index', compact('leaves'));
     }
 
@@ -43,7 +43,7 @@ class LeaveRequestController extends Controller
 
     public function reject(Request $request){
         //return $request->all();
-        $leave = Leave::where('id', $request->id)->where('status', 'pending')->first();
+        $leave = Leave::with('user')->where('id', $request->id)->where('status', 'pending')->first();
 
         if(!$leave){
             abort(404);

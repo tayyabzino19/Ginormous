@@ -11,7 +11,7 @@ use App\Models\Designation;
 class DesignationController extends Controller
 {
     public function index(){
-        $designations = Designation::orderBy('id', 'desc')->get();
+        $designations = Designation::with('users')->orderBy('id', 'desc')->get();
         return view('admin.users.designations.index', compact('designations'));
     }
 
