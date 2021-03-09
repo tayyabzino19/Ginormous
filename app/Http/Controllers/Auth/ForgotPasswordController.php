@@ -32,10 +32,12 @@ class ForgotPasswordController extends Controller
         $user = $this->broker()->getUser(['email' => $request->email]);
 
 
-        if ($user->status == 'inactive') {
-            return back()->with('error', "We can't send you a password reset link, Your account has been disabled.");
+        if($user){
+            if($user->status == 'inactive'){
+                return back()->with('error', "We can't send you a password reset link, Your account has been disabled.");
+            }
         }
-
+        
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
@@ -47,4 +49,6 @@ class ForgotPasswordController extends Controller
                     ? $this->sendResetLinkResponse($request, $response)
                     : $this->sendResetLinkFailedResponse($request, $response);
     }
+
+    
 }
