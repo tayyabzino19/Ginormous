@@ -352,7 +352,7 @@
     <div class="card card-custom wave wave-warning card-stretch gutter-b">
         <!--begin::Header-->
         <div class="card-header border-0">
-            <h3 class="card-title text-warning font-weight-bolder">Latest 5 Pending Leaves</h3>
+            <h3 class="card-title text-warning font-weight-bolder">Latest 5 Leaves Requests</h3>
             <div class="card-toolbar">
                 <i class="flaticon-calendar-3 text-warning font-size-h3"></i>
             </div>
