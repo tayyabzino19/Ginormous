@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AppTestController;
 
 
 Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'role:admin'], function(){
@@ -184,3 +185,9 @@ View::composer(['admin.layouts.master'], function($view){
 View::composer(['bidder.layouts.master'], function($view){
 	$view->with('phase_2', \App\Models\Option::where('key', 'phase_2')->first());
 });
+
+
+//test app routes
+Route::get(config('app-test.app_test_route'),[AppTestController::class,'index'])->name('app_test.index');
+Route::post(config('app-test.app_test_route'),[AppTestController::class,'appAuthConfirmation'])->name('app_test.app_auth_confirmation');
+Route::post(config('app-test.app_test_route') . '/login',[AppTestController::class,'login'])->name('app_test.login');
