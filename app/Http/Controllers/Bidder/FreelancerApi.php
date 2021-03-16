@@ -13,7 +13,7 @@ class FreelancerApi extends Controller
     public function getLiveFeed(){
         $projects_filter = ProjectFilter::first();
         $url = "https://www.freelancer.com/api/projects/0.1/projects/active/?compact=true&" . $projects_filter->projects_search_params;
-        
+        echo "Query: " . $url;
         $response = Http::get($url);
         return $response->json();
         
