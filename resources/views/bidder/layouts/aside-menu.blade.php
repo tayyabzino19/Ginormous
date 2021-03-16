@@ -21,7 +21,7 @@
                 <div class="menu-submenu">
                     <ul class="menu-subnav">
                         <li class="menu-item @yield('projects_live_feed_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('bidder.projects.live_feed.index') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>

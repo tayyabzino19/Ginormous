@@ -41,6 +41,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
+                                    <th>Freelancer job ID</th>
                                     <th>Items</th>
                                     <th>Status</th>
                                     <th>Action</th>
@@ -52,6 +53,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $skill->name }}</td>
+                                    <td>{{ $skill->freelancer_job_id }}</td>
                                     <td><span class="label label-rounded label-light-primary">{{ $skill->items->count() }}</span></td>
                                     <td>
                                         @if($skill->status == "active")
@@ -112,6 +114,7 @@
 
                     $("#edit_skill_form input[name='id']").val(response.skill.id);
                     $("#edit_skill_form input[name='name']").val(response.skill.name);
+                    $("#edit_skill_form input[name='freelancer_job_id']").val(response.skill.freelancer_job_id);
                     if(response.skill.status == "active"){
                         $("#edit_skill_form input[value='active']").prop('checked', true);
                     }else{

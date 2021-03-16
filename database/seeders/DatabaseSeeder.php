@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             LeaveSeeder::class,
             FreelancerApiKeySeeder::class,
             OptionSeeder::class,
+            ProjectFilterSeeder::class,
+            LanguageSeeder::class,
         ]);
     }
 }

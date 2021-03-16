@@ -20,11 +20,13 @@ class SkillController extends Controller
         //return $request->all();
         $validated = $request->validate([
             'name' => "required|min:2|unique:skills",
+            'freelancer_job_id' => "required|unique:skills",
             'status' => "required",
         ]);
 
         $skill = new Skill;
         $skill->name = $request->name;
+        $skill->freelancer_job_id = $request->freelancer_job_id;
         $skill->status = $request->status;
 
         if($skill->save()){
@@ -51,11 +53,13 @@ class SkillController extends Controller
         $skill = Skill::findOrFail($request->id);
         $validated = $request->validate([
             'name' => ['required', 'min:2', Rule::unique('skills')->ignore($request->id)],
+            'freelancer_job_id' => ['required', 'min:2', Rule::unique('skills')->ignore($request->id)],
             'status' => "required"
         ]);
         
 
         $skill->name = $request->name;
+        $skill->freelancer_job_id = $request->freelancer_job_id;
         $skill->status = $request->status;
         
         

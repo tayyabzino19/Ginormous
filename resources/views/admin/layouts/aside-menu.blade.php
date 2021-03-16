@@ -54,7 +54,7 @@
                         </li>
 
                         <li class="menu-item @yield('projects_filters_setting_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('admin.projects.filters') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>

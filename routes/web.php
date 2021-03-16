@@ -12,9 +12,12 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 
 
 	Route::group(['prefix' => 'projects', 'as' => 'projects.'], function(){
-		Route::get('/', ['as' => 'missed', 'uses' => 'ProjectController@missed']);
+		Route::get('missed', ['as' => 'missed', 'uses' => 'ProjectController@missed']);
 		Route::get('details', ['as' => 'details', 'uses' => 'ProjectController@details']);
 		Route::get('details/get-portfolio-items', ['as' => 'details.get_portfolio_items', 'uses' => 'ProjectController@getPortfolioItems']);
+
+		Route::get('filters', ['as' => 'filters', 'uses' => 'ProjectController@filters']);
+		Route::post('filters/update', ['as' => 'filters.update', 'uses' => 'ProjectController@updateFilters']);
 	});
 
 
@@ -159,10 +162,17 @@ Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder'
 		Route::get('request', ['as' => 'create', 'uses' => 'LeaveController@create']);
 		Route::post('create', ['as' => 'save', 'uses' => 'LeaveController@save']);
 		Route::get('view/{id?}', ['as' => 'edit', 'uses' => 'LeaveController@edit']);
-		
+	});
+
+	Route::group(['prefix' => 'projects', 'as' => 'projects.'], function(){
+		Route::group(['prefix' => 'live-feed', 'as' => 'live_feed.'], function(){
+			Route::get('/', ['as' => 'index', 'uses' => 'ProjectController@liveFeed']);
+			Route::get('/get-live-feed', ['as' => 'get_live_feed', 'uses' => 'FreelancerApi@getLiveFeed']);
+		});
 	});
 	
 });
+
 
 
 Route::get('/home', function(){
