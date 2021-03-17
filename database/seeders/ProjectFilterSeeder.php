@@ -19,7 +19,7 @@ class ProjectFilterSeeder extends Seeder
         $project_filter->project_type = ['fixed' => true, 'hourly' => false];
         $project_filter->fixed_price = ['min' => 1, 'max' => 10000];
         $project_filter->hourly_price = ['min' => 1, 'max' => 120];
-        $project_filter->listing_type = ['featured' => true, 'sealed' => false, 'NDA' => false, 'urgent' => true, 'fulltime' => false, 'recruiter' => false];
+        $project_filter->listing_type = ['featured' => true, 'sealed' => false, 'NDA' => false, 'urgent' => true, 'fulltime' => false, 'assisted' => false];
         $project_filter->save();
 
 

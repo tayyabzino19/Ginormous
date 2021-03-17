@@ -115,6 +115,7 @@
                                             <div class="checkbox-list mr-10 mb-4">
                                                 <label class="checkbox">
                                                 <input @if($is_true) checked @endif name="listing_type[{{$type}}]" value="1" type="checkbox">
+                                                @php if($type == 'assisted'){ $type = 'Recruiter'; }@endphp
                                                 <span></span>{{ ucwords($type) }}</label>
                                             </div>
                                         @endforeach

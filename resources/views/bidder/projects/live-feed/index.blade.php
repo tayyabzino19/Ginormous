@@ -37,43 +37,60 @@
 
 
     <div class="row">
+
+        @foreach($projects as $project)
         <div class="col-lg-12">
-            <div class="card card-custom card-stretch gutter-b feed_card" data-link="https://zino.brhythym.com/bidder/project/project-details.html">
+            <div class="card card-custom card-stretch gutter-b feed_card" data-link="javascript:;">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-1 d-flex align-items-center justify-content-center">
                             <div>
+                                @if($project->type == 'fixed')
+                                <span title="Fixed" data-toggle="tooltip" class="btn btn-sm btn-circle btn-icon btn-primary font-weight-bolder">F</span>
+                                @elseif($project->type == 'hourly')
                                 <span title="Hourly" data-toggle="tooltip" class="btn btn-sm btn-circle btn-icon btn-success font-weight-bolder">H</span>
-    
+                                @else
+                                <span title="{{ ucwords($project->type) }}" data-toggle="tooltip" class="btn btn-sm btn-circle btn-icon btn-warning font-weight-bolder">?</span>
+                                @endif
                             </div>
                         </div>
                         <div class="col-lg-10">
                             <p class="font-weight-bolder mb-2">
                                 <div class="float-left font-weight-bolder">
-                                    The standard Lorem Ipsum passage, used since the 1500s
+                                    {{ $project->title }}
                                     <br />
-                                    <small class="text-muted font-weight-lighter">2min ago</small>
+                                    <small class="text-muted font-weight-lighter">{{ \Carbon\Carbon::parse(date('Y-m-d H:i:s', $project->time_updated))->diffForHumans() }} </small>
                                 </div>
                                 <div class="float-right">
-                                    <span class="font-weight-bolder">$100 - $200 (USD)</span>
+                                    <span class="font-weight-bolder">{{ $project->currency->sign }}{{ $project->budget->minimum }} - {{ $project->currency->sign }}{{ $project->budget->maximum }} ({{ $project->currency->code }})</span>
                                 </div>
                                 <div class="clearfix"></div>
                             </p>
-                            <p class="text-dark-65">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                ..
+                            <p class="text-dark-65">
+                                {{ $project->preview_description }}
                             </p>
                             <hr />
                             <div class="row">
                                 <div class="col-lg-5">
-                                    20 <strong>Bids</strong> &nbsp;|&nbsp; <span title="Ratings" data-toggle="tooltip" class="label label-inline">4.0</span> &nbsp;|&nbsp; 20 <strong class="text-warning">Reviews</strong>
+                                    {{ $project->bid_stats->bid_count }} <strong>Bids</strong> &nbsp;|&nbsp; <span title="Ratings" data-toggle="tooltip" class="label label-inline">4.0</span> &nbsp;|&nbsp; 20 <strong class="text-warning">Reviews</strong>
                                 </div>
                                 <div class="col-lg-7">
-                                    <span class="label label-inline label-dark mb-1">Recruiter</span>
-                                    <span class="label label-inline label-warning mb-1">Featured</span>
+                                    @if($project->upgrades->NDA)
+                                        <span class="label label-inline label-info mb-1">NDA</span>
+                                    @endif
+                                    @if($project->upgrades->sealed)
                                     <span class="label label-inline label-primary mb-1">Sealed</span>
-                                    <span class="label label-inline label-info mb-1">NDA</span>
+                                    @endif
+                                    @if($project->upgrades->urgent)
                                     <span class="label label-inline label-danger mb-1">Urgent</span>
+                                    @endif
+                                    @if($project->upgrades->featured)
+                                    <span class="label label-inline label-warning mb-1">Featured</span>
+                                    @endif
+                                    @if($project->upgrades->fulltime)
                                     <span class="label label-inline label-success mb-1">Fulltime</span>
+                                    @endif
+                                    {{-- <span class="label label-inline label-dark mb-1">Recruiter</span>--}}
                                 </div>
                             </div>
                         </div>
@@ -92,15 +109,18 @@
     
             </div>
         </div>
+
+        @endforeach
+        
+        
     
-        <div class="col-lg-12">
+        {{-- <div class="col-lg-12">
             <div class="card card-custom card-stretch gutter-b feed_card" data-link="https://zino.brhythym.com/bidder/project/project-details.html">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-1 d-flex align-items-center justify-content-center">
                             <div>
                                 <span title="Fixed" data-toggle="tooltip" class="btn btn-sm btn-circle btn-icon btn-primary font-weight-bolder">F</span>
-    
                             </div>
                         </div>
                         <div class="col-lg-10">
@@ -149,7 +169,11 @@
                 </div>
     
             </div>
-        </div>
+        </div> --}}
+    </div>
+
+    <div>
+        {{ $projects->links() }}
     </div>
 </div>
 @endsection
