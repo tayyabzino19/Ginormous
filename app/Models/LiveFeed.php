@@ -14,5 +14,15 @@ class LiveFeed extends Model
         'budget' => 'object',
         'upgrades' => 'object',
         'bid_stats' => 'object',
+        'reputation' => 'object'
     ];
+
+
+    public function LiveFeedDetail(){
+        return $this->hasOne(LiveFeedDetail::class);
+    }
+
+    public function LiveFeedProposals(){
+        return $this->hasMany(LiveFeedProposal::class);
+    }
 }

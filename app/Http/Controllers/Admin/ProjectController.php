@@ -10,6 +10,9 @@ use App\Models\TechStar;
 use App\Models\PortfolioInitiator;
 use App\Models\Ender;
 
+use App\Models\LiveFeed;
+use App\Models\LiveFeedDetail;
+use App\Models\LiveFeedProposal;
 use App\Models\Item;
 use App\Models\Language;
 use App\Models\Skill;
@@ -184,8 +187,10 @@ class ProjectController extends Controller
                 }
             }
             
-            //return $project_filter;
-            //return $projects_search_params;
+            //Clear Live Feeds
+            LiveFeed::truncate();
+            LiveFeedDetail::truncate();
+            LiveFeedProposal::truncate();
 
             $project_filter->projects_search_params = $projects_search_params;
             $project_filter->save();

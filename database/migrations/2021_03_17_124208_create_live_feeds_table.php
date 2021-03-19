@@ -23,6 +23,7 @@ class CreateLiveFeedsTable extends Migration
             $table->json('currency')->nullable();
             $table->json('upgrades')->nullable();
             $table->json('bid_stats')->nullable();
+            $table->json('reputation')->nullable();
             $table->integer('time_submitted')->nullable();
             $table->integer('time_updated')->nullable();
             $table->timestamps();

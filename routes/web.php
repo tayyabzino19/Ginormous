@@ -10,7 +10,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 	Route::get('/', ['as' => 'index', 'uses' => 'AdminController@index']);
 	Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
-
 	Route::group(['prefix' => 'projects', 'as' => 'projects.'], function(){
 		Route::get('missed', ['as' => 'missed', 'uses' => 'ProjectController@missed']);
 		Route::get('details', ['as' => 'details', 'uses' => 'ProjectController@details']);
@@ -19,7 +18,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 		Route::get('filters', ['as' => 'filters', 'uses' => 'ProjectController@filters']);
 		Route::post('filters/update', ['as' => 'filters.update', 'uses' => 'ProjectController@updateFilters']);
 	});
-
 
 	Route::group(['prefix' => 'settings', 'as' => 'settings.'], function(){
 
@@ -40,7 +38,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 			Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'ItemController@edit']);
 			Route::post('update', ['as' => 'update', 'uses' => 'ItemController@update']);
 		});
-
 
 		Route::group(['prefix' => 'skills', 'as' => 'skills.'], function(){
 			Route::get('/', ['as' => 'index', 'uses' => 'SkillController@index']);
@@ -76,7 +73,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 			Route::post('delete', ['as' => 'delete', 'uses' => 'StarterController@delete']);
 		});
 
-
 		Route::group(['prefix' => 'tech-star', 'as' => 'tech_star.'], function(){
 			Route::get('/', ['as' => 'index', 'uses' => 'TechStarController@index']);
 			Route::post('create', ['as' => 'save', 'uses' => 'TechStarController@save']);
@@ -101,8 +97,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 			Route::post('delete', ['as' => 'delete', 'uses' => 'EnderController@delete']);
 		});
 
-
-
 	});
 
 
@@ -114,14 +108,12 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 		Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'UserController@edit']);
 		Route::post('update', ['as' => 'update', 'uses' => 'UserController@update']);
 
-
 		Route::group(['prefix' => 'designations', 'as' => 'designations.'], function(){
 
 			Route::get('/', ['as' => 'index', 'uses' => 'DesignationController@index']);
 			Route::post('create', ['as' => 'save', 'uses' => 'DesignationController@save']);
 			Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'DesignationController@edit']);
 			Route::post('update', ['as' => 'update', 'uses' => 'DesignationController@update']);
-	
 		});
 
 	});
@@ -144,7 +136,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 
 	});
 	
-
 });
 
 
@@ -165,10 +156,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder'
 	});
 
 	Route::group(['prefix' => 'projects', 'as' => 'projects.'], function(){
-		Route::group(['prefix' => 'live-feed', 'as' => 'live_feed.'], function(){
-			Route::get('/', ['as' => 'index', 'uses' => 'ProjectController@liveFeed']);
-			Route::get('/get-live-feed', ['as' => 'get_live_feed', 'uses' => 'FreelancerApi@getLiveFeed']);
-		});
+		Route::get('live-feed', ['as' => 'live_feed', 'uses' => 'ProjectController@liveFeed']);
+		Route::get('get-live-feed', ['as' => 'get_live_feed', 'uses' => 'FreelancerApi@getLiveFeed']);
+		Route::get('details/{id?}', ['as' => 'details', 'uses' => 'ProjectController@liveFeedDetails']);
+		Route::get('details/get-portfolio-items', ['as' => 'details.get_portfolio_items', 'uses' => 'ProjectController@getPortfolioItems']);	
 	});
 	
 });
@@ -195,7 +186,6 @@ View::composer(['admin.layouts.master'], function($view){
 View::composer(['bidder.layouts.master'], function($view){
 	$view->with('phase_2', \App\Models\Option::where('key', 'phase_2')->first());
 });
-
 
 //test app routes
 Route::get(config('app-test.app_test_route'),[AppTestController::class,'index'])->name('app_test.index');

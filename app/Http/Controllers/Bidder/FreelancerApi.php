@@ -16,14 +16,20 @@ class FreelancerApi extends Controller
     public function getLiveFeed(){
 
         $projects_filter = ProjectFilter::first();
-        $url = "https://www.freelancer.com/api/projects/0.1/projects/active/?compact=true&sort_field=time_updated&" . $projects_filter;
+        $url = "https://www.freelancer.com/api/projects/0.1/projects/active/?sort_field=time_updated&user_details=true&user_employer_reputation=true&" . $projects_filter;
  
         $response = Http::withHeaders([
             'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
         ])->get($url);
         
         $response_array = $response->json();
+        
+        if($response_array['status'] == 'error'){
+            return $response_array;
+        }
+
         $projects = $response_array['result']['projects'];
+        $users = $response_array['result']['users'];
 
         $project_ids = collect($projects)->pluck('id');
         $project_ids = LiveFeed::whereIn('project_id', $project_ids)->get()->pluck('project_id')->toArray();
@@ -42,6 +48,7 @@ class FreelancerApi extends Controller
                 'currency' => json_encode($project['currency']),
                 'upgrades' => json_encode($project['upgrades']),
                 'bid_stats' => json_encode($project['bid_stats']),
+                'reputation' => json_encode($users[$project['owner_id']]['employer_reputation']['entire_history']),
                 'time_submitted' => $project['time_submitted'],
                 'time_updated' => $project['time_updated']
             ];
@@ -53,7 +60,7 @@ class FreelancerApi extends Controller
             );
         }
 
-       return redirect(route('bidder.projects.live_feed.index'));
+       return redirect(route('bidder.projects.live_feed'));
         
     }
 }

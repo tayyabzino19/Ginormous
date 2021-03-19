@@ -138,7 +138,7 @@
                         <!--begin::Topbar-->
                         <div class="topbar">
                             <div class="topbar-item mr-8">
-                                <a href="" class="btn btn-danger btn-sm">Start Bidding</a>
+                                <a href="{{ route('bidder.projects.live_feed') }}" class="btn btn-danger btn-sm">Start Bidding</a>
                             </div>
                             <!--begin::Languages-->
                             <div class="dropdown">
