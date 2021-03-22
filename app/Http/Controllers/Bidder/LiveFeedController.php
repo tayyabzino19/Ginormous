@@ -326,6 +326,7 @@ class LiveFeedController extends Controller
             'amount' => (float) $request->amount,
             'period' => (integer) $request->period,
             'milestone_percentage' => (integer) $request->milestone_percentage,
+            'description' => $request->description,
         ]);
 
         $response_array = $response->json();
