@@ -22,3 +22,4 @@
     function deleteImage($dir, $name){
         Storage::delete(config($dir) . $name);
     }
+

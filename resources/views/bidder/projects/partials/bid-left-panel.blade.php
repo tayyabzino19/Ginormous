@@ -11,18 +11,21 @@
         </div>
 
         <div class="offcanvas-content pr-5 mr-n5">
-            <form>
+            <form id="bid_now_form" method="post" action="{{ route('bidder.projects.bid_now') }}">
+                @csrf
+                <input type="hidden" name="project_id" value="{{ $project->project_id }}">
+                <input type="hidden" name="milestone_percentage" value="100">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label class="font-weight-bold">Details:</label>
-                            <textarea rows="7" required name="details" class="form-control" placeholder="Enter Details"></textarea>
+                            <textarea rows="7" required name="description" class="form-control" placeholder="Enter Details"></textarea>
                         </div>
                     </div>
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label class="font-weight-bold">Days:</label>
-                            <input type="number" min="1" max="800" required placeholder="Enter Days" class="form-control">
+                            <input type="number" name="period" min="1" max="800" required placeholder="Enter Days" class="form-control">
                         </div>
                     </div>
 
@@ -31,7 +34,7 @@
                             <label class="font-weight-bold">Budget:</label>
 
                             <div class="input-group">
-                                <input type="number" min="1" max="99999999" required placeholder="Enter Budget" class="form-control">
+                                <input name="amount" type="number" min="1" max="99999999" required placeholder="Enter Budget" class="form-control">
                                 <div class="input-group-append">
                                     <button class="btn btn-secondary" type="button">USD</button>
                                 </div>

@@ -25,6 +25,13 @@
                         </li>
                         
                     </ul>
+
+                    <a href="{{ route("bidder.projects.sync_live_feed_details", $project->id) }}" data-toggle="tooltip" title="Sync Details" style="height: 32px; width: 32px;" class="btn btn-icon btn-warning btn-sm btn-circle btn-dropdown btn-lg mr-1 pulse pulse-light float-right">
+                        <span class="svg-icon svg-icon-xl svg-icon-primary">
+                            <i class="ki ki-reload" style="font-size: 14px;"></i>
+                        </span>
+                        <span class="pulse-ring"></span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -236,33 +243,37 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-8">
-                                    <div class="float-left">
-                                        <img src="{{ $live_feed_proposal->avatar_cdn }}" style="height:86px;">
-                                    </div>
-                                    <div class="float-left ml-4">
-                                        <img src="{{ $live_feed_proposal->country->highres_flag_url_cdn }}" style="width:30px;"> <span class="font-size-h3 font-weight-bold ml-1">{{ $live_feed_proposal->public_name }}</span>
-                                        <span class="font-size-h3 font-weight-normal text-dark-50">{{ '@' . $live_feed_proposal->username }}</span>
-                                        {{-- <p class="text-dark-50 font-size-h6 mt-2 mb-2">Wordpress Shopify Prestashop Magento PHP WIX UI/UX</p> --}}
-
-                                        <p>{{ $live_feed_proposal->tagline  }}</p>
-                                        <span title="Ratings" data-toggle="tooltip">
+                                    <div class="row">
+                                        <div class="col-lg-2">
+                                            <div class="float-left">
+                                                <img src="{{ $live_feed_proposal->avatar_cdn }}" style="height:86px;">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-10">
+                                            <img src="{{ $live_feed_proposal->country->highres_flag_url_cdn }}" style="width:30px;"> <span class="font-size-h3 font-weight-bold ml-1">{{ $live_feed_proposal->public_name }}</span>
+                                            <span class="font-size-h3 font-weight-normal text-dark-50">{{ '@' . $live_feed_proposal->username }}</span>
                                             
-                                            @for($i = 0; $i < round($live_feed_proposal->reputation->overall,0); $i++)
-                                                <i class="fas fa-star text-warning"></i>
-                                            @endfor
-
-                                            @for($i = 5; $i > round($live_feed_proposal->reputation->overall,0); $i--)
-                                                <i class="fas fa-star text-dark-30"></i>
-                                            @endfor
+                                            <p class="text-dark-50 font-size-h6 mt-2 mb-2">{{ $live_feed_proposal->tagline  }}</p>
                                             
-                                            <span class="font-size-h6">{{ round($live_feed_proposal->reputation->overall, 1) }}</span>
-                                        </span>
-                                        
-                                        <span data-toggle="tooltip" title="Reviews"><i class="fab fa-rocketchat text-info ml-6"></i> <span class="font-size-h6">{{ round($live_feed_proposal->reputation->reviews,0) }}</span></span>
-                                        
-                                        <span title="Money" data-toggle="tooltip"><span class="text-success font-size-h3 font-weight-bold ml-6">$</span> <span class="text-success font-weight-boldest" style="letter-spacing: 1px; position: relative; bottom: 2px;">|||||||<span class="text-muted">||</span></span><span class="font-size-h6">8.1</span></span>
+                                            <span title="Ratings" data-toggle="tooltip">
+                                                
+                                                @for($i = 0; $i < round($live_feed_proposal->reputation->overall,0); $i++)
+                                                    <i class="fas fa-star text-warning"></i>
+                                                @endfor
 
-                                        <span data-toggle="tooltip" title="Completion Rate"><i class="fas fa-circle-notch text-primary ml-4 font-size-h4"></i> <span class="font-size-h6">100%</span></span>
+                                                @for($i = 5; $i > round($live_feed_proposal->reputation->overall,0); $i--)
+                                                    <i class="fas fa-star text-dark-30"></i>
+                                                @endfor
+                                                
+                                                <span class="font-size-h6">{{ round($live_feed_proposal->reputation->overall, 1) }}</span>
+                                            </span>
+                                            
+                                            <span data-toggle="tooltip" title="Reviews"><i class="fab fa-rocketchat text-info ml-6"></i> <span class="font-size-h6">{{ round($live_feed_proposal->reputation->reviews,0) }}</span></span>
+                                            
+                                            <span title="Money" data-toggle="tooltip"><span class="text-success font-size-h3 font-weight-bold ml-6">$</span> <span class="text-success font-weight-boldest" style="letter-spacing: 1px; position: relative; bottom: 2px;">|||||||<span class="text-muted">||</span></span><span class="font-size-h6">8.1</span></span>
+
+                                            <span data-toggle="tooltip" title="Completion Rate"><i class="fas fa-circle-notch text-primary ml-4 font-size-h4"></i> <span class="font-size-h6">{{ round(($live_feed_proposal->reputation->completion_rate * 100) / 1) }}%</span></span>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -272,22 +283,9 @@
                                 </div>
 
                                 <div class="col-lg-12 mt-8">
-                                    {{-- <h6>Greetings!!</h6> --}}
                                     <div class="font-size-lg mt-4">
                                         {!! nl2br($live_feed_proposal->description) !!}
                                     </div>
-                                    {{-- <div class="font-size-lg mt-4">
-                                        I have read your project. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry<span class="dots">...</span>
-                                        <div class="more d-none">
-                                            Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-                                            remaining essentially unchanged. <br /> It was popularised in the 1960s with the release of Letraset sheets containing
-                                            <p>Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. I have read your project. Lorem Ipsum is simply dummy text
-                                                of the printing and typesetting industry Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since
-                                                the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                            <p>Regards, <br /> Ahmad Ayaz</p>
-                                        </div>
-                                        <button class="btn btn-link p-0 readmore">Read More</button>
-                                    </div> --}}
                                 </div>
 
                                 <div class="col-lg-12 text-right mt-6">

@@ -156,10 +156,14 @@ Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder'
 	});
 
 	Route::group(['prefix' => 'projects', 'as' => 'projects.'], function(){
-		Route::get('live-feed', ['as' => 'live_feed', 'uses' => 'ProjectController@liveFeed']);
-		Route::get('get-live-feed', ['as' => 'get_live_feed', 'uses' => 'FreelancerApi@getLiveFeed']);
-		Route::get('details/{id?}', ['as' => 'details', 'uses' => 'ProjectController@liveFeedDetails']);
-		Route::get('details/get-portfolio-items', ['as' => 'details.get_portfolio_items', 'uses' => 'ProjectController@getPortfolioItems']);	
+
+		Route::get('live-feed', ['as' => 'live_feed', 'uses' => 'LiveFeedController@liveFeed']);
+		Route::get('get-live-feed', ['as' => 'get_live_feed', 'uses' => 'LiveFeedController@getLiveFeed']);
+		Route::get('details/{id?}', ['as' => 'details', 'uses' => 'LiveFeedController@liveFeedDetails']);
+		Route::get('details/get-portfolio-items', ['as' => 'details.get_portfolio_items', 'uses' => 'LiveFeedController@getPortfolioItems']);
+		Route::get('sync-live-feed-details/{id?}', ['as' => 'sync_live_feed_details', 'uses' => 'LiveFeedController@syncLiveFeedDetails']);
+		Route::post('bid-now', ['as' => 'bid_now', 'uses' => 'LiveFeedController@bidNow']);
+		
 	});
 	
 });

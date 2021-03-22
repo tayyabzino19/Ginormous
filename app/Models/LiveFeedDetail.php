@@ -16,4 +16,8 @@ class LiveFeedDetail extends Model
         'reputation' => 'object',
         'country' => 'object',
     ];
+
+    public function liveFeed(){
+        return $this->belongsTo(LiveFeed::class);
+    }
 }

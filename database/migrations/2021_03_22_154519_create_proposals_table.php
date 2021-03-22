@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLiveFeedProposalsTable extends Migration
+class CreateProposalsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateLiveFeedProposalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('live_feed_proposals', function (Blueprint $table) {
+        Schema::create('proposals', function (Blueprint $table) {
             $table->id();
             $table->integer('bid_id');
-            $table->integer('live_feed_id');
+            $table->integer('project_id');
             $table->integer('bidder_id');
             $table->string('username')->nullable();
             $table->string('public_name')->nullable();
@@ -39,6 +39,6 @@ class CreateLiveFeedProposalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('live_feed_proposals');
+        Schema::dropIfExists('proposals');
     }
 }
