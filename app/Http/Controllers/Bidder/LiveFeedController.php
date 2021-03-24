@@ -17,20 +17,25 @@ use App\Models\Industry;
 use App\Models\Type;
 use App\Models\Item;
 use App\Models\ProjectFilter;
+use App\Models\Project;
+use App\Models\ProjectDetail;
+use App\Models\ProjectProposal;
+use Auth;
 
 use Illuminate\Support\Facades\Http;
 
 class LiveFeedController extends Controller
 {
     public function liveFeed(){
-        $projects = LiveFeed::orderBy('time_updated', 'desc')->paginate(50);
+       
+        $projects = LiveFeed::orderBy('time_submitted', 'desc')->paginate(50);
         return view('bidder.projects.live-feed', compact('projects'));
     }
 
     public function getLiveFeed(){
 
         $projects_filter = ProjectFilter::first();
-        $url = "https://www.freelancer.com/api/projects/0.1/projects/active/?sort_field=time_updated&user_details=true&user_employer_reputation=true&" . $projects_filter;
+        $url = "https://www.freelancer.com/api/projects/0.1/projects/active/?sort_field=time_submitted&user_details=true&user_employer_reputation=true&" . $projects_filter;
  
         $response = Http::withHeaders([
             'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
@@ -45,14 +50,20 @@ class LiveFeedController extends Controller
         $projects = $response_array['result']['projects'];
         $users = $response_array['result']['users'];
 
-        $project_ids = collect($projects)->pluck('id');
-        $project_ids = LiveFeed::whereIn('project_id', $project_ids)->get()->pluck('project_id')->toArray();
-
+        $fresh_project_ids = collect($projects)->pluck('id');
+        $live_feed_project_ids = LiveFeed::whereIn('project_id', $fresh_project_ids)->get()->pluck('project_id')->toArray();
+        $project_ids = Project::whereIn('freelancer_project_id', $fresh_project_ids)->get()->pluck('project_id')->toArray();
         
         foreach($projects as $project){
+
+            if(in_array($project['id'], $live_feed_project_ids)){
+                continue;
+            }
+
             if(in_array($project['id'], $project_ids)){
                 continue;
             }
+
             $projects_array[] = [
                 'project_id' => $project['id'],
                 'title' => $project['title'],
@@ -309,15 +320,23 @@ class LiveFeedController extends Controller
     }
 
     public function bidNow(Request $request){
+        //apply validations
         $bidder_id = 53598218;
         $request->validate([
+            'id' => 'required',
             'project_id' => 'required',
             'amount' => 'required',
             'period' => 'required',
             'milestone_percentage' => 'required',
             'description' => 'required'
         ]);
-        
+
+        $live_feed = LiveFeed::with('LiveFeedDetail', 'LiveFeedProposals')->where('id', $request->id)->where('project_id', $request->project_id)->first();
+        if(!$live_feed){
+            return abort(404);
+        }
+
+        //send bid to freelancer.com
         $response = Http::withHeaders([
             'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR',
         ])->post('https://www.freelancer.com/api/projects/0.1/bids/', [
@@ -333,17 +352,128 @@ class LiveFeedController extends Controller
         if($response_array['status'] == 'error'){
             return back()->with('error', $response_array['message']);
         }
+
+        //if bid successfully added. Save project
+        $project = new Project;
+        $project->user_id = Auth::user()->id;
+        $project->freelancer_project_id = $live_feed->project_id;
+        $project->title = $live_feed->title;
+        $project->preview_description = $live_feed->preview_description;
+        $project->time_submitted = $live_feed->time_submitted;
+        $project->time_updated = $live_feed->time_updated;
+        $project->type = $live_feed->type;
+        $project->currency = json_decode(json_encode($live_feed->currency), true);
+        $project->employer_reputation = json_decode(json_encode($live_feed->LiveFeedDetail->reputation), true);
+        $project->budget = json_decode(json_encode($live_feed->budget), true);
+        $project->upgrades = json_decode(json_encode($live_feed->upgrades), true);
+        $project->bid_stats = json_decode(json_encode($live_feed->bid_stats), true);
+        $project->status = 'bidded';
+        $project->save();
+
+        //Save project details
+        $detail = new ProjectDetail;
+        $detail->project_id = $project->id;
+        $detail->description = $live_feed->LiveFeedDetail->description;
+        $detail->jobs = json_decode(json_encode($live_feed->LiveFeedDetail->jobs), true);
+        $detail->attachments = json_decode(json_encode($live_feed->LiveFeedDetail->attachments), true);
+        $detail->employer_registration_date = $live_feed->LiveFeedDetail->registration_date;
+        $detail->country = json_decode(json_encode($live_feed->LiveFeedDetail->country), true);
+        $detail->employer_status = json_decode(json_encode($live_feed->LiveFeedDetail->status), true);
+        $detail->employer_username = $live_feed->LiveFeedDetail->username;
+        $detail->employer_public_name = $live_feed->LiveFeedDetail->public_name;
+        $detail->employer_avatar_cdn = $live_feed->LiveFeedDetail->avatar_cdn;
+        $detail->save();
+
+        //save project proposals
+        foreach($live_feed->LiveFeedProposals as $live_feed_proposal){
+            $proposal = new ProjectProposal;
+            $proposal->bid_id = $live_feed_proposal->bid_id;
+            $proposal->project_id = $project->id;
+            $proposal->bidder_id = $live_feed_proposal->bidder_id;
+            $proposal->username = $live_feed_proposal->username;
+            $proposal->public_name = $live_feed_proposal->public_name;
+            $proposal->tagline = $live_feed_proposal->tagline;
+            $proposal->avatar_cdn = $live_feed_proposal->avatar_cdn;
+            $proposal->amount = $live_feed_proposal->amount;
+            $proposal->period = $live_feed_proposal->period;
+            $proposal->description = $live_feed_proposal->description;
+            $proposal->submitdate = $live_feed_proposal->submitdate;
+            $proposal->reputation = json_decode(json_encode($live_feed_proposal->reputation), true);
+            $proposal->country = json_decode(json_encode($live_feed_proposal->country), true);
+            $proposal->save();
+        }
+
+        //remove live feed details for this project
+        $live_feed->LiveFeedDetail()->delete();
+        $live_feed->LiveFeedProposals()->delete();
+        $live_feed->delete();
+       
+        return redirect(route('bidder.projects.live_feed'))->with('success', "Proposal has been sent.");
+    }
+
+    public function markAsMissIt($id = null){
         
+        $live_feed = LiveFeed::findOrFail($id);
+        $project = new Project;
+        $project->user_id = Auth::user()->id;
+        $project->freelancer_project_id = $live_feed->project_id;
+        $project->title = $live_feed->title;
+        $project->preview_description = $live_feed->preview_description;
+        $project->type = $live_feed->type;
+        $project->budget = $live_feed->budget;
+        $project->currency = $live_feed->currency;
+        $project->upgrades = $live_feed->upgrades;
+        $project->bid_stats = $live_feed->bid_stats;
+        $project->employer_reputation = $live_feed->reputation;
+        $project->time_submitted = $live_feed->time_submitted;
+        $project->time_updated = $live_feed->time_updated;
+        $project->status = "missed";
+
+        if($project->save()){
+            $live_feed->LiveFeedDetail()->delete();
+            $live_feed->LiveFeedProposals()->delete();
+            $live_feed->delete();
+
+            $response['msg'] = "Ok";
+            $response['status'] = "success";
+        }else{
+            $response['status'] = "error";
+            $response['msg'] = "Something went wrong, Please try again";
+        }
+
+        return json_encode($response);
+    }
+
+    public function markAsBidLater($id = null){
         
-        // bidder_id
-        // project_id
-        // amount
-        // period
-        // description //Greater than or equal to 100
-        // project_owner_id
-        // submitdate
-        // time_submitted
-        // milestone_percentage
-        return back()->with('success', "Proposal has been sent.");
+        $live_feed = LiveFeed::findOrFail($id);
+        $project = new Project;
+        $project->user_id = Auth::user()->id;
+        $project->freelancer_project_id = $live_feed->project_id;
+        $project->title = $live_feed->title;
+        $project->preview_description = $live_feed->preview_description;
+        $project->type = $live_feed->type;
+        $project->budget = $live_feed->budget;
+        $project->currency = $live_feed->currency;
+        $project->upgrades = $live_feed->upgrades;
+        $project->bid_stats = $live_feed->bid_stats;
+        $project->employer_reputation = $live_feed->reputation;
+        $project->time_submitted = $live_feed->time_submitted;
+        $project->time_updated = $live_feed->time_updated;
+        $project->status = "bid_later";
+
+        if($project->save()){
+            $live_feed->LiveFeedDetail()->delete();
+            $live_feed->LiveFeedProposals()->delete();
+            $live_feed->delete();
+
+            $response['msg'] = "Ok";
+            $response['status'] = "success";
+        }else{
+            $response['status'] = "error";
+            $response['msg'] = "Something went wrong, Please try again";
+        }
+
+        return json_encode($response);
     }
 }

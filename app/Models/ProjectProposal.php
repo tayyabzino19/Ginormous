@@ -5,7 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Proposal extends Model
+class ProjectProposal extends Model
 {
     use HasFactory;
+
+   protected $casts = [
+       'reputation' => 'object',
+       'country' => 'object',
+   ];
 }

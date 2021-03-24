@@ -156,13 +156,19 @@ Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder'
 	});
 
 	Route::group(['prefix' => 'projects', 'as' => 'projects.'], function(){
-
+		
 		Route::get('live-feed', ['as' => 'live_feed', 'uses' => 'LiveFeedController@liveFeed']);
 		Route::get('get-live-feed', ['as' => 'get_live_feed', 'uses' => 'LiveFeedController@getLiveFeed']);
 		Route::get('details/{id?}', ['as' => 'details', 'uses' => 'LiveFeedController@liveFeedDetails']);
 		Route::get('details/get-portfolio-items', ['as' => 'details.get_portfolio_items', 'uses' => 'LiveFeedController@getPortfolioItems']);
 		Route::get('sync-live-feed-details/{id?}', ['as' => 'sync_live_feed_details', 'uses' => 'LiveFeedController@syncLiveFeedDetails']);
 		Route::post('bid-now', ['as' => 'bid_now', 'uses' => 'LiveFeedController@bidNow']);
+		Route::get('mark-as-miss-it/{id?}', ['as' => 'mark_as_miss_it', 'uses' => 'LiveFeedController@markAsMissIt']);
+		Route::get('mark-as-bid-later/{id?}', ['as' => 'mark_as_bid_later', 'uses' => 'LiveFeedController@markAsBidLater']);
+
+		Route::get('bid-later', ['as' => 'bid_later', 'uses' => 'ProjectController@bidLater']);
+		Route::get('bid-later-details/{id?}', ['as' => 'bid_later_details', 'uses' => 'ProjectController@bidLaterDetails']);
+		Route::get('miss-project/{id?}', ['as' => 'miss_project', 'uses' => 'ProjectController@missProject']);
 		
 	});
 	

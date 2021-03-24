@@ -1,6 +1,6 @@
 @extends('bidder.layouts.master')
 @section('projects_nav', 'menu-item-open')
-@section('projects_live_feed_nav', 'menu-item-active')
+@section('projects_bid_later_nav', 'menu-item-active')
 
 @section('main')
 <div class="container">
@@ -17,24 +17,14 @@
                             Projects
                         </li>
                         <li class="breadcrumb-item">
-                            Live Feed
+                            Bid Later
                         </li>
-                        
                     </ul>
-
-                    <a href="{{ route("bidder.projects.get_live_feed") }}" data-toggle="tooltip" title="Load Projects" style="height: 32px; width: 32px;" class="btn btn-icon btn-warning btn-sm btn-circle btn-dropdown btn-lg mr-1 pulse pulse-light float-right">
-                        <span class="svg-icon svg-icon-xl svg-icon-primary">
-                            <i class="ki ki-reload" style="font-size: 14px;"></i>
-                        </span>
-                        <span class="pulse-ring"></span>
-                    </a>
-                    
                     
                 </div>
             </div>
         </div>
     </div>
-
 
     <div class="row">
 
@@ -47,7 +37,7 @@
             }
         @endphp
         <div class="col-lg-12">
-            <div class="card card-custom card-stretch gutter-b feed_card" data-link="{{ route('bidder.projects.details', $project->id) }}">
+            <div class="card card-custom card-stretch gutter-b feed_card" data-link="{{ route('bidder.projects.bid_later_details', $project->id) }}">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-1 d-flex align-items-center justify-content-center">
@@ -79,7 +69,7 @@
                             <hr />
                             <div class="row">
                                 <div class="col-lg-5">
-                                    {{ $project->bid_stats->bid_count }} <strong>Bids</strong> &nbsp;|&nbsp; <span title="Ratings" data-toggle="tooltip" class="label label-inline">{{ round($project->reputation->overall, 1) }}</span> &nbsp;|&nbsp; <strong class="text-warning">{{ round($project->reputation->reviews,0) }} Reviews</strong>
+                                    {{ $project->bid_stats->bid_count }} <strong>Bids</strong> &nbsp;|&nbsp; <span title="Ratings" data-toggle="tooltip" class="label label-inline">{{ round($project->employer_reputation->overall, 1) }}</span> &nbsp;|&nbsp; <strong class="text-warning">{{ round($project->employer_reputation->reviews,0) }} Reviews</strong>
                                 </div>
                                 <div class="col-lg-7">
                                     @if($project->upgrades->NDA)
@@ -103,12 +93,7 @@
                         </div>
                         <div class="col-lg-1 d-flex align-items-center justify-content-center">
                             <div>
-                                <button onclick="missIt({{ $project->id }})" title="Miss It" data-toggle="tooltip" class="btn btn-sm btn-circle btn-icon btn-light-danger mb-4 action_btn miss_it"><i class="fas fa-times"></i></button>
-                                <br />
-                                <br />
-                                <br />
-                                <br />
-                                <button onclick="bidLater({{ $project->id }})" title="Bid Later" data-toggle="tooltip" class="btn btn-sm btn-circle btn-icon btn-light-primary action_btn bid_later"><i class="far fa-clock"></i></button>
+                                <button onclick="missProject({{ $project->id }})" title="Miss It" data-toggle="tooltip" class="btn btn-sm btn-circle btn-icon btn-light-danger mb-4 action_btn miss_it"><i class="fas fa-times"></i></button>
                             </div>
                         </div>
                     </div>
@@ -123,6 +108,7 @@
     <div>
         {{ $projects->links() }}
     </div>
+
 </div>
 @endsection
 
@@ -150,40 +136,13 @@
             }, 500);
             
         });
-
-        $(".action_btn.bid_later").on('click', function(){
-            new Audio(baseUrl).play();
-            var this_feed_card = $(this).parent().parent().parent().parent().parent();
-            this_feed_card.addClass("animate__animated animate__fadeOutTopLeft");
-            setTimeout(function(){
-                this_feed_card.addClass("d-none");
-            }, 500);
-        });
         
     });
 
-    function missIt(id){
+    function missProject(id){
         $.ajax({
             method: "get",
-            url: "{{ route('bidder.projects.mark_as_miss_it') }}/"+id,
-            dataType: "JSON",
-            success: function(response){
-                console.log(response);
-            },
-            error: function(jqXHR, exception){
-                if(jqXHR.status == 422){
-                    $.each(jqXHR.responseJSON.errors, function (key, value){
-                        console.log(value);
-                    });
-                }
-            }
-        });
-    }
-
-    function bidLater(id){
-        $.ajax({
-            method: "get",
-            url: "{{ route('bidder.projects.mark_as_bid_later') }}/"+id,
+            url: "{{ route('bidder.projects.miss_project') }}/"+id,
             dataType: "JSON",
             success: function(response){
                 console.log(response);

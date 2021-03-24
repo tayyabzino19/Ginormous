@@ -109,7 +109,7 @@
                                     {{ $project->title }}
                                     <br />
                                     <small>
-                                        <i style="font-size: 11px;" class="fa fa-clock"></i> {{ \Carbon\Carbon::parse(date('Y-m-d H:i:s', $project->time_updated))->diffForHumans() }}
+                                        <i style="font-size: 11px;" class="fa fa-clock"></i> {{ \Carbon\Carbon::parse(date('Y-m-d H:i:s', $project->time_submitted))->diffForHumans() }}
                                     </small>
                                 </h5>
                             </div>

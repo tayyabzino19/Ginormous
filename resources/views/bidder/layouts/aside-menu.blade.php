@@ -29,7 +29,7 @@
                             </a>
                         </li>
                         <li class="menu-item @yield('projects_bid_later_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('bidder.projects.bid_later') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
