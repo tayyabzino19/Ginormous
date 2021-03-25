@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AppTestController;
+use App\Http\Controllers\ApiController;
 
 
 Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'role:admin'], function(){
@@ -44,6 +45,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 			Route::post('create', ['as' => 'save', 'uses' => 'SkillController@save']);
 			Route::get('edit/{id?}', ['as' => 'edit', 'uses' => 'SkillController@edit']);
 			Route::post('updated', ['as' => 'update', 'uses' => 'SkillController@update']);
+			Route::get('sync', ['as' => 'sync', 'uses' => 'SkillController@sync']);
 		});
 
 		Route::group(['prefix' => 'industries', 'as' => 'industries.'], function(){
@@ -173,6 +175,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder'
 	});
 	
 });
+
+//Test Freelancer APi's: request & response
+Route::get('freelancer-api/request/{type?}', [ApiController::class, 'request'])->name('bidder.freelancer_api.request');
+Route::get('freelancer-api/response/{type?}', [ApiController::class, 'response'])->name('bidder.freelancer_api.response');
 
 
 

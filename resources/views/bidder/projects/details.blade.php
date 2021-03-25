@@ -25,13 +25,17 @@
                         </li>
                         
                     </ul>
+                    <div class="float-right">
+                    <a target="_blank" href="{{ route('bidder.freelancer_api.request', 'live-feed-details') }}" data-toggle="tooltip" title="View Last Api Request" style="height: 32px; width: 32px;" class="fa fa-eye btn btn-primary btn-sm btn-icon btn-circle"></a>
+                    <a target="_blank" href="{{ route('bidder.freelancer_api.response', 'live-feed-details') }}" data-toggle="tooltip" title="View Last Api Response" style="height: 32px; width: 32px;" class="fa fa-eye btn btn-success btn-sm btn-icon btn-circle"></a>
 
-                    <a href="{{ route("bidder.projects.sync_live_feed_details", $project->id) }}" data-toggle="tooltip" title="Sync Details" style="height: 32px; width: 32px;" class="btn btn-icon btn-warning btn-sm btn-circle btn-dropdown btn-lg mr-1 pulse pulse-light float-right">
+                    <a href="{{ route("bidder.projects.sync_live_feed_details", $project->id) }}" data-toggle="tooltip" title="Sync Details" style="height: 32px; width: 32px;" class="btn btn-icon btn-warning btn-sm btn-circle btn-dropdown btn-lg mr-1 pulse pulse-light">
                         <span class="svg-icon svg-icon-xl svg-icon-primary">
                             <i class="ki ki-reload" style="font-size: 14px;"></i>
                         </span>
                         <span class="pulse-ring"></span>
                     </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -235,6 +239,10 @@
 
         <div class="tab-pane" id="tab_2" role="tabpanel">
             <!--begin::Row-->
+            <div style="position: relative; bottom: 10px;">
+                <a target="_blank" href="{{ route('bidder.freelancer_api.request', 'live-feed-proposals') }}" data-toggle="tooltip" title="View Last Api Request" style="height: 32px; width: 32px;" class="fa fa-eye btn btn-primary btn-sm btn-icon btn-circle"></a>
+                <a target="_blank" href="{{ route('bidder.freelancer_api.response', 'live-feed-proposals') }}" data-toggle="tooltip" title="View Last Api Response" style="height: 32px; width: 32px;" class="fa fa-eye btn btn-success btn-sm btn-icon btn-circle"></a>
+            </div>
             @foreach($project->LiveFeedProposals as $live_feed_proposal)
                 
             <div class="row mb-6">

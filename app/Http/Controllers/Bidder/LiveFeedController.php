@@ -20,6 +20,7 @@ use App\Models\ProjectFilter;
 use App\Models\Project;
 use App\Models\ProjectDetail;
 use App\Models\ProjectProposal;
+use App\Models\Api;
 use Auth;
 
 use Illuminate\Support\Facades\Http;
@@ -46,6 +47,17 @@ class LiveFeedController extends Controller
         if($response_array['status'] == 'error'){
             return $response_array;
         }
+
+        //save api request and response for test
+        $api = Api::where('type', 'live-feed')->first();
+        if(!$api){
+            $api = new Api;
+        }
+        $api->request = $url;
+        $api->response = $response_array;
+        $api->type = 'live-feed';
+        $api->save();
+        // End save api
 
         $projects = $response_array['result']['projects'];
         $users = $response_array['result']['users'];
@@ -95,14 +107,26 @@ class LiveFeedController extends Controller
 
         if(LiveFeedDetail::where('live_feed_id', $id)->doesntExist()){
             //Freelancer Project details and proposal Api's
+            $url = "https://www.freelancer.com/api/projects/0.1/projects/" . $LiveFeed->project_id . "/?full_description=true&job_details=true&attachment_details=true&user_details=true&user_avatar=true&user_country_details=true&user_status=true&user_employer_reputation=true";
             $response = Http::withHeaders([
                 'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
-            ])->get("https://www.freelancer.com/api/projects/0.1/projects/" . $LiveFeed->project_id . "/?full_description=true&job_details=true&attachment_details=true&user_details=true&user_avatar=true&user_country_details=true&user_status=true&user_employer_reputation=true");
+            ])->get($url);
             
             $response_array = $response->json();
             if($response_array['status'] == 'error'){
                 return $response_array;
             }
+
+            //save api request and response for test
+            $api = Api::where('type', 'live-feed-details')->first();
+            if(!$api){
+                $api = new Api;
+            }
+            $api->request = $url;
+            $api->response = $response_array;
+            $api->type = 'live-feed-details';
+            $api->save();
+            // End save api
 
             $result_array = $response_array['result'];
             $live_feed_details = new LiveFeedDetail;
@@ -134,13 +158,25 @@ class LiveFeedController extends Controller
             $live_feed->reputation = $result_array['owner']['employer_reputation']['entire_history'];
             $live_feed->save();
 
+            $url = "https://www.freelancer.com/api/projects/0.1/projects/" . $LiveFeed->project_id . '/bids/?user_details=true&user_avatar=true&user_country_details=true&user_reputation=true&user_display_info=true';
             $response = Http::withHeaders([
                 'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
-            ])->get("https://www.freelancer.com/api/projects/0.1/projects/" . $LiveFeed->project_id . '/bids/?user_details=true&user_avatar=true&user_country_details=true&user_reputation=true&user_display_info=true');
+            ])->get($url);
             
            $response_array = $response->json();
     
             if(isset($response_array['result']) && count($response_array['result']) > 0){
+                //save api request and response for test
+                $api = Api::where('type', 'live-feed-proposals')->first();
+                if(!$api){
+                    $api = new Api;
+                }
+                $api->request = $url;
+                $api->response = $response_array;
+                $api->type = 'live-feed-proposals';
+                $api->save();
+                // End save api
+
                 $bids = $response_array['result']['bids'];
                 $users = $response_array['result']['users'];
                 foreach($bids as $bid){
@@ -239,15 +275,27 @@ class LiveFeedController extends Controller
         }
         
         try{
+            $url = "https://www.freelancer.com/api/projects/0.1/projects/" . $live_feed_details->liveFeed->project_id . "/?full_description=true&job_details=true&attachment_details=true&user_details=true&user_avatar=true&user_country_details=true&user_status=true&user_employer_reputation=true";
             $response = Http::withHeaders([
                 'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
-            ])->get("https://www.freelancer.com/api/projects/0.1/projects/" . $live_feed_details->liveFeed->project_id . "/?full_description=true&job_details=true&attachment_details=true&user_details=true&user_avatar=true&user_country_details=true&user_status=true&user_employer_reputation=true");
+            ])->get($url);
             
            $response_array = $response->json();
 
             if($response_array['status'] == 'error'){
                 return $response_array;
             }
+
+            //save api request and response for test
+            $api = Api::where('type', 'live-feed-details')->first();
+            if(!$api){
+                $api = new Api;
+            }
+            $api->request = $url;
+            $api->response = $response_array;
+            $api->type = 'live-feed-details';
+            $api->save();
+            // End save api
             
             // Update LiveFeedDetail Model
             $result_array = $response_array['result'];
@@ -278,14 +326,27 @@ class LiveFeedController extends Controller
             $live_feed->reputation = $result_array['owner']['employer_reputation']['entire_history'];
             $live_feed->save();
 
+            $url = "https://www.freelancer.com/api/projects/0.1/projects/" . $live_feed_details->liveFeed->project_id . '/bids/?user_details=true&user_avatar=true&user_country_details=true&user_reputation=true&user_display_info=true';
             $response = Http::withHeaders([
                 'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
-            ])->get("https://www.freelancer.com/api/projects/0.1/projects/" . $live_feed_details->liveFeed->project_id . '/bids/?user_details=true&user_avatar=true&user_country_details=true&user_reputation=true&user_display_info=true');
+            ])->get($url);
             
             $response_array = $response->json();
             
             //Update LiveFeedProposal Model
             if(isset($response_array['result']) && count($response_array['result']) > 0){
+
+                //save api request and response for test
+                $api = Api::where('type', 'live-feed-proposals')->first();
+                if(!$api){
+                    $api = new Api;
+                }
+                $api->request = $url;
+                $api->response = $response_array;
+                $api->type = 'live-feed-proposals';
+                $api->save();
+                // End save api
+
                 $bids = $response_array['result']['bids'];
                 $users = $response_array['result']['users'];
                 foreach($bids as $bid){

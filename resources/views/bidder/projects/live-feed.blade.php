@@ -21,13 +21,17 @@
                         </li>
                         
                     </ul>
+                <div class="float-right">
+                    <a target="_blank" href="{{ route('bidder.freelancer_api.request', 'live-feed') }}" data-toggle="tooltip" title="View Last Api Request" style="height: 32px; width: 32px;" class="fa fa-eye btn btn-primary btn-sm btn-icon btn-circle"></a>
+                    <a target="_blank" href="{{ route('bidder.freelancer_api.response', 'live-feed') }}" data-toggle="tooltip" title="View Last Api Response" style="height: 32px; width: 32px;" class="fa fa-eye btn btn-success btn-sm btn-icon btn-circle"></a>
 
-                    <a href="{{ route("bidder.projects.get_live_feed") }}" data-toggle="tooltip" title="Load Projects" style="height: 32px; width: 32px;" class="btn btn-icon btn-warning btn-sm btn-circle btn-dropdown btn-lg mr-1 pulse pulse-light float-right">
+                    <a href="{{ route("bidder.projects.get_live_feed") }}" data-toggle="tooltip" title="Load Projects" style="height: 32px; width: 32px;" class="btn btn-icon btn-warning btn-sm btn-circle btn-dropdown btn-lg mr-1 pulse pulse-light">
                         <span class="svg-icon svg-icon-xl svg-icon-primary">
                             <i class="ki ki-reload" style="font-size: 14px;"></i>
                         </span>
                         <span class="pulse-ring"></span>
                     </a>
+                </div>
                     
                     
                 </div>

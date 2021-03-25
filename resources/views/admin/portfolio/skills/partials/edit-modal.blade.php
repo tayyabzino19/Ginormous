@@ -28,13 +28,13 @@
 
                             <div class="form-group float-left w-100">
                                 <label class="font-weight-bold">Name*</label>
-                                <input type="text" required name="name" class="form-control" value="HTML" placeholder="Enter skill here">
+                                <input readonly='readonly' type="text" required name="name" class="form-control" value="HTML" placeholder="Enter skill here">
                             </div>
 
                             <div class="form-group float-left w-100">
                                 <label class="font-weight-bold">Freelancer Job ID*</label>
                                 <a target="_blank" href="https://www.freelancer.com/api/projects/0.1/jobs" class="ml-2">View Job List</a>
-                                <input type="number" required name="freelancer_job_id" class="form-control" placeholder="Enter Freelancer Job ID here">
+                                <input readonly='readonly' type="number" required name="freelancer_job_id" class="form-control" placeholder="Enter Freelancer Job ID here">
                             </div>
                         </div>
                     </div>

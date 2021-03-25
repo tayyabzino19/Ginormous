@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\Skill;
 
+use Illuminate\Support\Facades\Http;
+
 class SkillController extends Controller
 {
     public function index(){
@@ -58,8 +60,8 @@ class SkillController extends Controller
         ]);
         
 
-        $skill->name = $request->name;
-        $skill->freelancer_job_id = $request->freelancer_job_id;
+        //$skill->name = $request->name;
+        //$skill->freelancer_job_id = $request->freelancer_job_id;
         $skill->status = $request->status;
         
         
@@ -71,5 +73,53 @@ class SkillController extends Controller
         return redirect(route('admin.portfolio.skills.index'))->with("error", "Something went wrong, Please try again.");
     
     }
+
+    public function sync(){
+        
+        $url = 'https://www.freelancer.com/api/projects/0.1/jobs';
+        $response = Http::withHeaders([
+            'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
+        ])->get($url);
+        
+        $response_array = $response->json();
+
+        if(Skill::count()){
+            $collection = collect($response_array['result']);
+            $new_jobs = $collection->where('id', '>', Skill::max('freelancer_job_id'));
+
+            foreach($new_jobs as $job){
+                $skills_array[] = [
+                    'name' => $job['name'],
+                    'freelancer_job_id' => $job['id']
+                ];
+            }
+
+            if(isset($skills_array)){
+                Skill::insert(
+                    $skills_array
+                );
+            }
+
+            return redirect(route('admin.portfolio.skills.index'))->with("success", "Skill updated successfully.");
+
+        }
+
+        foreach($response_array['result'] as $job){
+            $skills_array[] = [
+                'name' => $job['name'],
+                'freelancer_job_id' => $job['id']
+            ];
+        }
+        
+        if(isset($skills_array)){
+            Skill::insert(
+                $skills_array
+            );
+        }
+
+        return redirect(route('admin.portfolio.skills.index'))->with("success", "Skill updated successfully.");
+
+    }
+
     
 }

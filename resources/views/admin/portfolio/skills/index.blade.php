@@ -30,7 +30,12 @@
                         <h3 class="card-label">Skills</h3>
                     </div>
                     <div class="card-toolbar">
-                        <button data-toggle="modal" data-target="#add_skill_modal" class="btn btn-primary"><i class="flaticon-add"></i>Add New</button>
+                        <a href="{{ route("admin.portfolio.skills.sync") }}" data-toggle="tooltip" title="Sync Skills" style="height: 32px; width: 32px;" class="btn btn-icon btn-warning btn-sm btn-circle btn-dropdown btn-lg mr-1 pulse pulse-light">
+                            <span class="svg-icon svg-icon-xl svg-icon-primary">
+                                <i class="ki ki-reload" style="font-size: 14px;"></i>
+                            </span>
+                            <span class="pulse-ring"></span>
+                        </a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -68,7 +73,6 @@
                                 </tr>
                                 @endforeach
                                 
-
                             </tbody>
                         </table>
                     </div>
@@ -83,7 +87,6 @@
 @endsection
 
 @section('page_partials')
-@include('admin.portfolio.skills.partials.add-modal')
 @include('admin.portfolio.skills.partials.edit-modal')
 @endsection
 

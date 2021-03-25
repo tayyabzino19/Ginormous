@@ -20,8 +20,7 @@ class ProjectController extends Controller
         if(!$project){
             return abort(404);
         }
-        
-        return $project;
+        return view('bidder.projects.bid-later-details', compact('project'));
     }
 
     public function missProject($id = null){
@@ -42,4 +41,6 @@ class ProjectController extends Controller
 
         return json_encode($response);
     }
+
+    
 }
