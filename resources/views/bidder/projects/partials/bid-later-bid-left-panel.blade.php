@@ -11,10 +11,10 @@
         </div>
 
         <div class="offcanvas-content pr-5 mr-n5">
-            <form id="bid_now_form" method="post" action="{{ route('bidder.projects.bid_now') }}">
+            <form id="bid_now_form" method="post" action="{{ route('bidder.projects.bid_later_bid_now') }}">
                 @csrf
                 <input type="hidden" name="id" value="{{ $project->id }}">
-                <input type="hidden" name="project_id" value="{{ $project->project_id }}">
+                <input type="hidden" name="freelancer_project_id" value="{{ $project->freelancer_project_id }}">
                 <input type="hidden" name="milestone_percentage" value="100">
                 <div class="row">
                     <div class="col-lg-12">

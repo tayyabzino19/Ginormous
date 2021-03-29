@@ -144,6 +144,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder', 'as' => 'bidder.', 'middleware' => 'role:bidder'], function(){
 
 	Route::get('/', ['as' => 'index', 'uses' => 'BidderController@index']);
+	Route::get('bid-later-counter', ['as' => 'bid_later_counter', 'uses' => 'ProjectController@bidLaterCounter']);
 
 	Route::group(['prefix' => 'settings', 'as' => 'settings.'], function(){
 		Route::get('/', ['as' => 'index', 'uses' => 'BidderController@settings']);
@@ -161,8 +162,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder'
 		
 		Route::get('live-feed', ['as' => 'live_feed', 'uses' => 'LiveFeedController@liveFeed']);
 		Route::get('get-live-feed', ['as' => 'get_live_feed', 'uses' => 'LiveFeedController@getLiveFeed']);
-		Route::get('details/{id?}', ['as' => 'details', 'uses' => 'LiveFeedController@liveFeedDetails']);
 		Route::get('details/get-portfolio-items', ['as' => 'details.get_portfolio_items', 'uses' => 'LiveFeedController@getPortfolioItems']);
+		Route::get('details/{id?}', ['as' => 'details', 'uses' => 'LiveFeedController@liveFeedDetails']);
+
 		Route::get('sync-live-feed-details/{id?}', ['as' => 'sync_live_feed_details', 'uses' => 'LiveFeedController@syncLiveFeedDetails']);
 		Route::post('bid-now', ['as' => 'bid_now', 'uses' => 'LiveFeedController@bidNow']);
 		Route::get('mark-as-miss-it/{id?}', ['as' => 'mark_as_miss_it', 'uses' => 'LiveFeedController@markAsMissIt']);
@@ -171,6 +173,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder'
 		Route::get('bid-later', ['as' => 'bid_later', 'uses' => 'ProjectController@bidLater']);
 		Route::get('bid-later-details/{id?}', ['as' => 'bid_later_details', 'uses' => 'ProjectController@bidLaterDetails']);
 		Route::get('miss-project/{id?}', ['as' => 'miss_project', 'uses' => 'ProjectController@missProject']);
+		Route::get('bid-later/details/get-portfolio-items', ['as' => 'bid_later_details.get_portfolio_items', 'uses' => 'ProjectController@getPortfolioItems']);
+		Route::get('sync-project-details/{id?}', ['as' => 'sync_project_details', 'uses' => 'ProjectController@syncProjectDetails']);
+
+		Route::post('bid-later-bid-now', ['as' => 'bid_later_bid_now', 'uses' => 'ProjectController@bidNow']);
 		
 	});
 	
@@ -179,8 +185,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder'
 //Test Freelancer APi's: request & response
 Route::get('freelancer-api/request/{type?}', [ApiController::class, 'request'])->name('bidder.freelancer_api.request');
 Route::get('freelancer-api/response/{type?}', [ApiController::class, 'response'])->name('bidder.freelancer_api.response');
-
-
 
 Route::get('/home', function(){
     return redirect(route('bidder.index'));
@@ -201,6 +205,7 @@ View::composer(['admin.layouts.master'], function($view){
 
 View::composer(['bidder.layouts.master'], function($view){
 	$view->with('phase_2', \App\Models\Option::where('key', 'phase_2')->first());
+	$view->with('bid_later_counter', \App\Models\Project::where('user_id', Auth::user()->id)->where('status', 'bid_later')->count());
 });
 
 //test app routes

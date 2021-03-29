@@ -135,11 +135,14 @@
 								</span>
                             </p>
                         </div>
-                        <!--begin::Topbar-->
                         <div class="topbar">
-                            <div class="topbar-item mr-8">
+                            <div class="topbar-item">
+                                <a href="{{ route('bidder.projects.bid_later') }}" class="bid_later_counter btn btn-warning btn-sm mr-4 @if(!$bid_later_counter) d-none @endif">Bid Later: <span class="label label-inline label-white label-sm">{{ $bid_later_counter }}</span></a>
                                 <a href="{{ route('bidder.projects.live_feed') }}" class="btn btn-danger btn-sm">Start Bidding</a>
                             </div>
+                        </div>
+                        <!--begin::Topbar-->
+                        <div class="topbar">
                             <!--begin::Languages-->
                             <div class="dropdown">
                                 <!--begin::Toggle-->
@@ -346,6 +349,30 @@
                 toastr.error("{{ $error }}", "Error");
             @endforeach
         @endif
+
+        $('.action_btn.miss_it, .action_btn.bid_later').on('click', function(){
+            setTimeout(function(){
+                $.ajax({
+                    method: "get",
+                    url: "{{ route('bidder.bid_later_counter') }}",
+                    dataType: "JSON",
+                    success: function(response){
+                        console.log(response.counter);
+                        if(response.counter > 0){
+                            $(".bid_later_counter").removeClass('d-none');
+                            $(".bid_later_counter").addClass('d-inline-block');
+                            $(".bid_later_counter .label").html(response.counter);
+                        }else{
+                            $(".bid_later_counter").removeClass('d-inline-block');
+                            $(".bid_later_counter").addClass('d-none');
+                            $(".bid_later_counter .label").text(response.counter);
+                        }
+                    }
+                });
+            }, 1000);
+            
+        });
+
 
     </script>
 

@@ -17,7 +17,6 @@ class BidderController extends Controller
     }
 
     public function settings(){
-        
         $user  = Auth::user();
         return view('bidder.settings.index', compact('user'));
     }
@@ -51,7 +50,6 @@ class BidderController extends Controller
         }
 
         if($user->save()){
-
             return redirect(route('bidder.settings.index'))->with("success", "Your profile has been successfully updated.");
         }
         

@@ -16,4 +16,12 @@ class Project extends Model
         'bid_stats' => 'object',
         'employer_reputation' => 'object'
     ];
+
+    public function ProjectDetail(){
+        return $this->hasOne(ProjectDetail::class);
+    }
+
+    public function ProjectProposals(){
+        return $this->hasMany(ProjectProposal::class);
+    }
 }

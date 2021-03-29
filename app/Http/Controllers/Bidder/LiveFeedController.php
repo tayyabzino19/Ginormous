@@ -22,7 +22,6 @@ use App\Models\ProjectDetail;
 use App\Models\ProjectProposal;
 use App\Models\Api;
 use Auth;
-
 use Illuminate\Support\Facades\Http;
 
 class LiveFeedController extends Controller
@@ -217,8 +216,6 @@ class LiveFeedController extends Controller
     }
 
     public function getPortfolioItems(Request $request){
-        // return count($request->types);
-        
           if(!isset($request->types) && !isset($request->skills) && !isset($request->industries)){
               $response['status'] = "error";
               $response['msg'] = "Items not found";
@@ -236,7 +233,9 @@ class LiveFeedController extends Controller
         }
         
         if(isset($request->skills)){
-          foreach($request->skills as $type_id){
+            $skills = Skill::whereIn('freelancer_job_id', $request->skills)->pluck('id');
+            //dd($skills);
+          foreach($skills as $type_id){
               $items->whereHas('skills', function($query) use ($type_id){
                   $query->where('skill_id', $type_id);
               });
@@ -251,7 +250,7 @@ class LiveFeedController extends Controller
             }
         }
         
-        $items = $items->where("status", "active")->limit(5)->get();
+        $items = $items->where("status", "active")->inRandomOrder()->limit(5)->get();
   
         $response['status'] = "error";
         $response['msg'] = "Items not found";
@@ -389,8 +388,41 @@ class LiveFeedController extends Controller
             'amount' => 'required',
             'period' => 'required',
             'milestone_percentage' => 'required',
-            'description' => 'required'
+            //'description' => 'required'
         ]);
+
+        $description = "";
+
+        if($request->starter != ""){
+            $description .= $request->starter . '
+            ';
+        }
+
+        if($request->about != ""){
+            $description .= $request->about . '
+            ';
+        }
+
+        if($request->tech_star != ""){
+            $description .= $request->tech_star . '
+            ';
+        }
+
+        if($request->portfolio_initiator != ""){
+            $description .= $request->portfolio_initiator . '
+            ';
+        }
+
+        if($request->portfolio != ""){
+            $description .= $request->portfolio . '
+            ';
+        }
+        if($request->ender != ""){
+            $description .= $request->ender . '
+            ';
+        }
+
+        //return nl2br($description);
 
         $live_feed = LiveFeed::with('LiveFeedDetail', 'LiveFeedProposals')->where('id', $request->id)->where('project_id', $request->project_id)->first();
         if(!$live_feed){

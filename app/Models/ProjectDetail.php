@@ -15,4 +15,8 @@ class ProjectDetail extends Model
         'employer_status' => 'object',
         'country' => 'object'
     ];
+
+    public function project(){
+        return $this->belongsTo(Project::class);
+    }
 }

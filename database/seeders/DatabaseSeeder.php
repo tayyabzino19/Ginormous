@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             SkillSeeder::class,
             IndustrySeeder::class,
             TypeSeeder::class,
-            StarterSeeder::class,
+            HelperSeeder::class,
             LeaveSeeder::class,
             FreelancerApiKeySeeder::class,
             OptionSeeder::class,

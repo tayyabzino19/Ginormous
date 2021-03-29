@@ -3,7 +3,7 @@
 @section('projects_live_feed_nav', 'menu-item-active')
 
 @section('main')
-<div class="container">
+<div class="container" id="app">
     <div class="row">
         <div class="col-lg-12">
             <div class="row mb-6">
@@ -314,12 +314,13 @@
 
 
 
-      
         <div class="tab-pane" id="tab_3" role="tabpanel">
 
             <div class="row">
                 <div class="col-8">
                 <div class="card card-custom">
+                {{-- For scroll
+                class="scroll scroll-pull" data-scroll="true" style="height: 1000px" --}}
                 <div class="card-body">
                     <div class="row">
                         <div class="col-4">
@@ -343,7 +344,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link portfolio_tab id="contact-tab-5" data-toggle="tab" href="#portfolio-tab" aria-controls="contact">
+                                    <a class="nav-link portfolio_tab" id="contact-tab-5" data-toggle="tab" href="#portfolio-tab" aria-controls="contact">
                                         
                                         <span class="nav-text">4. Portfolio</span>
                                     </a>
@@ -363,9 +364,10 @@
                             
                             <div class="tab-content" id="myTabContent5">
                                 <div class="tab-pane fade show active" id="starter-tab" role="tabpanel" aria-labelledby="home-tab-5">
-                                    <div class="scroll scroll-pull" data-scroll="true" style="height: 752px">
+                                    <div >
                                         @foreach($starters as $starter)
                                         <div>
+                                            <i data-text="{{ $starter->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_starter'></i>
                                             @if(strlen($starter->description) > 120)
                                             {{ substr($starter->description, 0, 120) }}<span class="dots">...</span><div class="more d-none">{{ substr($starter->description, 120) }}</div>
                                             <button class="btn btn-link p-0 readmore">Read More</button>
@@ -378,9 +380,10 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="techstar-tab" role="tabpanel" aria-labelledby="profile-tab-5">
-                                    <div class="scroll scroll-pull" data-scroll="true" style="height: 752px">
+                                    <div >
                                         @foreach($tech_stars as $tech_star)
                                         <div>
+                                            <i data-text="{{ $tech_star->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_tech_star'></i>
                                             @if(strlen($tech_star->description) > 120)
                                             {{ substr($tech_star->description, 0, 120) }}<span class="dots">...</span><div class="more d-none">{{ substr($tech_star->description, 120) }}</div>
                                             <button class="btn btn-link p-0 readmore">Read More</button>
@@ -393,9 +396,10 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="initiator-tab" role="tabpanel" aria-labelledby="contact-tab-5">
-                                    <div class="scroll scroll-pull" data-scroll="true" style="height: 752px">
+                                    <div >
                                         @foreach($portfolio_initiators as $portfolio_initiator)
                                         <div>
+                                            <i data-text="{{ $portfolio_initiator->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_portfolio_initiator'></i>
                                             @if(strlen($portfolio_initiator->description) > 120)
                                             {{ substr($portfolio_initiator->description, 0, 120) }}<span class="dots">...</span><div class="more d-none">{{ substr($portfolio_initiator->description, 120) }}</div>
                                             <button class="btn btn-link p-0 readmore">Read More</button>
@@ -417,7 +421,7 @@
                                                 <label class="font-weight-bold">Skills</label>
                                                 <select style="width: 100%;" class="form-control select2 skills" name="skills[]" multiple="multiple">
                                                     @foreach($skills as $skill)
-                                                        <option value="{{ $skill->id }}">{{ $skill->name }}</option>
+                                                        <option value="{{ $skill->freelancer_job_id }}">{{ $skill->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -453,9 +457,10 @@
                                 </form>
                                 </div>
                                 <div class="tab-pane fade" id="ender-tab" role="tabpanel" aria-labelledby="contact-tab-5">
-                                    <div class="scroll scroll-pull" data-scroll="true" style="height: 752px">
+                                    <div>
                                         @foreach($enders as $ender)
                                         <div>
+                                            <i data-text="{{ $ender->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_ender'></i>
                                             @if(strlen($ender->description) > 120)
                                             {{ substr($ender->description, 0, 120) }}<span class="dots">...</span><div class="more d-none">{{ substr($ender->description, 120) }}</div>
                                             <button class="btn btn-link p-0 readmore">Read More</button>
@@ -481,49 +486,49 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="font-weight-bold">Starter</label>
-                                        <textarea class="form-control" rows="5"></textarea>
+                                        <textarea class="form-control" rows="5" v-model="starter"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="font-weight-bold">About</label>
-                                        <textarea class="form-control" rows="5"></textarea>
+                                        <textarea class="form-control" rows="5" v-model="about"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="font-weight-bold">Tech Star</label>
-                                        <textarea class="form-control" rows="5"></textarea>
+                                        <textarea class="form-control" rows="5" v-model="tech_star"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="font-weight-bold">Portfolio Initiator</label>
-                                        <textarea class="form-control" rows="5"></textarea>
+                                        <textarea class="form-control" rows="5" v-model="portfolio_initiator"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="font-weight-bold">Portfolio</label>
-                                        <textarea class="form-control" rows="5"></textarea>
+                                        <textarea class="form-control" rows="5" v-model="portfolio"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="font-weight-bold">Ender</label>
-                                        <textarea class="form-control" rows="5"></textarea>
+                                        <textarea class="form-control" rows="5" v-model="ender"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="font-weight-bold">Days:</label>
-                                        <input type="number" min="1" max="800" required placeholder="Enter Days" class="form-control">
+                                        <input type="number" min="1" max="800" required placeholder="Enter Days" v-model="days" class="form-control">
                                     </div>
                                 </div>
             
@@ -532,9 +537,9 @@
                                         <label class="font-weight-bold">Budget:</label>
             
                                         <div class="input-group">
-                                            <input type="number" min="1" max="99999999" required placeholder="Enter Budget" class="form-control">
+                                            <input type="number" min="1" max="99999999" v-model="budget" required placeholder="Enter Budget" class="form-control">
                                             <div class="input-group-append">
-                                                <button class="btn btn-secondary" type="button">USD</button>
+                                                <button class="btn btn-secondary" type="button">{{ $project->currency->code }}</button>
                                             </div>
                                         </div>
             
@@ -608,16 +613,13 @@
         </div>
 
     </div>
-
+    @include('bidder.projects.partials.bid-left-panel')
 </div>
 
 <!--end::Section-->
 
 @endsection
 
-@section('page_partials')
-@include('bidder.projects.partials.bid-left-panel')
-@endsection
 
 @section('page_css')
 <style>
@@ -677,6 +679,12 @@
                 $('.select2.skills').select2({
                     placeholder: "Please select skills",
                 });
+                
+                //set skills
+                @if(count($project->LiveFeedDetail->jobs))
+                    $(".select2.skills").val({{collect($project->LiveFeedDetail->jobs)->pluck('id')}}).trigger("change")
+                @endif
+
             }, 200);
 
 
@@ -725,7 +733,41 @@
 
        // portfolio_form
 
-
     });
+</script>
+
+<script src="{{ asset('extensions/vue.js') }}"></script>
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            starter: '',
+            about: '',
+            tech_star: '',
+            portfolio_initiator: '',
+            portfolio: '',
+            ender: '',
+            days: '',
+            budget: ''
+        }
+    });
+
+    $(".btn_copy_starter").on("click", function(){
+        let text = $(this).attr('data-text');
+        app.starter = text;
+    });
+    $(".btn_copy_tech_star").on("click", function(){
+        let text = $(this).attr('data-text');
+        app.tech_star = text;
+    });
+    $(".btn_copy_portfolio_initiator").on("click", function(){
+        let text = $(this).attr('data-text');
+        app.portfolio_initiator = text;
+    });
+    $(".btn_copy_ender").on("click", function(){
+        let text = $(this).attr('data-text');
+        app.ender = text;
+    });
+
 </script>
 @endsection
