@@ -26,7 +26,7 @@
                         
                     </ul>
                     <div class="float-right">
-                    <a href="{{ route("bidder.projects.sync_project_details", $project->id) }}" data-toggle="tooltip" title="Sync Details" style="height: 32px; width: 32px;" class="btn btn-icon btn-warning btn-sm btn-circle btn-dropdown btn-lg mr-1 pulse pulse-light">
+                    <a href="{{ route("common.sync_project_details", $project->id) }}" data-toggle="tooltip" title="Sync Details" style="height: 32px; width: 32px;" class="btn btn-icon btn-warning btn-sm btn-circle btn-dropdown btn-lg mr-1 pulse pulse-light">
                         <span class="svg-icon svg-icon-xl svg-icon-primary">
                             <i class="ki ki-reload" style="font-size: 14px;"></i>
                         </span>
@@ -406,7 +406,6 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="portfolio-tab" role="tabpanel" aria-labelledby="contact-tab-5">
-                                    <form method="get" id="portfolio_form" action="{{ route('admin.projects.details.get_portfolio_items') }}">
                                     <div class="row">
                                         
                                         <div class="col-lg-12">
@@ -437,18 +436,15 @@
                                                 </select>
                                             </div>
 
-                                            {{-- <button>Submit</button> --}}
-
                                         </div>
                                     
 
                                         <div class="col-lg-12 mt-6">
                                             <div class="form-group">
-                                                <textarea style="line-height: 24px;" class="form-control related_items" rows="5"></textarea>
+                                                <textarea v-model="portfolio" style="line-height: 24px;" class="form-control related_items" rows="5"></textarea>
                                             </div>
                                         </div>
                                     </div>
-                                </form>
                                 </div>
                                 <div class="tab-pane fade" id="ender-tab" role="tabpanel" aria-labelledby="contact-tab-5">
                                     <div>
@@ -531,7 +527,7 @@
                                         <label class="font-weight-bold">Budget:</label>
             
                                         <div class="input-group">
-                                            <input type="number" min="1" max="99999999" v-model="budget" required placeholder="Enter Budget" class="form-control">
+                                            <input type="number" min="{{ $project->budget->minimum }}" max="99999999" v-model="budget" required placeholder="Enter Budget" class="form-control">
                                             <div class="input-group-append">
                                                 <button class="btn btn-secondary" type="button">{{ $project->currency->code }}</button>
                                             </div>
@@ -705,7 +701,7 @@
             
             $.ajax({
                 method: 'get',
-                url: "{{ route('bidder.projects.bid_later_details.get_portfolio_items') }}?"+filters,
+                url: "{{ route('common.filter_portfolio_items') }}?"+filters,
                 dataType: 'JSON',
                 success: function(response){
                     //console.log(response);
@@ -717,8 +713,11 @@
                             counter++;
                         });
                         $(".related_items").val(items_links);
+                        app.portfolio = items_links;
+
                     }else{
                         $(".related_items").val('');
+                        app.portfolio = '';
                     }
                 }
             });
@@ -741,7 +740,8 @@
             portfolio: '',
             ender: '',
             days: '',
-            budget: ''
+            budget: '',
+            redirect_path: ''
         }
     });
 

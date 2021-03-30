@@ -18,6 +18,7 @@ class CreateProjectsTable extends Migration
             $table->integer('user_id');
             $table->integer('freelancer_project_id');
             $table->string('title');
+            $table->string('seo_url')->nullable();
             $table->text('preview_description')->nullable();
             $table->json('budget')->nullable();
             $table->json('currency')->nullable();

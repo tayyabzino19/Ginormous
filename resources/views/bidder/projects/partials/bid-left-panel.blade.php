@@ -55,7 +55,7 @@
                             <label class="font-weight-bold">Budget:</label>
 
                             <div class="input-group">
-                                <input name="amount" type="number" min="1" max="99999999" v-model="budget" required placeholder="Enter Budget" class="form-control">
+                                <input name="amount" type="number" min="{{ $project->budget->minimum }}" max="99999999" v-model="budget" required placeholder="Enter Budget" class="form-control">
                                 <div class="input-group-append">
                                     <button class="btn btn-secondary" type="button">{{ $project->currency->code }}</button>
                                 </div>

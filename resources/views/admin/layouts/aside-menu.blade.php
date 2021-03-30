@@ -28,7 +28,7 @@
                             </a>
                         </li>
                         <li class="menu-item @yield('projects_bidded_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('admin.projects.bidded') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
@@ -335,7 +335,7 @@
                 <div class="menu-submenu">
                     <ul class="menu-subnav">
                         <li class="menu-item @yield('settings_api_keys_nav')" aria-haspopup="true">
-                            <a href="{{ route('admin.settings.api_keys') }}" class="menu-link">
+                            <a href="{{ route('admin.settings.freelancer_api_client') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>

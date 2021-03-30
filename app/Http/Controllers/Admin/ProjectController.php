@@ -19,12 +19,53 @@ use App\Models\Skill;
 use App\Models\Industry;
 use App\Models\Type;
 use App\Models\ProjectFilter;
+use App\Models\FreelancerApiClient;
+use App\Models\Project;
+use App\Models\ProjectDetail;
+use App\Models\ProjectProposal;
 
 class ProjectController extends Controller
 {
     public function missed(){
-        return view('admin.projects.missed');
+        $projects = Project::with('user')->where('status', 'missed')->orderBy('id', 'desc')->paginate(50);
+        return view('admin.projects.missed.index', compact('projects'));
     }
+
+    public function missedDetails($id = null){
+        $project = Project::with(['ProjectDetail','projectProposals'])->where('id', $id)->where('status', 'missed')->firstOrFail();
+        $starters = Starter::where("status", 'active')->orderBy('id', 'desc')->get();
+        $tech_stars = TechStar::where("status", 'active')->orderBy('id', 'desc')->get();
+        $portfolio_initiators = PortfolioInitiator::where("status", 'active')->orderBy('id', 'desc')->get();
+        $enders = Ender::where("status", 'active')->orderBy('id', 'desc')->get();
+        $skills = Skill::where("status", 'active')->orderBy('id', 'desc')->get();
+        $industries = Industry::where("status", 'active')->orderBy('id', 'desc')->get();
+        $types = Type::where("status", 'active')->orderBy('id', 'desc')->get();
+
+        return view('admin.projects.missed.details', compact('project', 'starters', 'tech_stars', 'portfolio_initiators', 'enders', 'skills', 'industries', 'types'));
+    }
+
+
+    public function bidded(){
+        $projects = Project::with('user')->where('status', 'bidded')->orderBy('id', 'desc')->paginate(50);
+        return view('admin.projects.bidded.index', compact('projects'));
+    }
+
+    public function biddedDetails($id = null){
+        $project = Project::with(['ProjectDetail','projectProposals'])->where('id', $id)->where('status', 'bidded')->firstOrFail();
+        $starters = Starter::where("status", 'active')->orderBy('id', 'desc')->get();
+        $tech_stars = TechStar::where("status", 'active')->orderBy('id', 'desc')->get();
+        $portfolio_initiators = PortfolioInitiator::where("status", 'active')->orderBy('id', 'desc')->get();
+        $enders = Ender::where("status", 'active')->orderBy('id', 'desc')->get();
+        $skills = Skill::where("status", 'active')->orderBy('id', 'desc')->get();
+        $industries = Industry::where("status", 'active')->orderBy('id', 'desc')->get();
+        $types = Type::where("status", 'active')->orderBy('id', 'desc')->get();
+        
+        $our_proposals = $project->projectProposals->where('bidder_id', FreelancerApiClient::first()->client_id);
+        return view('admin.projects.bidded.details', compact('our_proposals', 'project', 'starters', 'tech_stars', 'portfolio_initiators', 'enders', 'skills', 'industries', 'types'));
+    }
+
+
+
 
     public function details(){
 

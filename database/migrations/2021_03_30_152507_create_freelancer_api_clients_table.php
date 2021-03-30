@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFreelancerApiKeysTable extends Migration
+class CreateFreelancerApiClientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateFreelancerApiKeysTable extends Migration
      */
     public function up()
     {
-        Schema::create('freelancer_api_keys', function (Blueprint $table) {
+        Schema::create('freelancer_api_clients', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
             $table->string('client_id');
             $table->string('auth_key');
             $table->enum('status', ['connected', 'invalid'])->default('invalid');
@@ -30,6 +29,6 @@ class CreateFreelancerApiKeysTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('freelancer_api_keys');
+        Schema::dropIfExists('freelancer_api_clients');
     }
 }

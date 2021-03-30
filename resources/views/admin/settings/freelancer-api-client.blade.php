@@ -38,29 +38,30 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form id="api_keys_form" method='post' action="{{ route('admin.settings.api_keys.update') }}">
+                            <form method='post' action="{{ route('admin.settings.freelancer_api_client.update') }}">
                                 @csrf
-                                <input type="hidden" name="id" value="{{ $user->id }}">
+                                <input type="hidden" name="id" value="{{ $client->id }}">
                                 <div class="row">
                                     <div class="col-lg-6 mb-5">
                                         <div class="form-group">
                                             <label class="font-weight-bold"> Client ID* </label>
-                                            <input type="text" value="{{ $user->freelancerApiKey->client_id }}" name="client_id" placeholder="Please Enter Client ID" class="form-control" required>
+                                            <input type="text" value="{{ $client->client_id }}" name="client_id" placeholder="Please Enter Client ID" class="form-control" required>
                                         </div>
                                     </div>
 
                                     <div class="col-lg-6 mb-5">
                                         <div class="form-group">
                                             <label class="font-weight-bold"> Auth Key* </label>
-                                            <input type="text" value="{{ $user->freelancerApiKey->auth_key }}" name="auth_key" placeholder="Please Enter Auth Key" class="form-control" required>
+                                            <input type="text" value="{{ $client->auth_key }}" name="auth_key" placeholder="Please Enter Auth Key" class="form-control" required>
                                         </div>
                                     </div>
 
                                     <div class="col-lg-6 mb-5 font-weight-bold">
-
-                                        <i class="far fa-times-circle mt-1 d-inline-block text-danger"></i> <span class="text-danger">Invalid</span>
-                                        <br />
+                                        @if($client->status == 'connected')
                                         <i class="far fa-check-circle mt-1 d-inline-block text-success"></i> <span class="text-success">Connected</span>
+                                        @else
+                                        <i class="far fa-times-circle mt-1 d-inline-block text-danger"></i> <span class="text-danger">Invalid</span>
+                                        @endif
                                     </div>
 
                                     <div class="col-lg-6 text-right">

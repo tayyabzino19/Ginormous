@@ -17,6 +17,7 @@ class CreateLiveFeedsTable extends Migration
             $table->id();
             $table->string('project_id');
             $table->string('title');
+            $table->string('seo_url')->nullable();
             $table->string('preview_description');
             $table->string('type');
             $table->json('budget')->nullable();

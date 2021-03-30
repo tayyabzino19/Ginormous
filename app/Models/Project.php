@@ -24,4 +24,8 @@ class Project extends Model
     public function ProjectProposals(){
         return $this->hasMany(ProjectProposal::class);
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

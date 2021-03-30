@@ -11,9 +11,11 @@
         </div>
 
         <div class="offcanvas-content pr-5 mr-n5">
-            <form id="bid_now_form" method="post" action="{{ route('bidder.projects.bid_later_bid_now') }}">
+            <form id="bid_now_form" method="post" action="{{ route('common.bid_now') }}">
                 @csrf
+                <input type="hidden" name="redirect_path" v-model="redirect_path">
                 <input type="hidden" name="id" value="{{ $project->id }}">
+
                 <input type="hidden" name="freelancer_project_id" value="{{ $project->freelancer_project_id }}">
                 <input type="hidden" name="milestone_percentage" value="100">
                 <div class="row">
@@ -55,7 +57,7 @@
                             <label class="font-weight-bold">Budget:</label>
 
                             <div class="input-group">
-                                <input name="amount" type="number" min="1" max="99999999" v-model="budget" required placeholder="Enter Budget" class="form-control">
+                                <input name="amount" type="number" min="{{ $project->budget->minimum }}" max="99999999" v-model="budget" required placeholder="Enter Budget" class="form-control">
                                 <div class="input-group-append">
                                     <button class="btn btn-secondary" type="button">{{ $project->currency->code }}</button>
                                 </div>

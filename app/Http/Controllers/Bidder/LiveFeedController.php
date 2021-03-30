@@ -21,6 +21,7 @@ use App\Models\Project;
 use App\Models\ProjectDetail;
 use App\Models\ProjectProposal;
 use App\Models\Api;
+use App\Models\FreelancerApiClient;
 use Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -38,7 +39,7 @@ class LiveFeedController extends Controller
         $url = "https://www.freelancer.com/api/projects/0.1/projects/active/?sort_field=time_submitted&user_details=true&user_employer_reputation=true&" . $projects_filter;
  
         $response = Http::withHeaders([
-            'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
+            'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key
         ])->get($url);
         
         $response_array = $response->json();
@@ -78,6 +79,7 @@ class LiveFeedController extends Controller
             $projects_array[] = [
                 'project_id' => $project['id'],
                 'title' => $project['title'],
+                'seo_url' => $project['seo_url'],
                 'preview_description' => $project['preview_description'],
                 'type' => $project['type'],
                 'budget' => json_encode($project['budget']),
@@ -108,7 +110,7 @@ class LiveFeedController extends Controller
             //Freelancer Project details and proposal Api's
             $url = "https://www.freelancer.com/api/projects/0.1/projects/" . $LiveFeed->project_id . "/?full_description=true&job_details=true&attachment_details=true&user_details=true&user_avatar=true&user_country_details=true&user_status=true&user_employer_reputation=true";
             $response = Http::withHeaders([
-                'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
+                'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key
             ])->get($url);
             
             $response_array = $response->json();
@@ -146,6 +148,7 @@ class LiveFeedController extends Controller
             //Update LiveFeed Model
             $live_feed = liveFeed::findOrFail($id);
             $live_feed->title = $result_array['title'];
+            $live_feed->seo_url = $result_array['seo_url'];
             $live_feed->currency = $result_array['currency'];
             $live_feed->type = $result_array['type'];
             $live_feed->budget = $result_array['budget'];
@@ -159,7 +162,7 @@ class LiveFeedController extends Controller
 
             $url = "https://www.freelancer.com/api/projects/0.1/projects/" . $LiveFeed->project_id . '/bids/?user_details=true&user_avatar=true&user_country_details=true&user_reputation=true&user_display_info=true';
             $response = Http::withHeaders([
-                'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
+                'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key
             ])->get($url);
             
            $response_array = $response->json();
@@ -215,56 +218,6 @@ class LiveFeedController extends Controller
         return view('bidder.projects.details', compact('project', 'starters', 'tech_stars', 'portfolio_initiators', 'enders', 'skills', 'industries', 'types'));
     }
 
-    public function getPortfolioItems(Request $request){
-          if(!isset($request->types) && !isset($request->skills) && !isset($request->industries)){
-              $response['status'] = "error";
-              $response['msg'] = "Items not found";
-              return json_encode($response);
-          }
-        
-        $items = Item::select("url");
-  
-        if(isset($request->types)){
-          foreach($request->types as $type_id){
-              $items->whereHas('types', function($query) use ($type_id){
-                  $query->where('type_id', $type_id);
-              });
-            }
-        }
-        
-        if(isset($request->skills)){
-            $skills = Skill::whereIn('freelancer_job_id', $request->skills)->pluck('id');
-            //dd($skills);
-          foreach($skills as $type_id){
-              $items->whereHas('skills', function($query) use ($type_id){
-                  $query->where('skill_id', $type_id);
-              });
-            }
-        }
-  
-        if(isset($request->industries)){
-          foreach($request->industries as $type_id){
-              $items->whereHas('industries', function($query) use ($type_id){
-                  $query->where('industry_id', $type_id);
-              });
-            }
-        }
-        
-        $items = $items->where("status", "active")->inRandomOrder()->limit(5)->get();
-  
-        $response['status'] = "error";
-        $response['msg'] = "Items not found";
-  
-        if(count($items)){
-            $response['status'] = "success";
-            $response['items'] = $items;
-            $response['msg'] = "";
-        }
-  
-        return json_encode($response);
-  
-      }
-
       public function syncLiveFeedDetails($id = null){
 
         $live_feed_details = LiveFeedDetail::with('liveFeed')->where('live_feed_id', $id)->first();
@@ -276,7 +229,7 @@ class LiveFeedController extends Controller
         try{
             $url = "https://www.freelancer.com/api/projects/0.1/projects/" . $live_feed_details->liveFeed->project_id . "/?full_description=true&job_details=true&attachment_details=true&user_details=true&user_avatar=true&user_country_details=true&user_status=true&user_employer_reputation=true";
             $response = Http::withHeaders([
-                'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
+                'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key
             ])->get($url);
             
            $response_array = $response->json();
@@ -314,6 +267,7 @@ class LiveFeedController extends Controller
             //Update LiveFeed Model
             $live_feed = liveFeed::findOrFail($id);
             $live_feed->title = $result_array['title'];
+            $live_feed->seo_url = $result_array['seo_url'];
             $live_feed->currency = $result_array['currency'];
             $live_feed->type = $result_array['type'];
             $live_feed->budget = $result_array['budget'];
@@ -327,7 +281,7 @@ class LiveFeedController extends Controller
 
             $url = "https://www.freelancer.com/api/projects/0.1/projects/" . $live_feed_details->liveFeed->project_id . '/bids/?user_details=true&user_avatar=true&user_country_details=true&user_reputation=true&user_display_info=true';
             $response = Http::withHeaders([
-                'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
+                'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key
             ])->get($url);
             
             $response_array = $response->json();
@@ -381,7 +335,7 @@ class LiveFeedController extends Controller
 
     public function bidNow(Request $request){
         //apply validations
-        $bidder_id = 53598218;
+        $bidder_id = FreelancerApiClient::first()->client_id;
         $request->validate([
             'id' => 'required',
             'project_id' => 'required',
@@ -431,14 +385,14 @@ class LiveFeedController extends Controller
 
         //send bid to freelancer.com
         $response = Http::withHeaders([
-            'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR',
+            'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key,
         ])->post('https://www.freelancer.com/api/projects/0.1/bids/', [
             'project_id' => (integer) $request->project_id,
             'bidder_id' => $bidder_id,
             'amount' => (float) $request->amount,
             'period' => (integer) $request->period,
             'milestone_percentage' => (integer) $request->milestone_percentage,
-            'description' => $request->description,
+            'description' => $description,
         ]);
 
         $response_array = $response->json();
@@ -451,6 +405,7 @@ class LiveFeedController extends Controller
         $project->user_id = Auth::user()->id;
         $project->freelancer_project_id = $live_feed->project_id;
         $project->title = $live_feed->title;
+        $project->seo_url = $live_feed->seo_url;
         $project->preview_description = $live_feed->preview_description;
         $project->time_submitted = $live_feed->time_submitted;
         $project->time_updated = $live_feed->time_updated;
@@ -511,6 +466,7 @@ class LiveFeedController extends Controller
         $project->user_id = Auth::user()->id;
         $project->freelancer_project_id = $live_feed->project_id;
         $project->title = $live_feed->title;
+        $project->seo_url = $live_feed->seo_url;
         $project->preview_description = $live_feed->preview_description;
         $project->type = $live_feed->type;
         $project->budget = $live_feed->budget;
@@ -544,6 +500,7 @@ class LiveFeedController extends Controller
         $project->user_id = Auth::user()->id;
         $project->freelancer_project_id = $live_feed->project_id;
         $project->title = $live_feed->title;
+        $project->seo_url = $live_feed->seo_url;
         $project->preview_description = $live_feed->preview_description;
         $project->type = $live_feed->type;
         $project->budget = $live_feed->budget;

@@ -4,8 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AppTestController;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\CommonController;
 
 
+//Reuse common tasks
+Route::get('common/filter-portfolio-items', [CommonController::class, 'filterItems'])->name('common.filter_portfolio_items');
+Route::get('common/sync-project-details/{id?}', [CommonController::class, 'syncProjectDetails'])->name('common.sync_project_details');
+Route::post('common/bid-now', [CommonController::class, 'bidNow'])->name('common.bid_now');
+
+//admin
 Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'role:admin'], function(){
 
 	Route::get('/', ['as' => 'index', 'uses' => 'AdminController@index']);
@@ -13,17 +20,20 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 
 	Route::group(['prefix' => 'projects', 'as' => 'projects.'], function(){
 		Route::get('missed', ['as' => 'missed', 'uses' => 'ProjectController@missed']);
-		Route::get('details', ['as' => 'details', 'uses' => 'ProjectController@details']);
-		Route::get('details/get-portfolio-items', ['as' => 'details.get_portfolio_items', 'uses' => 'ProjectController@getPortfolioItems']);
+		Route::get('missed/details/{id?}', ['as' => 'missed.details', 'uses' => 'ProjectController@missedDetails']);
 
+		Route::get('bidded', ['as' => 'bidded', 'uses' => 'ProjectController@bidded']);
+		Route::get('bidded/details/{id?}', ['as' => 'bidded.details', 'uses' => 'ProjectController@biddedDetails']);
+
+		//Route::get('details', ['as' => 'details', 'uses' => 'ProjectController@details']);
 		Route::get('filters', ['as' => 'filters', 'uses' => 'ProjectController@filters']);
 		Route::post('filters/update', ['as' => 'filters.update', 'uses' => 'ProjectController@updateFilters']);
 	});
 
 	Route::group(['prefix' => 'settings', 'as' => 'settings.'], function(){
 
-		Route::get('api-keys', ['as' => 'api_keys', 'uses' => 'FreelancerApiKeyController@index']);
-		Route::post('api-keys', ['as' => 'api_keys.update', 'uses' => 'FreelancerApiKeyController@update']);
+		Route::get('freelancer-api-client', ['as' => 'freelancer_api_client', 'uses' => 'FreelancerApiClientController@index']);
+		Route::post('freelancer-api-client', ['as' => 'freelancer_api_client.update', 'uses' => 'FreelancerApiClientController@update']);
 
 		Route::get('profile', ['as' => 'profile', 'uses' => 'AdminController@profile']);
 		Route::post('profile', ['as' => 'profile_update', 'uses' => 'AdminController@updateProfile']);
@@ -140,7 +150,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 	
 });
 
+//admin close
 
+//bidder
 Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder', 'as' => 'bidder.', 'middleware' => 'role:bidder'], function(){
 
 	Route::get('/', ['as' => 'index', 'uses' => 'BidderController@index']);
@@ -173,14 +185,12 @@ Route::group(['namespace' => 'App\Http\Controllers\Bidder', 'prefix' => 'bidder'
 		Route::get('bid-later', ['as' => 'bid_later', 'uses' => 'ProjectController@bidLater']);
 		Route::get('bid-later-details/{id?}', ['as' => 'bid_later_details', 'uses' => 'ProjectController@bidLaterDetails']);
 		Route::get('miss-project/{id?}', ['as' => 'miss_project', 'uses' => 'ProjectController@missProject']);
-		Route::get('bid-later/details/get-portfolio-items', ['as' => 'bid_later_details.get_portfolio_items', 'uses' => 'ProjectController@getPortfolioItems']);
-		Route::get('sync-project-details/{id?}', ['as' => 'sync_project_details', 'uses' => 'ProjectController@syncProjectDetails']);
-
-		Route::post('bid-later-bid-now', ['as' => 'bid_later_bid_now', 'uses' => 'ProjectController@bidNow']);
 		
 	});
 	
 });
+//bidder close
+
 
 //Test Freelancer APi's: request & response
 Route::get('freelancer-api/request/{type?}', [ApiController::class, 'request'])->name('bidder.freelancer_api.request');

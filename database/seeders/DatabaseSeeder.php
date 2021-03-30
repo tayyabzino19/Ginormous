@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             TypeSeeder::class,
             HelperSeeder::class,
             LeaveSeeder::class,
-            FreelancerApiKeySeeder::class,
+            FreelancerApiClientSeeder::class,
             OptionSeeder::class,
             ProjectFilterSeeder::class,
             LanguageSeeder::class,

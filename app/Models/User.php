@@ -79,8 +79,5 @@ class User extends Authenticatable
     public function designation(){
         return $this->belongsTo(Designation::class);
     }
-
-    public function freelancerApiKey(){
-        return $this->hasOne(FreelancerApiKey::class);
-    }
+    
 }

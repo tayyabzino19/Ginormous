@@ -78,7 +78,7 @@ class SkillController extends Controller
         
         $url = 'https://www.freelancer.com/api/projects/0.1/jobs';
         $response = Http::withHeaders([
-            'freelancer-oauth-v1' => 'FBK1GHW5um3R6nIXJlS7baqTm6aGPR'
+            'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key
         ])->get($url);
         
         $response_array = $response->json();
