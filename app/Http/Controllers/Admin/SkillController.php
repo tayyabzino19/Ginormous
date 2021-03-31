@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Validation\Rule;
 use App\Models\Skill;
+use App\Models\FreelancerApiClient;
+
 
 use Illuminate\Support\Facades\Http;
 
