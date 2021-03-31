@@ -29,6 +29,10 @@
                                 <label class="font-weight-bold">Name*</label>
                                 <input type="text" required value="{{ old('name') }}" name="name" class="form-control" placeholder="Enter designation here">
                             </div>
+                            <div class="form-group float-left w-100">
+                                <label class="font-weight-bold">Bonus Amount*</label>
+                                <input type="number" required value="{{ old('bonus_amount') }}" name="bonus_amount" class="form-control" placeholder="Enter bonus amount here">
+                            </div>
                         </div>
                     </div>
 

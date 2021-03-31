@@ -7,13 +7,50 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\Project;
+use App\Models\Leave;
 use Auth;
 use Hash;
+use Carbon\Carbon;
 
 class BidderController extends Controller
 {
-    public function index(){
-        return view('bidder.dashboard.index');
+    //defining search vars
+    protected $date_range;
+
+    public function index(Request $request){
+
+        if(isset($request->search)){
+
+            $date_range = explode('to', $request->date_range);
+            $from_date = date('Y-m-d', strtotime($date_range[0]));
+            $to_date = date('Y-m-d', strtotime($date_range[1]));
+            $from_date = Carbon::parse($from_date)->startOfDay();
+            $to_date = Carbon::parse($to_date)->endOfDay();
+            $this->date_range = $request->date_range;
+
+            $project_bidded_count = Project::where('user_id', Auth::user()->id)->where('status', 'bidded')->whereBetween('action_date', [$from_date, $to_date])->count();
+            $project_accepted_count = Project::where('user_id', Auth::user()->id)->where('status', 'accepted')->whereBetween('action_date', [$from_date, $to_date])->count();
+            $project_missed_count = Project::where('user_id', Auth::user()->id)->where('status', 'missed')->whereBetween('action_date', [$from_date, $to_date])->count();
+            $project_replied_count = Project::where('user_id', Auth::user()->id)->where('status', 'replied')->whereBetween('action_date', [$from_date, $to_date])->count();
+            
+            $leave_total_count = Leave::where('user_id', Auth::user()->id)->whereBetween('created_at', [$from_date, $to_date])->count();
+            $leave_accepted_count = Leave::where('user_id', Auth::user()->id)->where('status', 'accepted')->whereBetween('created_at', [$from_date, $to_date])->count();
+            $leave_rejected_count = Leave::where('user_id', Auth::user()->id)->where('status', 'rejected')->whereBetween('created_at', [$from_date, $to_date])->count();
+            $leave_pending_count = Leave::where('user_id', Auth::user()->id)->where('status', 'pending')->whereBetween('created_at', [$from_date, $to_date])->count();
+        }else{
+            $project_bidded_count = Project::where('user_id', Auth::user()->id)->where('status', 'bidded')->count();
+            $project_accepted_count = Project::where('user_id', Auth::user()->id)->where('status', 'accepted')->count();
+            $project_missed_count = Project::where('user_id', Auth::user()->id)->where('status', 'missed')->count();
+            $project_replied_count = Project::where('user_id', Auth::user()->id)->where('status', 'replied')->count();
+            $leave_total_count = Leave::where('user_id', Auth::user()->id)->count();
+            $leave_accepted_count = Leave::where('user_id', Auth::user()->id)->where('status', 'accepted')->count();
+            $leave_rejected_count = Leave::where('user_id', Auth::user()->id)->where('status', 'rejected')->count();
+            $leave_pending_count = Leave::where('user_id', Auth::user()->id)->where('status', 'pending')->count();
+        }
+
+        $date_range = $this->date_range;
+        return view('bidder.dashboard.index', compact('date_range', 'leave_pending_count', 'leave_rejected_count', 'leave_accepted_count', 'leave_total_count', 'project_bidded_count', 'project_accepted_count', 'project_missed_count', 'project_replied_count'));
     }
 
     public function settings(){
@@ -22,7 +59,6 @@ class BidderController extends Controller
     }
 
     public function updateSettings(Request $request){
-
         $validated = $request->validate([
             'name' => 'required|min:3|max:50',
             'password' => 'nullable|sometimes|confirmed|min:8',

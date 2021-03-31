@@ -29,6 +29,7 @@ class CreateProjectsTable extends Migration
             $table->json('employer_reputation');
             $table->enum('type', ['hourly', 'fixed']);
             $table->enum('status', ['missed', 'bid_later', 'bidded', 'replied', 'accepted']);
+            $table->timestamp('action_date')->nullable();
             $table->timestamps();
         });
     }

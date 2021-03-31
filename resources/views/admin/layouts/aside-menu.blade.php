@@ -36,7 +36,7 @@
                             </a>
                         </li>
                         <li class="menu-item @yield('projects_replied_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('admin.projects.replied') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
@@ -45,7 +45,7 @@
                         </li>
 
                         <li class="menu-item @yield('projects_accepted_nav')" aria-haspopup="true">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('admin.projects.accepted') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>

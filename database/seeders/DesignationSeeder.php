@@ -17,6 +17,7 @@ class DesignationSeeder extends Seeder
     {
         $designation = new Designation;
         $designation->name = "Bidder";
+        $designation->bonus_amount = 5000;
         $designation->status = "active";
         $designation->save();
     }

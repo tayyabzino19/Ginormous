@@ -42,6 +42,7 @@
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Users</th>
+                                    <th>Bonus Amount</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -53,6 +54,7 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $designation->name }}</td>
                                         <td><span class="label label-rounded label-light-primary">{{ $designation->users->count() }}</span></td>
+                                        <td>{{ number_format($designation->bonus_amount) }}</td>
                                         <td>
                                             @if($designation->status == "active")
                                                 <span class="label font-weight-bold label-light-success label-inline">Active</span>
@@ -118,6 +120,7 @@
 
                         $("#edit_designation_form input[name='id']").val(response.designation.id);
                         $("#edit_designation_form input[name='name']").val(response.designation.name);
+                        $("#edit_designation_form input[name='bonus_amount']").val(response.designation.bonus_amount);
                         if(response.designation.status == "active"){
                             $("#edit_designation_form input[value='active']").prop('checked', true);
                         }else{

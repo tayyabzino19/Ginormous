@@ -16,6 +16,7 @@ class CreateDesignationsTable extends Migration
         Schema::create('designations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('bonus_amount')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });

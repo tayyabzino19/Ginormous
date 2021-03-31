@@ -118,12 +118,11 @@ class ProjectController extends Controller
 
     public function missProject($id = null){
         
-        $project = Project::where('id', $id)->where('user_id', Auth::user()->id)->where('status', 'bid_later')->first();
-        if(!$project){
-            return abort(404);
-        }
+        $project = Project::where('id', $id)->where('user_id', Auth::user()->id)->where('status', 'bid_later')->firstOrFail();
 
         $project->status = "missed";
+        $project->action_date = date('Y-m-d H:i:s');
+        
         if($project->save()){
             $response['msg'] = "Ok";
             $response['status'] = "success";

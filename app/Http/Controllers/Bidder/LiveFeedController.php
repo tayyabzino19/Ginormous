@@ -28,7 +28,6 @@ use Illuminate\Support\Facades\Http;
 class LiveFeedController extends Controller
 {
     public function liveFeed(){
-       
         $projects = LiveFeed::orderBy('time_submitted', 'desc')->paginate(50);
         return view('bidder.projects.live-feed', compact('projects'));
     }
@@ -415,6 +414,7 @@ class LiveFeedController extends Controller
         $project->budget = json_decode(json_encode($live_feed->budget), true);
         $project->upgrades = json_decode(json_encode($live_feed->upgrades), true);
         $project->bid_stats = json_decode(json_encode($live_feed->bid_stats), true);
+        $project->action_date = date('Y-m-d H:i:s');
         $project->status = 'bidded';
         $project->save();
 
@@ -476,6 +476,7 @@ class LiveFeedController extends Controller
         $project->employer_reputation = $live_feed->reputation;
         $project->time_submitted = $live_feed->time_submitted;
         $project->time_updated = $live_feed->time_updated;
+        $project->action_date = date('Y-m-d H:i:s');
         $project->status = "missed";
 
         if($project->save()){
@@ -510,6 +511,7 @@ class LiveFeedController extends Controller
         $project->employer_reputation = $live_feed->reputation;
         $project->time_submitted = $live_feed->time_submitted;
         $project->time_updated = $live_feed->time_updated;
+        $project->action_date = date('Y-m-d H:i:s');
         $project->status = "bid_later";
 
         if($project->save()){

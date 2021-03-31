@@ -60,26 +60,26 @@
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <li class="nav-item mr-3">
+                {{-- <li class="nav-item mr-3">
                     <a class="nav-link" data-toggle="tab" href="#tab_3">
                         <span class="nav-text font-size-lg">Helper</span>
                     </a>
-                </li>
+                </li> --}}
                 <!--end::Item-->
 
                 <!--begin::Item-->
-                <li class="nav-item mr-3">
+                {{-- <li class="nav-item mr-3">
                     <a class="nav-link" data-toggle="tab" href="#tab_4">
                         <span class="nav-text font-size-lg">Bid</span>
                     </a>
-                </li>
+                </li> --}}
                 <!--end::Item-->
             </ul>
         </div>
         <!--end::Toolbar-->
 
         <div class="card-title">
-            <button id="kt_quick_user_toggle" class="btn btn-primary"><i class="flaticon-price-tag"></i>Bid Now</button>
+            {{-- <button id="kt_quick_user_toggle" class="btn btn-primary"><i class="flaticon-price-tag"></i>Bid Now</button> --}}
         </div>
 
     </div>

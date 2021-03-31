@@ -4,8 +4,49 @@
 
 @section('main')
 <div class="container">
+    <div class="col-md-12">
+        <form id="filter_form" method="get">
+            <input type="hidden" name="search" value="true">
+                <div class="mb-5 d-flex justify-content-center">
+                    
+                    <select name="user" style="max-width: 140px;" class="form-control select2 user">
+                        <option></option>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        @endforeach
+                    </select>
 
-<div class="row">
+                    <div class="col-lg-4 mb-2">
+                        <div class='input-group' id='kt_daterangepicker_6'>
+                            <input readonly value="{{ $date_range }}" name="date_range" type='text' class="form-control" placeholder="Select date range" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar-check-o"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-primary--icon" id="kt_search">
+                            <span>
+                                <i class="la la-filter"></i>
+                                <span>Filter</span>
+                            </span>
+                        </button>&#160;&#160;
+
+                        @if(isset(request()->search))
+                        <a href="{{ route('bidder.index') }}" id="kt_reset">
+                            <span>
+                                <i class="la la-close p-0"></i>
+                            </span>
+                        </a>
+                        @endif                               
+                    </div>
+                </div>
+        </form>
+    </div>
+<div class="row">    
     <div class="col-lg-3">
         <!--begin::Callout-->
         <div class="card card-custom wave wave-animate-slow wave-primary mb-8 mb-lg-0">
@@ -22,7 +63,7 @@
                         <div class="text-dark-75">Bidded</div>
                     </div>
                     <div class="flex-grow-1 text-right">
-                        <h1 class="font-size-h4">20</h1>
+                        <h1 class="font-size-h4">{{ $project_bidded_count }}</h1>
                     </div>
                     <!--end::Content-->
                 </div>
@@ -46,7 +87,7 @@
                         <div class="text-dark-75">Accepted</div>
                     </div>
                     <div class="flex-grow-1 text-right">
-                        <h1 class="font-size-h4">1</h1>
+                        <h1 class="font-size-h4">{{ $project_accepted_count }}</h1>
                     </div>
                     <!--end::Content-->
                 </div>
@@ -71,7 +112,7 @@
                         <div class="text-dark-75">Missed</div>
                     </div>
                     <div class="flex-grow-1 text-right">
-                        <h1 class="font-size-h4">5</h1>
+                        <h1 class="font-size-h4">{{ $project_missed_count }}</h1>
                     </div>
                     <!--end::Content-->
                 </div>
@@ -96,7 +137,7 @@
                         <div class="text-dark-75">Replied</div>
                     </div>
                     <div class="flex-grow-1 text-right">
-                        <h1 class="font-size-h4">3</h1>
+                        <h1 class="font-size-h4">{{ $project_replied_count }}</h1>
                     </div>
                     <!--end::Content-->
                 </div>
@@ -124,7 +165,7 @@
                         <div class="text-dark-75">Total</div>
                     </div>
                     <div class="flex-grow-1 text-right">
-                        <h1 class="font-size-h4">20</h1>
+                        <h1 class="font-size-h4">{{ $leave_total_count }}</h1>
                     </div>
                     <!--end::Content-->
                 </div>
@@ -148,7 +189,7 @@
                         <div class="text-dark-75">Accepted</div>
                     </div>
                     <div class="flex-grow-1 text-right">
-                        <h1 class="font-size-h4">1</h1>
+                        <h1 class="font-size-h4">{{ $leave_accepted_count }}</h1>
                     </div>
                     <!--end::Content-->
                 </div>
@@ -173,7 +214,7 @@
                         <div class="text-dark-75">Rejected</div>
                     </div>
                     <div class="flex-grow-1 text-right">
-                        <h1 class="font-size-h4">5</h1>
+                        <h1 class="font-size-h4">{{ $leave_rejected_count }}</h1>
                     </div>
                     <!--end::Content-->
                 </div>
@@ -198,7 +239,7 @@
                         <div class="text-dark-75">Pending</div>
                     </div>
                     <div class="flex-grow-1 text-right">
-                        <h1 class="font-size-h4">3</h1>
+                        <h1 class="font-size-h4">{{ $leave_pending_count }}</h1>
                     </div>
                     <!--end::Content-->
                 </div>
@@ -433,16 +474,55 @@
 </div>
 <!--end::Row-->
 
-
-
-
-
-
-
-
-
 </div>
 
+@endsection
+
+
+
+@section('page_js')
+<script>
+    $(document).ready(function(){
+        
+        $(".select2.user").select2({
+            placeholder: "User"
+        });
+
+        //Change value of filters
+        $("select[name='user']").val("{{ $user_id }}").change();
+
+        $("#filter_form").on("submit", function(e){
+            e.preventDefault();
+            let date_range = $("input[name='date_range']").val();
+            var user_val = $("select[name='user']").val();
+            if(date_range == '' || user_val == ''){
+                return false;
+            }
+            e.currentTarget.submit();
+        });
+        
+        $('#kt_daterangepicker_6').daterangepicker({
+            buttonClasses: ' btn',
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-secondary',
+            //startDate: "moment().subtract(1, 'days')",
+            endDate: "moment().subtract(1, 'days')",
+
+            ranges: {
+               'Today': [moment(), moment()],
+               'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+               'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+               'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+               'This Month': [moment().startOf('month'), moment().endOf('month')],
+               'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+           
+            $('#kt_daterangepicker_6 .form-control').val( start.format('DD-MMM-YYYY') + ' to ' + end.format('DD-MMM-YYYY'));
+            
+        });
+    });
+</script>
 @endsection
 
 

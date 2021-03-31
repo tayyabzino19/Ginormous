@@ -4,7 +4,6 @@
 @section('leaves_management_all_leaves_nav', 'menu-item-active')
 
 @section("main")
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="container">
         <div class="row mb-6">
             <div class="col-lg-12">

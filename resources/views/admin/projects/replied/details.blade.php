@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('projects_nav', 'menu-item-open')
-@section('projects_bidded_nav', 'menu-item-active')
+@section('projects_replied_nav', 'menu-item-active')
 
 @section("main")
 <div class="container" id="app">
@@ -19,7 +19,7 @@
                         Projects
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('admin.projects.bidded') }}">Bidded</a>
+                        <a href="{{ route('admin.projects.replied') }}">Replied</a>
                     </li>
                     <li class="breadcrumb-item">
                         Details
@@ -79,7 +79,7 @@
         <!--end::Toolbar-->
 
         <div class="card-title">
-            <button onclick="markAsReplied({{ $project->id }})" class="btn btn-primary"><i class="fa fa-check"></i>Mark as Replied</button>
+            <button onclick="markAsAccepted({{ $project->id }})" class="btn btn-primary"><i class="fa fa-check"></i>Mark as Accepted</button>
         </div>
 
     </div>
@@ -651,7 +651,7 @@
 <script>
 
 
-function markAsReplied(id){
+function markAsAccepted(id){
     Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -661,7 +661,7 @@ function markAsReplied(id){
         confirmButtonColor: "#1bc5bd"
     }).then(function(result) {
         if (result.value) {
-            window.open("{{ route('admin.projects.bidded.mark_as_replied') }}/"+id, "_self");
+            window.open("{{ route('admin.projects.replied.mark_as_accepted') }}/"+id, "_self");
         }
     });
 }

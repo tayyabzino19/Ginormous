@@ -24,6 +24,14 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 
 		Route::get('bidded', ['as' => 'bidded', 'uses' => 'ProjectController@bidded']);
 		Route::get('bidded/details/{id?}', ['as' => 'bidded.details', 'uses' => 'ProjectController@biddedDetails']);
+		Route::get('bidded/mark-as-replied/{id?}', ['as' => 'bidded.mark_as_replied', 'uses' => 'ProjectController@markAsReplied']);
+
+		Route::get('replied', ['as' => 'replied', 'uses' => 'ProjectController@replied']);
+		Route::get('replied/details/{id?}', ['as' => 'replied.details', 'uses' => 'ProjectController@repliedDetails']);
+		Route::get('replied/mark-as-accepted/{id?}', ['as' => 'replied.mark_as_accepted', 'uses' => 'ProjectController@markAsAccepted']);
+
+		Route::get('accepted', ['as' => 'accepted', 'uses' => 'ProjectController@accepted']);
+		Route::get('accepted/details/{id?}', ['as' => 'accepted.details', 'uses' => 'ProjectController@acceptedDetails']);
 
 		//Route::get('details', ['as' => 'details', 'uses' => 'ProjectController@details']);
 		Route::get('filters', ['as' => 'filters', 'uses' => 'ProjectController@filters']);
