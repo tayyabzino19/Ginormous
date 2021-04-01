@@ -50,7 +50,8 @@ class BidderController extends Controller
         }
 
         $date_range = $this->date_range;
-        return view('bidder.dashboard.index', compact('date_range', 'leave_pending_count', 'leave_rejected_count', 'leave_accepted_count', 'leave_total_count', 'project_bidded_count', 'project_accepted_count', 'project_missed_count', 'project_replied_count'));
+        $this_month_project_accepted_count = Project::where('user_id', Auth::user()->id)->where('status', 'accepted')->whereYear('action_date', Carbon::now()->year)->whereMonth('action_date', Carbon::now()->month)->count();
+        return view('bidder.dashboard.index', compact('this_month_project_accepted_count', 'date_range', 'leave_pending_count', 'leave_rejected_count', 'leave_accepted_count', 'leave_total_count', 'project_bidded_count', 'project_accepted_count', 'project_missed_count', 'project_replied_count'));
     }
 
     public function settings(){

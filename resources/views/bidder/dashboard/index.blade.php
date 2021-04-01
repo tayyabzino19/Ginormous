@@ -13,7 +13,7 @@
                 <div class="d-flex justify-content-between">
                     
                     <div>
-                        <h6 class="mt-3">This Month Bonus: <span class="text-success">{{ number_format($project_accepted_count * Auth::user()->designation->bonus_amount) }}</span></h6>
+                        <h6 class="mt-3">This Month Bonus: <span class="text-success">{{ number_format($this_month_project_accepted_count * Auth::user()->designation->bonus_amount) }}</span></h6>
                     </div>
 
                     <div class="mb-5 d-flex justify-content-end">
