@@ -15,7 +15,8 @@ class CreateLiveFeedsTable extends Migration
     {
         Schema::create('live_feeds', function (Blueprint $table) {
             $table->id();
-            $table->string('project_id');
+            $table->integer('user_id');
+            $table->string('project_id')->unique();
             $table->string('title');
             $table->string('seo_url')->nullable();
             $table->string('preview_description');

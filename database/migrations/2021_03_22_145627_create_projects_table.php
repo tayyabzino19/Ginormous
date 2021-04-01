@@ -16,7 +16,7 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->integer('freelancer_project_id');
+            $table->integer('freelancer_project_id')->unique();
             $table->string('title');
             $table->string('seo_url')->nullable();
             $table->text('preview_description')->nullable();

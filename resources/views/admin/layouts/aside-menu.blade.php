@@ -19,12 +19,28 @@
                 </a>
                 <div class="menu-submenu">
                     <ul class="menu-subnav">
+                        <li class="menu-item @yield('projects_pool_nav')" aria-haspopup="true">
+                            <a href="{{ route('admin.projects.pool') }}" class="menu-link">
+                                <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                <span class="menu-text">Pool</span>
+                            </a>
+                        </li>
                         <li class="menu-item @yield('projects_missed_nav')" aria-haspopup="true">
                             <a href="{{ route('admin.projects.missed') }}" class="menu-link">
                                 <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
                                 <span class="menu-text">Missed</span>
+                            </a>
+                        </li>
+                        <li class="menu-item @yield('projects_bid_later_nav')" aria-haspopup="true">
+                            <a href="{{ route('admin.projects.bid_later') }}" class="menu-link">
+                                <i class="menu-bullet menu-bullet-dot">
+                                    <span></span>
+                                </i>
+                                <span class="menu-text">Bid Later</span>
                             </a>
                         </li>
                         <li class="menu-item @yield('projects_bidded_nav')" aria-haspopup="true">

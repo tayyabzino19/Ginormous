@@ -19,8 +19,16 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 	Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 	Route::group(['prefix' => 'projects', 'as' => 'projects.'], function(){
+		
+		Route::get('pool', ['as' => 'pool', 'uses' => 'ProjectController@pool']);
+		Route::get('pool/details/{id?}', ['as' => 'pool.details', 'uses' => 'ProjectController@poolDetails']);
+		Route::get('pool/sync-pool-details/{id?}', ['as' => 'pool.sync_pool_details', 'uses' => 'ProjectController@syncPoolDetails']);
+		
 		Route::get('missed', ['as' => 'missed', 'uses' => 'ProjectController@missed']);
 		Route::get('missed/details/{id?}', ['as' => 'missed.details', 'uses' => 'ProjectController@missedDetails']);
+
+		Route::get('bid-later', ['as' => 'bid_later', 'uses' => 'ProjectController@bidLater']);
+		Route::get('bid-later/details/{id?}', ['as' => 'bid_later.details', 'uses' => 'ProjectController@bidLaterDetails']);
 
 		Route::get('bidded', ['as' => 'bidded', 'uses' => 'ProjectController@bidded']);
 		Route::get('bidded/details/{id?}', ['as' => 'bidded.details', 'uses' => 'ProjectController@biddedDetails']);

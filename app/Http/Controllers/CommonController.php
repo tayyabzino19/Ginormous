@@ -151,7 +151,7 @@ class CommonController extends Controller
       }
 
       public function bidNow(Request $request){
-        
+    
         //apply validations
         $bidder_id = FreelancerApiClient::first()->client_id;
         $request->validate([
@@ -193,22 +193,21 @@ class CommonController extends Controller
             $description .= $request->ender . '
             ';
         }
-        //return nl2br($description);
-
-        //return $request->all();
-
+        
         $project = Project::where('id', $request->id)->where('user_id', Auth::user()->id)->where('freelancer_project_id', $request->freelancer_project_id)->firstOrFail();
-        //send bid to freelancer.com
+        //return $description;
         $response = Http::withHeaders([
             'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key,
         ])->post('https://www.freelancer.com/api/projects/0.1/bids/', [
-            'project_id' => (integer) $request->project_id,
-            'bidder_id' => $bidder_id,
+            'project_id' => (integer) $request->freelancer_project_id,
+            'bidder_id' => (integer) $bidder_id,
             'amount' => (float) $request->amount,
             'period' => (integer) $request->period,
             'milestone_percentage' => (integer) $request->milestone_percentage,
             'description' => $description,
         ]);
+
+        //return $response;
 
         $response_array = $response->json();
         if($response_array['status'] == 'error'){

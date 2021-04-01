@@ -212,7 +212,7 @@
                         <!--end::Copyright-->
                         <!--begin::Nav-->
                         <div class="nav nav-dark">
-                            &copy; All rights reserved by&nbsp;<a class="text-dark-75 text-hover-primary" href="https://zino.brhythym.com/bidder/">Ginormous</a>
+                            &copy; All rights reserved by&nbsp;<a class="text-dark-75 text-hover-primary" href="https://zino.brhythym.com">Ginormous</a>
                         </div>
                         <!--end::Nav-->
                     </div>

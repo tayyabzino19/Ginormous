@@ -7,10 +7,10 @@
 <div class="container">
     <div class="row mb-6">
         <div class="col-lg-12">
-            <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+            <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm float-left">
 
                 <li class="breadcrumb-item">
-                    <a href="https://zino.brhythym.com/admin"><i class="fa fa-home"></i></a>
+                    <a href="{{ route('admin.index') }}"><i class="fa fa-home"></i></a>
                 </li>
                 <li class="breadcrumb-item">
                     Projects
@@ -19,6 +19,7 @@
                     Missed
                 </li>
             </ul>
+            <div class="float-right mt-2 mr-2"><b>Total:</b> {{ number_format($projects->total()) }}</div>
         </div>
     </div>
 
@@ -97,11 +98,7 @@
                         </div>
                         <div class="col-lg-1 d-flex align-items-center justify-content-center">
                             <div>
-                                <button onclick="bidLater({{ $project->id }})" title="Bid Later" data-toggle="tooltip" class="btn btn-sm btn-circle btn-icon btn-light-primary action_btn bid_later"><i class="far fa-clock"></i></button>
-                                <br />
-                                <br />
-                                <br />
-                                <br />
+                               
                                 <a href="https://www.freelancer.com/projects/{{$project->seo_url}}" title="Open in Web" target="_blank" data-toggle="tooltip" class="btn btn-sm btn-circle btn-icon btn-light-info action_btn"><i class="fas fa-globe"></i></a>
                                 
                                 

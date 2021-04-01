@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('projects_nav', 'menu-item-open')
-@section('projects_accepted_nav', 'menu-item-active')
+@section('projects_bid_later_nav', 'menu-item-active')
 
 @section("main")
 <div class="container" id="app">
@@ -19,7 +19,7 @@
                         Projects
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('admin.projects.accepted') }}">Accepted</a>
+                        <a href="{{ route('admin.projects.bid_later') }}">Bid Later</a>
                     </li>
                     <li class="breadcrumb-item">
                         Details
@@ -68,23 +68,19 @@
                 <!--end::Item-->
 
                 <!--begin::Item-->
-                <li class="nav-item mr-3">
+                {{-- <li class="nav-item mr-3">
                     <a class="nav-link" data-toggle="tab" href="#tab_4">
                         <span class="nav-text font-size-lg">Bid</span>
                     </a>
-                </li>
+                </li> --}}
                 <!--end::Item-->
             </ul>
         </div>
         <!--end::Toolbar-->
 
-        <div class="mt-9">
-            <b>Accepted At: </b> <span class="">{{ date('d M Y h:i:s A', strtotime($project->action_date)) }}</span>
+        <div class="card-title">
+            {{-- <button id="kt_quick_user_toggle" class="btn btn-primary"><i class="flaticon-price-tag"></i>Bid Now</button> --}}
         </div>
-
-        {{-- <div class="card-title">
-            <button onclick="markAsAccepted({{ $project->id }})" class="btn btn-primary"><i class="fa fa-check"></i>Mark as Accepted</button>
-        </div> --}}
 
     </div>
     <!--end::Card header-->
@@ -558,70 +554,49 @@
             <div class="col-lg-12">
                 <div class="card card-custom">
                     <div class="card-body">
-                        
-                        @foreach($our_proposals as $project_proposal)
-                        <div class="row mb-6">
-                            <div class="col-lg-12">
-                                <div class="card card-custom">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-lg-8">
-                                                <div class="row">
-                                                    <div class="col-lg-2">
-                                                        <div class="float-left">
-                                                            <img src="{{ $project_proposal->avatar_cdn }}" style="height:86px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-10">
-                                                        <img src="{{ $project_proposal->country->highres_flag_url_cdn }}" style="width:30px;"> <span class="font-size-h3 font-weight-bold ml-1">{{ $project_proposal->public_name }}</span>
-                                                        <span class="font-size-h3 font-weight-normal text-dark-50">{{ '@' . $project_proposal->username }}</span>
-                                                        
-                                                        <p class="text-dark-50 font-size-h6 mt-2 mb-2">{{ $project_proposal->tagline  }}</p>
-                                                        
-                                                        <span title="Ratings" data-toggle="tooltip">
-                                                            
-                                                            @for($i = 0; $i < round($project_proposal->reputation->overall,0); $i++)
-                                                                <i class="fas fa-star text-warning"></i>
-                                                            @endfor
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="float-left">
+                                    <img src="https://zino.brhythym.com/images/joe-alwyn.jpg" style="height:80px;">
+                                </div>
+                                <div class="float-left ml-4">
+                                    <img src="https://zino.brhythym.com/images/pak-flag.png" style="width:30px;"> <span class="font-size-h3 font-weight-bold ml-1">Fullstack Developer</span>
+                                    <span class="font-size-h3 font-weight-normal text-dark-50">@ahmadayaznoor</span>
+                                    <p class="text-dark-50 font-size-h6 mt-2 mb-2">Laravel Wordpress Shopify Prestashop Magento PHP WIX UI/UX</p>
 
-                                                            @for($i = 5; $i > round($project_proposal->reputation->overall,0); $i--)
-                                                                <i class="fas fa-star text-dark-30"></i>
-                                                            @endfor
-                                                            
-                                                            <span class="font-size-h6">{{ round($project_proposal->reputation->overall, 1) }}</span>
-                                                        </span>
-                                                        
-                                                        <span data-toggle="tooltip" title="Reviews"><i class="fab fa-rocketchat text-info ml-6"></i> <span class="font-size-h6">{{ round($project_proposal->reputation->reviews,0) }}</span></span>
-                                                        
-                                                        <span title="Money" data-toggle="tooltip"><span class="text-success font-size-h3 font-weight-bold ml-6">$</span> <span class="text-success font-weight-boldest" style="letter-spacing: 1px; position: relative; bottom: 2px;">|||||||<span class="text-muted">||</span></span><span class="font-size-h6">8.1</span></span>
+                                    <span title="Ratings" data-toggle="tooltip">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i> <span class="font-size-h6">5.0</span>
+                                    </span>
+                                    
+                                    <span data-toggle="tooltip" title="Reviews"><i class="fab fa-rocketchat text-info ml-6"></i> <span class="font-size-h6">557</span></span>
+                                    
+                                    <span title="Money" data-toggle="tooltip"><span class="text-success font-size-h3 font-weight-bold ml-6">$</span> <span class="text-success font-weight-boldest" style="letter-spacing: 1px; position: relative; bottom: 2px;">|||||||<span class="text-muted">||</span></span><span class="font-size-h6">8.1</span></span>
 
-                                                        <span data-toggle="tooltip" title="Completion Rate"><i class="fas fa-circle-notch text-primary ml-4 font-size-h4"></i> <span class="font-size-h6">{{ round(($project_proposal->reputation->completion_rate * 100) / 1) }}%</span></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-4 text-right">
-                                                <h3>{{ $project->currency->sign }}{{ $project_proposal->amount }} ({{ $project->currency->code }})</h3>
-                                                <h6>in {{ $project_proposal->period }} days</h6>
-                                            </div>
-
-                                            <div class="col-lg-12 mt-8">
-                                                <div class="font-size-lg mt-4">
-                                                    {!! nl2br($project_proposal->description) !!}
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-12 text-right mt-6">
-                                                <h6 class="text-dark-50 font-size-h6 font-weight-normal">Replies within a few hours</h6>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
+                                    <span data-toggle="tooltip" title="Completion Rate"><i class="fas fa-circle-notch text-primary ml-4 font-size-h4"></i> <span class="font-size-h6">100%</span></span>
+                                    
                                 </div>
                             </div>
+
+                            <div class="col-lg-4 text-right">
+                                <h3>$450.00 USD</h3>
+                                <h6 class="mb-2">2 days ago</h6>
+                                <span class="label font-weight-bold label-light-default label-inline label-xl">Rank: 10</span>
+                            </div>
+
+                            <div class="col-lg-12 mt-8">
+                                <div class="font-size-lg mt-4">
+                                   <P>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.
+
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.                                                        </P>
+                                </div>
+                            </div>
+
+
                         </div>
-                        @endforeach
 
                     </div>
                 </div>
@@ -653,25 +628,8 @@
 
 @section('page_js')
 <script>
-
-
-function markAsAccepted(id){
-    Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, Proceed!",
-        confirmButtonColor: "#1bc5bd"
-    }).then(function(result) {
-        if (result.value) {
-            window.open("{{ route('admin.projects.replied.mark_as_accepted') }}/"+id, "_self");
-        }
-    });
-}
-
 $(document).ready(function() {
-    //readmore functionality
+
     $(document).on('click','.readmore', function(){
         $(this).parent().find('.dots').removeClass("d-inline");
         $(this).parent().find('.dots').addClass("d-none");
@@ -782,7 +740,7 @@ var app = new Vue({
         ender: '',
         days: '',
         budget: '',
-        redirect_path: "{{ route('admin.projects.bidded') }}"
+        redirect_path: "{{ route('admin.projects.missed') }}"
     }
 });
 

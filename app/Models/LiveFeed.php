@@ -25,4 +25,8 @@ class LiveFeed extends Model
     public function LiveFeedProposals(){
         return $this->hasMany(LiveFeedProposal::class);
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

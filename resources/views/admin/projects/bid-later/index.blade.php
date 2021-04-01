@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('projects_nav', 'menu-item-open')
-@section('projects_accepted_nav', 'menu-item-active')
+@section('projects_bid_later_nav', 'menu-item-active')
 
 @section("main")
 <div class="container">
@@ -16,7 +16,7 @@
                     Projects
                 </li>
                 <li class="breadcrumb-item">
-                    Accepted
+                    Bid Later
                 </li>
             </ul>
             <div class="float-right mt-2 mr-2"><b>Total:</b> {{ number_format($projects->total()) }}</div>
@@ -34,7 +34,7 @@
             }
         @endphp
         <div class="col-lg-12">
-            <div class="card card-custom card-stretch gutter-b feed_card" data-link="{{ route('admin.projects.accepted.details', $project->id) }}">
+            <div class="card card-custom card-stretch gutter-b feed_card" data-link="{{ route('admin.projects.bid_later.details', $project->id) }}">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-1 d-flex align-items-center justify-content-center">
@@ -49,14 +49,10 @@
                                 @endif
                                 <br />
                                 <br />
-                                
-                                <div class="symbol symbol-circle symbol-lg-35" data-toggle="tooltip" data-html="true" title="<b>Bidded By:</b> {{ $project->user->name }}">
+                                <br />
+                                <br />
+                                <div class="symbol symbol-circle symbol-lg-35" data-toggle="tooltip" data-html="true" title="<b>Bid Later By:</b> {{ $project->user->name }}">
                                     <img src="{{ route('image_source', ['user', $project->user->picture]) }}">
-                                </div>
-                                <br />
-                                <br />
-                                <div class="symbol symbol-circle symbol-lg-35" data-toggle="tooltip" data-html="true" title="<b>Accepted By:</b> {{ $project->ProjectDetail->employer_public_name }}">
-                                    <img src="{{ $project->ProjectDetail->employer_avatar_cdn }}">
                                 </div>
                             </div>
                         </div>
@@ -102,7 +98,10 @@
                         </div>
                         <div class="col-lg-1 d-flex align-items-center justify-content-center">
                             <div>
+                               
                                 <a href="https://www.freelancer.com/projects/{{$project->seo_url}}" title="Open in Web" target="_blank" data-toggle="tooltip" class="btn btn-sm btn-circle btn-icon btn-light-info action_btn"><i class="fas fa-globe"></i></a>
+                                
+                                
                             </div>
                         </div>
                     </div>

@@ -7,10 +7,10 @@
 <div class="container">
     <div class="row mb-6">
         <div class="col-lg-12">
-            <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+            <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm float-left">
 
                 <li class="breadcrumb-item">
-                    <a href="https://zino.brhythym.com/admin"><i class="fa fa-home"></i></a>
+                    <a href="{{ route('admin.index') }}"><i class="fa fa-home"></i></a>
                 </li>
                 <li class="breadcrumb-item">
                     Projects
@@ -19,6 +19,7 @@
                     Replied
                 </li>
             </ul>
+            <div class="float-right mt-2 mr-2"><b>Total:</b> {{ number_format($projects->total()) }}</div>
         </div>
     </div>
 

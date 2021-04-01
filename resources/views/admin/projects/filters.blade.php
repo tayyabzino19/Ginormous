@@ -1,6 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('projects_nav', 'menu-item-open')
+@section('projects_filters_setting_nav', 'menu-item-active')
 
 @section("main")
 <div class="container">

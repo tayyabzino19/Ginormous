@@ -78,6 +78,10 @@
         </div>
         <!--end::Toolbar-->
 
+        <div class="mt-9">
+            <b>Replied At: </b> <span class="">{{ date('d M Y h:i:s A', strtotime($project->action_date)) }}</span>
+        </div>
+
         <div class="card-title">
             <button onclick="markAsAccepted({{ $project->id }})" class="btn btn-primary"><i class="fa fa-check"></i>Mark as Accepted</button>
         </div>

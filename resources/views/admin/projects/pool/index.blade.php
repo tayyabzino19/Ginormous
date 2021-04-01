@@ -1,14 +1,13 @@
 @extends('admin.layouts.master')
 
 @section('projects_nav', 'menu-item-open')
-@section('projects_accepted_nav', 'menu-item-active')
+@section('projects_pool_nav', 'menu-item-active')
 
 @section("main")
 <div class="container">
     <div class="row mb-6">
         <div class="col-lg-12">
             <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm float-left">
-
                 <li class="breadcrumb-item">
                     <a href="{{ route('admin.index') }}"><i class="fa fa-home"></i></a>
                 </li>
@@ -16,11 +15,12 @@
                     Projects
                 </li>
                 <li class="breadcrumb-item">
-                    Accepted
+                    Pool
                 </li>
             </ul>
             <div class="float-right mt-2 mr-2"><b>Total:</b> {{ number_format($projects->total()) }}</div>
         </div>
+        
     </div>
 
     <div class="row">
@@ -34,7 +34,7 @@
             }
         @endphp
         <div class="col-lg-12">
-            <div class="card card-custom card-stretch gutter-b feed_card" data-link="{{ route('admin.projects.accepted.details', $project->id) }}">
+            <div class="card card-custom card-stretch gutter-b feed_card" data-link="{{ route('admin.projects.pool.details', $project->id) }}">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-1 d-flex align-items-center justify-content-center">
@@ -49,14 +49,10 @@
                                 @endif
                                 <br />
                                 <br />
-                                
-                                <div class="symbol symbol-circle symbol-lg-35" data-toggle="tooltip" data-html="true" title="<b>Bidded By:</b> {{ $project->user->name }}">
+                                <br />
+                                <br />
+                                <div class="symbol symbol-circle symbol-lg-35" data-toggle="tooltip" data-html="true" title="<b>Pool of:</b> {{ $project->user->name }}">
                                     <img src="{{ route('image_source', ['user', $project->user->picture]) }}">
-                                </div>
-                                <br />
-                                <br />
-                                <div class="symbol symbol-circle symbol-lg-35" data-toggle="tooltip" data-html="true" title="<b>Accepted By:</b> {{ $project->ProjectDetail->employer_public_name }}">
-                                    <img src="{{ $project->ProjectDetail->employer_avatar_cdn }}">
                                 </div>
                             </div>
                         </div>
@@ -78,7 +74,7 @@
                             <hr />
                             <div class="row">
                                 <div class="col-lg-5">
-                                    {{ $project->bid_stats->bid_count }} <strong>Bids</strong> &nbsp;|&nbsp; <span title="Ratings" data-toggle="tooltip" class="label label-inline">{{ round($project->employer_reputation->overall, 1) }}</span> &nbsp;|&nbsp; <strong class="text-warning">{{ round($project->employer_reputation->reviews,0) }} Reviews</strong>
+                                    {{ $project->bid_stats->bid_count }} <strong>Bids</strong> &nbsp;|&nbsp; <span title="Ratings" data-toggle="tooltip" class="label label-inline">{{ round($project->reputation->overall, 1) }}</span> &nbsp;|&nbsp; <strong class="text-warning">{{ round($project->reputation->reviews,0) }} Reviews</strong>
                                 </div>
                                 <div class="col-lg-7">
                                     @if($project->upgrades->NDA)

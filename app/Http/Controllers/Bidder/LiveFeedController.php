@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Http;
 class LiveFeedController extends Controller
 {
     public function liveFeed(){
-        $projects = LiveFeed::orderBy('time_submitted', 'desc')->paginate(50);
+        $projects = LiveFeed::where('user_id', Auth::user()->id)->orderBy('time_submitted', 'desc')->paginate(50);
         return view('bidder.projects.live-feed', compact('projects'));
     }
 
@@ -63,7 +63,7 @@ class LiveFeedController extends Controller
 
         $fresh_project_ids = collect($projects)->pluck('id');
         $live_feed_project_ids = LiveFeed::whereIn('project_id', $fresh_project_ids)->get()->pluck('project_id')->toArray();
-        $project_ids = Project::whereIn('freelancer_project_id', $fresh_project_ids)->get()->pluck('project_id')->toArray();
+        $project_ids = Project::whereIn('freelancer_project_id', $fresh_project_ids)->get()->pluck('freelancer_project_id')->toArray();
         
         foreach($projects as $project){
 
@@ -76,6 +76,7 @@ class LiveFeedController extends Controller
             }
 
             $projects_array[] = [
+                'user_id' => Auth::User()->id,
                 'project_id' => $project['id'],
                 'title' => $project['title'],
                 'seo_url' => $project['seo_url'],
@@ -90,6 +91,8 @@ class LiveFeedController extends Controller
                 'time_updated' => $project['time_updated']
             ];
         }
+
+        
         
         if(isset($projects_array)){
             LiveFeed::insert(
@@ -103,7 +106,7 @@ class LiveFeedController extends Controller
 
     public function liveFeedDetails($id = null){
         
-        $LiveFeed = LiveFeed::findOrFail($id);
+        $LiveFeed = LiveFeed::where('user_id', Auth::user()->id)->where('id', $id)->firstOrFail();
 
         if(LiveFeedDetail::where('live_feed_id', $id)->doesntExist()){
             //Freelancer Project details and proposal Api's
@@ -387,7 +390,7 @@ class LiveFeedController extends Controller
             'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key,
         ])->post('https://www.freelancer.com/api/projects/0.1/bids/', [
             'project_id' => (integer) $request->project_id,
-            'bidder_id' => $bidder_id,
+            'bidder_id' => (integer) $bidder_id,
             'amount' => (float) $request->amount,
             'period' => (integer) $request->period,
             'milestone_percentage' => (integer) $request->milestone_percentage,
