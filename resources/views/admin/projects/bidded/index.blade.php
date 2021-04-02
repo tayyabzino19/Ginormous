@@ -23,7 +23,48 @@
         </div>
     </div>
 
-    <div class="row">
+    <form id="filter_form" method="get">
+        <input type="hidden" name="search" value="true">
+        <div class="d-flex justify-content-center">
+            <div class="">
+            <input type="text" class="form-control" name="title" placeholder="Project Title">
+            </div>
+            <div class="">
+                <select name="user" style="max-width: 140px;" class="form-control select2 user">
+                    <option></option>
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="">
+                <div class='input-group' id='kt_daterangepicker_6'>
+                    <input readonly value="{{ $date_range }}" name="date_range" type='text' class="form-control" placeholder="Select date range" />
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="la la-calendar-check-o"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <button type="submit" class="btn btn-primary"><i class="la la-filter"></i> Filter
+                </button>&#160;&#160;
+
+                @if(isset(request()->search))
+                <a href="{{ route('admin.projects.pool') }}" id="kt_reset">
+                    <span>
+                        <i class="la la-close p-0"></i>
+                    </span>
+                </a>
+                @endif                               
+            </div>
+        </div>
+    </form>
+
+    <div class="row mt-6">
 
         @foreach($projects as $project)
         @php
@@ -131,6 +172,46 @@
 
 <script>
     $(document).ready(function(){
+
+        //Search start
+        $(".select2.user").select2({
+            placeholder: "User"
+        });
+
+        //Change value of filters
+        $("select[name='user']").val("{{ $user_id }}").change();
+
+        $("#filter_form").on("submit", function(e){
+            e.preventDefault();
+            let date_range = $("input[name='date_range']").val();
+            let title_val = $("input[name='title']").val();
+            var user_val = $("select[name='user']").val();
+            if(date_range == '' && user_val == '' && title_val == ''){
+                return false;
+            }
+            e.currentTarget.submit();
+        });
+        
+        $('#kt_daterangepicker_6').daterangepicker({
+            buttonClasses: ' btn',
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-secondary',
+            //startDate: "moment().subtract(1, 'days')",
+            endDate: "moment().subtract(1, 'days')",
+
+            ranges: {
+               'Today': [moment(), moment()],
+               'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+               'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+               'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+               'This Month': [moment().startOf('month'), moment().endOf('month')],
+               'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+            $('#kt_daterangepicker_6 .form-control').val( start.format('DD-MMM-YYYY') + ' to ' + end.format('DD-MMM-YYYY'));
+            
+        });
+        //serach ends
 
         $(".feed_card").click(function(e){
             if( $(e.target).closest(".action_btn").length < 1 ) {

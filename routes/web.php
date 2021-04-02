@@ -44,6 +44,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 
 		//Route::get('details', ['as' => 'details', 'uses' => 'ProjectController@details']);
 		Route::get('filters', ['as' => 'filters', 'uses' => 'ProjectController@filters']);
 		Route::post('filters/update', ['as' => 'filters.update', 'uses' => 'ProjectController@updateFilters']);
+
+		Route::get('exclude', ['as' => 'exclude', 'uses' => 'ProjectController@exclude']);
+		Route::get('exclude/sync', ['as' => 'exclude.sync', 'uses' => 'ProjectController@SyncExclude']);
+		Route::post('exclude/update', ['as' => 'exclude.update', 'uses' => 'ProjectController@updateExclude']);
 	});
 
 	Route::group(['prefix' => 'settings', 'as' => 'settings.'], function(){

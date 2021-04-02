@@ -167,31 +167,37 @@ class CommonController extends Controller
 
         if($request->starter != ""){
             $description .= $request->starter . '
-            ';
+
+';
         }
 
         if($request->about != ""){
             $description .= $request->about . '
-            ';
+
+';
         }
 
         if($request->tech_star != ""){
             $description .= $request->tech_star . '
-            ';
+
+';
         }
 
         if($request->portfolio_initiator != ""){
             $description .= $request->portfolio_initiator . '
-            ';
+
+';
         }
 
         if($request->portfolio != ""){
             $description .= $request->portfolio . '
-            ';
+
+';
         }
         if($request->ender != ""){
             $description .= $request->ender . '
-            ';
+
+';
         }
         
         $project = Project::where('id', $request->id)->where('user_id', Auth::user()->id)->where('freelancer_project_id', $request->freelancer_project_id)->firstOrFail();

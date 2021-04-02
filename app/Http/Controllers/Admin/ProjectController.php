@@ -14,6 +14,9 @@ use App\Models\LiveFeed;
 use App\Models\LiveFeedDetail;
 use App\Models\LiveFeedProposal;
 use App\Models\Item;
+use App\Models\Country;
+use App\Models\Currency;
+use App\Models\Exclude;
 use App\Models\Language;
 use App\Models\Skill;
 use App\Models\Industry;
@@ -23,13 +26,20 @@ use App\Models\FreelancerApiClient;
 use App\Models\Project;
 use App\Models\ProjectDetail;
 use App\Models\ProjectProposal;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 
 class ProjectController extends Controller
 {
+    //defining search vars
+    protected $date_range, $user_id;
+
     public function pool(){
         $projects = LiveFeed::with('user')->orderBy('time_submitted', 'desc')->paginate(100);
-        return view('admin.projects.pool.index', compact('projects'));
+        $users = User::where('role', 'bidder')->get();
+        $date_range = $this->date_range;
+        $user_id = $this->user_id;
+        return view('admin.projects.pool.index', compact('projects', 'users', 'date_range', 'user_id'));
     }
 
 
@@ -226,7 +236,10 @@ class ProjectController extends Controller
 
     public function missed(){
         $projects = Project::with('user')->where('status', 'missed')->orderBy('action_date', 'desc')->paginate(100);
-        return view('admin.projects.missed.index', compact('projects'));
+        $users = User::where('role', 'bidder')->get();
+        $date_range = $this->date_range;
+        $user_id = $this->user_id;
+        return view('admin.projects.missed.index', compact('projects', 'users', 'date_range', 'user_id'));
     }
 
     public function missedDetails($id = null){
@@ -321,7 +334,10 @@ class ProjectController extends Controller
 
     public function bidLater(){
         $projects = Project::with('user')->where('status', 'bid_later')->orderBy('action_date', 'desc')->paginate(100);
-        return view('admin.projects.bid-later.index', compact('projects'));
+        $users = User::where('role', 'bidder')->get();
+        $date_range = $this->date_range;
+        $user_id = $this->user_id;
+        return view('admin.projects.bid-later.index', compact('projects', 'users', 'date_range', 'user_id'));
     }
 
     public function bidLaterDetails($id = null){
@@ -415,7 +431,10 @@ class ProjectController extends Controller
 
     public function bidded(){
         $projects = Project::with('user')->where('status', 'bidded')->orderBy('action_date', 'desc')->paginate(100);
-        return view('admin.projects.bidded.index', compact('projects'));
+        $users = User::where('role', 'bidder')->get();
+        $date_range = $this->date_range;
+        $user_id = $this->user_id;
+        return view('admin.projects.bidded.index', compact('projects', 'users', 'date_range', 'user_id'));
     }
 
     public function biddedDetails($id = null){
@@ -526,7 +545,10 @@ class ProjectController extends Controller
 
     public function replied(){
         $projects = Project::with('user', 'ProjectDetail')->where('status', 'replied')->orderBy('action_date', 'desc')->paginate(100);
-        return view('admin.projects.replied.index', compact('projects'));
+        $users = User::where('role', 'bidder')->get();
+        $date_range = $this->date_range;
+        $user_id = $this->user_id;
+        return view('admin.projects.replied.index', compact('projects', 'users', 'date_range', 'user_id'));
     }
 
     public function acceptedDetails($id = null){
@@ -547,7 +569,10 @@ class ProjectController extends Controller
 
     public function accepted(){
         $projects = Project::with('user', 'ProjectDetail')->where('status', 'accepted')->orderBy('action_date', 'desc')->paginate(100);
-        return view('admin.projects.accepted.index', compact('projects'));
+        $users = User::where('role', 'bidder')->get();
+        $date_range = $this->date_range;
+        $user_id = $this->user_id;
+        return view('admin.projects.accepted.index', compact('projects', 'users', 'date_range', 'user_id'));
     }
 
 
@@ -676,6 +701,105 @@ class ProjectController extends Controller
 
         return redirect(route('admin.projects.filters'))->with("error", "Something went wrong, Please try again.");
 
+    }
+
+    public function exclude(){
+        $countries = Country::all();
+        $currencies = Currency::all();
+        $exclude = exclude::first();
+        return view('admin.projects.exclude', compact('countries', 'currencies', 'exclude'));
+    }
+
+    public function SyncExclude(){
+
+            try{
+                //Handle Countries
+                $response = Http::withHeaders([
+                    'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key
+                ])->get("https://www.freelancer.com/api/common/0.1/countries");
+            }catch(\Exception $e){
+                return redirect(route('admin.projects.exclude'))->with("error", "Some thing went wrong, Please try again.");
+            }
+            
+            $response_array = $response->json();
+            
+            if($response_array['status'] == 'error'){
+                return $response_array;
+            }
+
+            $countries = $response_array['result']['countries'];
+            
+            foreach($countries as $country){
+                $countries_array[] = [
+                    'name' => $country['name'],
+                    'code' => $country['code']
+                ];
+            }
+
+            if(isset($countries_array)){
+                Country::truncate();
+                Country::insert(
+                    $countries_array
+                );
+            }
+            
+            try{
+                //Handle Currencies
+                $response = Http::withHeaders([
+                    'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key
+                ])->get("https://www.freelancer.com/api/projects/0.1/currencies");  
+            }catch(\Exception $e){
+                return redirect(route('admin.projects.exclude'))->with("error", "Some thing went wrong, Please try again.");
+            }
+            
+            $response_array = $response->json();
+            
+            if($response_array['status'] == 'error'){
+                return $response_array;
+            }
+
+            $currencies = $response_array['result']['currencies'];
+            
+            foreach($currencies as $currency){
+                $currencies_array[] = [
+                    'name' => $currency['name'],
+                    'code' => $currency['code']
+                ];
+            }
+
+            if(isset($currencies_array)){
+                Currency::truncate();
+                Currency::insert(
+                    $currencies_array
+                );
+            }
+
+            return redirect(route('admin.projects.exclude'))->with("success", "Countries and currencies updated successfully.");
+    }
+
+    public function updateExclude(Request $request){
+
+        //return $request->all();
+
+        if(!isset($request->countries)){
+            $countries = [];
+        }else{
+            $countries = $request->countries;
+        }
+
+        if(!isset($request->currencies)){
+            $currencies = [];
+        }else{
+            $currencies = $request->currencies;
+        }
+
+        $exclude = Exclude::firstOrNew();
+        $exclude->countries = $countries;
+        $exclude->currencies = $currencies;
+        if($exclude->save()){
+            return redirect(route('admin.projects.exclude'))->with("success", "Exclude settings updated successfully.");
+        }
+        return redirect(route('admin.projects.exclude'))->with("error", "Something went wrong, Please try again.");
     }
 
     public function markAsReplied($id = null){

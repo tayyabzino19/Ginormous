@@ -13,6 +13,7 @@ use App\Models\TechStar;
 use App\Models\PortfolioInitiator;
 use App\Models\Ender;
 use App\Models\Skill;
+use App\Models\Exclude;
 use App\Models\Industry;
 use App\Models\Type;
 use App\Models\Item;
@@ -35,13 +36,13 @@ class LiveFeedController extends Controller
     public function getLiveFeed(){
 
         $projects_filter = ProjectFilter::first();
-        $url = "https://www.freelancer.com/api/projects/0.1/projects/active/?sort_field=time_submitted&user_details=true&user_employer_reputation=true&" . $projects_filter;
+        $url = "https://www.freelancer.com/api/projects/0.1/projects/active/?sort_field=time_submitted&user_details=true&user_country_details=true&user_employer_reputation=true&" . $projects_filter;
  
         $response = Http::withHeaders([
             'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key
         ])->get($url);
         
-        $response_array = $response->json();
+       $response_array = $response->json();
         
         if($response_array['status'] == 'error'){
             return $response_array;
@@ -64,6 +65,7 @@ class LiveFeedController extends Controller
         $fresh_project_ids = collect($projects)->pluck('id');
         $live_feed_project_ids = LiveFeed::whereIn('project_id', $fresh_project_ids)->get()->pluck('project_id')->toArray();
         $project_ids = Project::whereIn('freelancer_project_id', $fresh_project_ids)->get()->pluck('freelancer_project_id')->toArray();
+        $exclude = Exclude::first();
         
         foreach($projects as $project){
 
@@ -74,6 +76,23 @@ class LiveFeedController extends Controller
             if(in_array($project['id'], $project_ids)){
                 continue;
             }
+
+            if(in_array($project['id'], $project_ids)){
+                continue;
+            }
+
+            if($exclude){
+                if(in_array($project['currency']['code'], $exclude->currencies)){
+                    continue;
+                }
+            }
+
+            if($exclude){
+                if(in_array(strtoupper($users[$project['owner_id']]['location']['country']['code']), $exclude->countries)){
+                    continue;
+                }
+            }
+
 
             $projects_array[] = [
                 'user_id' => Auth::User()->id,
@@ -92,8 +111,6 @@ class LiveFeedController extends Controller
             ];
         }
 
-        
-        
         if(isset($projects_array)){
             LiveFeed::insert(
                 $projects_array
@@ -351,31 +368,37 @@ class LiveFeedController extends Controller
 
         if($request->starter != ""){
             $description .= $request->starter . '
-            ';
+
+';
         }
 
         if($request->about != ""){
             $description .= $request->about . '
-            ';
+
+';
         }
 
         if($request->tech_star != ""){
             $description .= $request->tech_star . '
-            ';
+
+';
         }
 
         if($request->portfolio_initiator != ""){
             $description .= $request->portfolio_initiator . '
-            ';
+
+';
         }
 
         if($request->portfolio != ""){
             $description .= $request->portfolio . '
-            ';
+
+';
         }
         if($request->ender != ""){
             $description .= $request->ender . '
-            ';
+
+';
         }
 
         //return nl2br($description);

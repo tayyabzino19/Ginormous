@@ -77,6 +77,14 @@
                                 <span class="menu-text">Filters Setting</span>
                             </a>
                         </li>
+                        <li class="menu-item @yield('projects_exclude_nav')" aria-haspopup="true">
+                            <a href="{{ route('admin.projects.exclude') }}" class="menu-link">
+                                <i class="menu-bullet menu-bullet-dot">
+                                    <span></span>
+                                </i>
+                                <span class="menu-text">Exclude</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>

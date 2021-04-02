@@ -36,7 +36,7 @@
                         </button>&#160;&#160;
 
                         @if(isset(request()->search))
-                        <a href="{{ route('bidder.index') }}" id="kt_reset">
+                        <a href="{{ route('admin.index') }}" id="kt_reset">
                             <span>
                                 <i class="la la-close p-0"></i>
                             </span>
