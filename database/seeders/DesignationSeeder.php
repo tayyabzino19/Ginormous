@@ -15,10 +15,10 @@ class DesignationSeeder extends Seeder
      */
     public function run()
     {
-        $designation = new Designation;
-        $designation->name = "Bidder";
-        $designation->bonus_amount = 5000;
-        $designation->status = "active";
-        $designation->save();
+        // $designation = new Designation;
+        // $designation->name = "Bidder";
+        // $designation->bonus_amount = 5000;
+        // $designation->status = "active";
+        // $designation->save();
     }
 }

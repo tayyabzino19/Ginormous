@@ -17,19 +17,19 @@ class UserSeeder extends Seeder
     {
         $user = new User;
         $user->name = "Ahmad Ayaz";
-        $user->email = "admin@gmail.com";
+        $user->email = "ahmadayaznoor@gmail.com";
         $user->password = Hash::make('google@123');
         $user->role = "admin";
         $user->status = "active";
         $user->save();
 
-        $user = new User;
-        $user->designation_id = 1;
-        $user->name = "Ahsan Zahid";
-        $user->email = "bidder@gmail.com";
-        $user->password = Hash::make('google@123');
-        $user->role = "bidder";
-        $user->status = "active";
-        $user->save();
+        // $user = new User;
+        // $user->designation_id = 1;
+        // $user->name = "Ahsan Zahid";
+        // $user->email = "bidder@gmail.com";
+        // $user->password = Hash::make('google@123');
+        // $user->role = "bidder";
+        // $user->status = "active";
+        // $user->save();
     }
 }

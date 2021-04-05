@@ -14,24 +14,24 @@ class IndustrySeeder extends Seeder
      */
     public function run()
     {
-        $industry = new Industry;
-        $industry->name = "Education";
-        $industry->status = 'active';
-        $industry->save();
+        // $industry = new Industry;
+        // $industry->name = "Education";
+        // $industry->status = 'active';
+        // $industry->save();
 
-        $industry = new Industry;
-        $industry->name = "Real Estate";
-        $industry->status = 'inactive';
-        $industry->save();
+        // $industry = new Industry;
+        // $industry->name = "Real Estate";
+        // $industry->status = 'inactive';
+        // $industry->save();
 
-        $industry = new Industry;
-        $industry->name = "Gambling & Casinos";
-        $industry->status = 'active';
-        $industry->save();
+        // $industry = new Industry;
+        // $industry->name = "Gambling & Casinos";
+        // $industry->status = 'active';
+        // $industry->save();
 
-        $industry = new Industry;
-        $industry->name = "Health";
-        $industry->status = 'active';
-        $industry->save();
+        // $industry = new Industry;
+        // $industry->name = "Health";
+        // $industry->status = 'active';
+        // $industry->save();
     }
 }

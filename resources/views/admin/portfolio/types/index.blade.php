@@ -66,15 +66,7 @@
                                 </tr>
                                 @endforeach
 
-                                <tr data-url="https://zino.brhythym.com/public/admin/transactions/view/15">
-                                    <td>1</td>
-                                    <td>Landing Page</td>
-                                    <td><span class="label label-rounded label-light-primary">16</span></td>
-                                    <td><span class="label font-weight-bold label-light-success label-inline">Active</span></td>
-                                    <td nowrap="nowrap">
-                                        <button data-toggle="modal" data-target="#edit_type_modal" class="btn btn-sm btn-icon btn-light-primary mr-2"><i title="View" data-toggle="tooltip" class="far fa-eye"></i></button>
-                                    </td>
-                                </tr>
+                               
 
                             </tbody>
                         </table>

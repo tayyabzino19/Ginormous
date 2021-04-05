@@ -21,11 +21,14 @@ class DesignationController extends Controller
         $validated = $request->validate([
             'name' => "required|min:2|unique:designations",
             'status' => "required",
+            'bonus_amount' => "required|max:9"
         ]);
 
         $designation = new Designation;
         $designation->name = $request->name;
         $designation->status = $request->status;
+        $designation->bonus_amount = $request->bonus_amount;
+        
 
         if($designation->save()){
 
@@ -51,13 +54,13 @@ class DesignationController extends Controller
         $designation = Designation::findOrFail($request->id);
         $validated = $request->validate([
             'name' => ['required', 'min:2', Rule::unique('designations')->ignore($request->id)],
-            'status' => "required"
+            'status' => "required",
+            'bonus_amount' => "required|max:9"
         ]);
-        
 
         $designation->name = $request->name;
         $designation->status = $request->status;
-        
+        $designation->bonus_amount = $request->bonus_amount;
         
         if($designation->save()){
 
