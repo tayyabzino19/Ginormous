@@ -27,7 +27,7 @@
         <input type="hidden" name="search" value="true">
         <div class="d-flex justify-content-center">
             <div class="">
-            <input type="text" class="form-control" name="title" placeholder="Project Title">
+            <input type="text" class="form-control" value="{{ $project_title }}" name="title" placeholder="Project Title">
             </div>
             <div class="">
                 <select name="user" style="max-width: 140px;" class="form-control select2 user">
@@ -54,7 +54,7 @@
                 </button>&#160;&#160;
 
                 @if(isset(request()->search))
-                <a href="{{ route('admin.projects.pool') }}" id="kt_reset">
+                <a href="{{ route('admin.projects.accepted') }}" id="kt_reset">
                     <span>
                         <i class="la la-close p-0"></i>
                     </span>

@@ -28,18 +28,48 @@ use App\Models\ProjectDetail;
 use App\Models\ProjectProposal;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
 
 class ProjectController extends Controller
 {
     //defining search vars
-    protected $date_range, $user_id;
+    protected $date_range, $user_id, $project_title;
 
-    public function pool(){
-        $projects = LiveFeed::with('user')->orderBy('time_submitted', 'desc')->paginate(100);
+    public function pool(Request $request){
+
+        //return $request->all();
+        $projects = LiveFeed::with('user');
+
+        if(isset($request->search)){
+            if(isset($request->title) && !empty($request->title)){
+                $projects = $projects->where('title', 'like', '%' . $request->title . '%');
+                $this->project_title = $request->title;
+            }
+
+            if(isset($request->user) && !empty($request->user)){
+                $projects = $projects->where('user_id', $request->user);
+                $this->user_id = $request->user;
+            }
+
+            if(isset($request->date_range) && !empty($request->date_range)){
+                
+                $date_range = explode('to', $request->date_range);
+                $from_date = date('Y-m-d', strtotime($date_range[0]));
+                $to_date = date('Y-m-d', strtotime($date_range[1]));
+                $from_date = Carbon::parse($from_date)->startOfDay();
+                $to_date = Carbon::parse($to_date)->endOfDay();
+                $projects = $projects->whereBetween('time_submitted', [strtotime($from_date), strtotime($to_date)]);
+                $this->date_range = $request->date_range;
+            }
+        }
+        
+        $projects = $projects->orderBy('time_submitted', 'desc')->paginate(100);
+
         $users = User::where('role', 'bidder')->get();
         $date_range = $this->date_range;
         $user_id = $this->user_id;
-        return view('admin.projects.pool.index', compact('projects', 'users', 'date_range', 'user_id'));
+        $project_title = $this->project_title;
+        return view('admin.projects.pool.index', compact('projects', 'users', 'date_range', 'user_id', 'project_title'));
     }
 
 
@@ -234,12 +264,41 @@ class ProjectController extends Controller
 
 
 
-    public function missed(){
-        $projects = Project::with('user')->where('status', 'missed')->orderBy('action_date', 'desc')->paginate(100);
+    public function missed(Request $request){
+
+        //return $request->all();
+        $projects = Project::with('user')->where('status', 'missed');
+        
+        if(isset($request->search)){
+            if(isset($request->title) && !empty($request->title)){
+                $projects = $projects->where('title', 'like', '%' . $request->title . '%');
+                $this->project_title = $request->title;
+            }
+
+            if(isset($request->user) && !empty($request->user)){
+                $projects = $projects->where('user_id', $request->user);
+                $this->user_id = $request->user;
+            }
+
+            if(isset($request->date_range) && !empty($request->date_range)){
+                
+                $date_range = explode('to', $request->date_range);
+                $from_date = date('Y-m-d', strtotime($date_range[0]));
+                $to_date = date('Y-m-d', strtotime($date_range[1]));
+                $from_date = Carbon::parse($from_date)->startOfDay();
+                $to_date = Carbon::parse($to_date)->endOfDay();
+                $projects = $projects->whereBetween('action_date', [$from_date, $to_date]);
+                $this->date_range = $request->date_range;
+            }
+        }
+        
+        $projects = $projects->orderBy('action_date', 'desc')->paginate(100);
+
         $users = User::where('role', 'bidder')->get();
         $date_range = $this->date_range;
         $user_id = $this->user_id;
-        return view('admin.projects.missed.index', compact('projects', 'users', 'date_range', 'user_id'));
+        $project_title = $this->project_title;
+        return view('admin.projects.missed.index', compact('projects', 'users', 'date_range', 'user_id', 'project_title'));
     }
 
     public function missedDetails($id = null){
@@ -331,13 +390,40 @@ class ProjectController extends Controller
     }
 
 
+    public function bidLater(Request $request){
+        //return $request->all();
+        $projects = Project::with('user')->where('status', 'bid_later');
 
-    public function bidLater(){
-        $projects = Project::with('user')->where('status', 'bid_later')->orderBy('action_date', 'desc')->paginate(100);
+        if(isset($request->search)){
+            if(isset($request->title) && !empty($request->title)){
+                $projects = $projects->where('title', 'like', '%' . $request->title . '%');
+                $this->project_title = $request->title;
+            }
+
+            if(isset($request->user) && !empty($request->user)){
+                $projects = $projects->where('user_id', $request->user);
+                $this->user_id = $request->user;
+            }
+
+            if(isset($request->date_range) && !empty($request->date_range)){
+                
+                $date_range = explode('to', $request->date_range);
+                $from_date = date('Y-m-d', strtotime($date_range[0]));
+                $to_date = date('Y-m-d', strtotime($date_range[1]));
+                $from_date = Carbon::parse($from_date)->startOfDay();
+                $to_date = Carbon::parse($to_date)->endOfDay();
+                $projects = $projects->whereBetween('action_date', [$from_date, $to_date]);
+                $this->date_range = $request->date_range;
+            }
+        }
+        
+        $projects = $projects->orderBy('action_date', 'desc')->paginate(100);
+
         $users = User::where('role', 'bidder')->get();
         $date_range = $this->date_range;
         $user_id = $this->user_id;
-        return view('admin.projects.bid-later.index', compact('projects', 'users', 'date_range', 'user_id'));
+        $project_title = $this->project_title;
+        return view('admin.projects.bid-later.index', compact('projects', 'users', 'date_range', 'user_id', 'project_title'));
     }
 
     public function bidLaterDetails($id = null){
@@ -429,12 +515,41 @@ class ProjectController extends Controller
     }
 
 
-    public function bidded(){
-        $projects = Project::with('user')->where('status', 'bidded')->orderBy('action_date', 'desc')->paginate(100);
+    public function bidded(Request $request){
+        //return $request->all();
+        $projects = Project::with('user')->where('status', 'bidded');
+        
+        if(isset($request->search)){
+            
+            if(isset($request->title) && !empty($request->title)){
+                $projects = $projects->where('title', 'like', '%' . $request->title . '%');
+                $this->project_title = $request->title;
+            }
+
+            if(isset($request->user) && !empty($request->user)){
+                $projects = $projects->where('user_id', $request->user);
+                $this->user_id = $request->user;
+            }
+
+            if(isset($request->date_range) && !empty($request->date_range)){
+                
+                $date_range = explode('to', $request->date_range);
+                $from_date = date('Y-m-d', strtotime($date_range[0]));
+                $to_date = date('Y-m-d', strtotime($date_range[1]));
+                $from_date = Carbon::parse($from_date)->startOfDay();
+                $to_date = Carbon::parse($to_date)->endOfDay();
+                $projects = $projects->whereBetween('action_date', [$from_date, $to_date]);
+                $this->date_range = $request->date_range;
+            }
+        }
+        
+        $projects = $projects->orderBy('action_date', 'desc')->paginate(100);
+
         $users = User::where('role', 'bidder')->get();
         $date_range = $this->date_range;
         $user_id = $this->user_id;
-        return view('admin.projects.bidded.index', compact('projects', 'users', 'date_range', 'user_id'));
+        $project_title = $this->project_title;
+        return view('admin.projects.bidded.index', compact('projects', 'users', 'date_range', 'user_id', 'project_title'));
     }
 
     public function biddedDetails($id = null){
@@ -543,12 +658,43 @@ class ProjectController extends Controller
     }
 
 
-    public function replied(){
-        $projects = Project::with('user', 'ProjectDetail')->where('status', 'replied')->orderBy('action_date', 'desc')->paginate(100);
+    public function replied(Request $request){
+
+        //return $request->all();
+        $projects = Project::with('user')->where('status', 'replied');
+        
+        if(isset($request->search)){
+            
+            if(isset($request->title) && !empty($request->title)){
+                $projects = $projects->where('title', 'like', '%' . $request->title . '%');
+                $this->project_title = $request->title;
+            }
+
+            if(isset($request->user) && !empty($request->user)){
+                $projects = $projects->where('user_id', $request->user);
+                $this->user_id = $request->user;
+            }
+
+            if(isset($request->date_range) && !empty($request->date_range)){
+                
+                $date_range = explode('to', $request->date_range);
+                $from_date = date('Y-m-d', strtotime($date_range[0]));
+                $to_date = date('Y-m-d', strtotime($date_range[1]));
+                $from_date = Carbon::parse($from_date)->startOfDay();
+                $to_date = Carbon::parse($to_date)->endOfDay();
+                $projects = $projects->whereBetween('action_date', [$from_date, $to_date]);
+                $this->date_range = $request->date_range;
+            }
+        }
+        
+        $projects = $projects->orderBy('action_date', 'desc')->paginate(100);
+
         $users = User::where('role', 'bidder')->get();
         $date_range = $this->date_range;
         $user_id = $this->user_id;
-        return view('admin.projects.replied.index', compact('projects', 'users', 'date_range', 'user_id'));
+        $project_title = $this->project_title;
+        return view('admin.projects.replied.index', compact('projects', 'users', 'date_range', 'user_id', 'project_title'));
+
     }
 
     public function acceptedDetails($id = null){
@@ -567,12 +713,41 @@ class ProjectController extends Controller
     }
 
 
-    public function accepted(){
-        $projects = Project::with('user', 'ProjectDetail')->where('status', 'accepted')->orderBy('action_date', 'desc')->paginate(100);
+    public function accepted(Request $request){
+        //return $request->all();
+        $projects = Project::with('user')->where('status', 'accepted');
+        
+        if(isset($request->search)){
+            
+            if(isset($request->title) && !empty($request->title)){
+                $projects = $projects->where('title', 'like', '%' . $request->title . '%');
+                $this->project_title = $request->title;
+            }
+
+            if(isset($request->user) && !empty($request->user)){
+                $projects = $projects->where('user_id', $request->user);
+                $this->user_id = $request->user;
+            }
+
+            if(isset($request->date_range) && !empty($request->date_range)){
+                
+                $date_range = explode('to', $request->date_range);
+                $from_date = date('Y-m-d', strtotime($date_range[0]));
+                $to_date = date('Y-m-d', strtotime($date_range[1]));
+                $from_date = Carbon::parse($from_date)->startOfDay();
+                $to_date = Carbon::parse($to_date)->endOfDay();
+                $projects = $projects->whereBetween('action_date', [$from_date, $to_date]);
+                $this->date_range = $request->date_range;
+            }
+        }
+        
+        $projects = $projects->orderBy('action_date', 'desc')->paginate(100);
+
         $users = User::where('role', 'bidder')->get();
         $date_range = $this->date_range;
         $user_id = $this->user_id;
-        return view('admin.projects.accepted.index', compact('projects', 'users', 'date_range', 'user_id'));
+        $project_title = $this->project_title;
+        return view('admin.projects.accepted.index', compact('projects', 'users', 'date_range', 'user_id', 'project_title'));
     }
 
 
