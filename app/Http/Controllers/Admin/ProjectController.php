@@ -75,7 +75,6 @@ class ProjectController extends Controller
 
     public function poolDetails($id = null){
         
-        
         $LiveFeed = LiveFeed::where('id', $id)->firstOrFail();
 
         if(LiveFeedDetail::where('live_feed_id', $id)->doesntExist()){
@@ -265,6 +264,7 @@ class ProjectController extends Controller
 
 
     public function missed(Request $request){
+        
 
         //return $request->all();
         $projects = Project::with('user')->where('status', 'missed');

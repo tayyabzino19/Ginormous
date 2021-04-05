@@ -67,6 +67,7 @@ class CommonController extends Controller
 
 
       public function syncProjectDetails($id = null){
+
         $project_detail = ProjectDetail::with('Project')->where('project_id', $id)->firstOrFail();
         try{
             $url = "https://www.freelancer.com/api/projects/0.1/projects/" . $project_detail->project->freelancer_project_id . "/?full_description=true&job_details=true&attachment_details=true&user_details=true&user_avatar=true&user_country_details=true&user_status=true&user_employer_reputation=true";
@@ -108,42 +109,47 @@ class CommonController extends Controller
             $project->employer_reputation = $result_array['owner']['employer_reputation']['entire_history'];
             $project->save();
 
-            $url = "https://www.freelancer.com/api/projects/0.1/projects/" . $project_detail->project->freelancer_project_id . '/bids/?user_details=true&user_avatar=true&user_country_details=true&user_reputation=true&user_display_info=true';
-            $response = Http::withHeaders([
-                'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key
-            ])->get($url);
-            
-            $response_array = $response->json();
-            
-            //Update LiveFeedProposal Model
-            if(isset($response_array['result']) && count($response_array['result']) > 0){
+            for($i = 0; $i < ceil($result_array['bid_stats']['bid_count'] / 100); $i++){
+                $offset = $i * 100;
+                $url = "https://www.freelancer.com/api/projects/0.1/projects/" . $project_detail->project->freelancer_project_id . '/bids/?user_details=true&user_avatar=true&user_country_details=true&user_reputation=true&user_display_info=true&offset=' . $offset;
+                $response = Http::withHeaders([
+                    'freelancer-oauth-v1' => FreelancerApiClient::first()->auth_key
+                ])->get($url);
+                
+                $response_array = $response->json();
+                
+                //Update LiveFeedProposal Model
+                if(isset($response_array['result']) && count($response_array['result']) > 0){
 
-                $bids = $response_array['result']['bids'];
-                $users = $response_array['result']['users'];
-                foreach($bids as $bid){
+                    $bids = $response_array['result']['bids'];
+                    $users = $response_array['result']['users'];
+                    foreach($bids as $bid){
 
-                    $proposal = ProjectProposal::where('bid_id', $bid['id'])->first();
+                        $proposal = ProjectProposal::where('bid_id', $bid['id'])->first();
 
-                    if(!$proposal){
-                        $proposal = new ProjectProposal;
-                        $proposal->bidder_id = $bid['bidder_id'];
+                        if(!$proposal){
+                            $proposal = new ProjectProposal;
+                            $proposal->bidder_id = $bid['bidder_id'];
+                        }
+
+                        $proposal->project_id = $id;
+                        $proposal->bid_id = $bid['id'];
+                        $proposal->amount = $bid['amount'];
+                        $proposal->period = $bid['period'];
+                        $proposal->description = $bid['description'];
+                        $proposal->submitdate = $bid['submitdate'];
+                        $proposal->username = $users[$bid['bidder_id']]['username'];
+                        $proposal->public_name = $users[$bid['bidder_id']]['public_name'];
+                        $proposal->tagline = $users[$bid['bidder_id']]['tagline'];
+                        $proposal->reputation = $users[$bid['bidder_id']]['reputation']['entire_history'];
+                        $proposal->country = $users[$bid['bidder_id']]['location']['country'];
+                        $proposal->avatar_cdn = $users[$bid['bidder_id']]['avatar_cdn'];
+                        $proposal->save();
                     }
-
-                    $proposal->project_id = $id;
-                    $proposal->bid_id = $bid['id'];
-                    $proposal->amount = $bid['amount'];
-                    $proposal->period = $bid['period'];
-                    $proposal->description = $bid['description'];
-                    $proposal->submitdate = $bid['submitdate'];
-                    $proposal->username = $users[$bid['bidder_id']]['username'];
-                    $proposal->public_name = $users[$bid['bidder_id']]['public_name'];
-                    $proposal->tagline = $users[$bid['bidder_id']]['tagline'];
-                    $proposal->reputation = $users[$bid['bidder_id']]['reputation']['entire_history'];
-                    $proposal->country = $users[$bid['bidder_id']]['location']['country'];
-                    $proposal->avatar_cdn = $users[$bid['bidder_id']]['avatar_cdn'];
-                    $proposal->save();
                 }
+
             }
+            
             return back()->with('success', 'Data synchronization completed successfully.');
         }catch (Throwable $e) {
             return back()->with('error', 'Data synchronization failed.' . $e);
