@@ -6,7 +6,15 @@ use App\Http\Controllers\AppTestController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CommonController;
 
-
+Route::get('/clear-cache', function() {
+	Artisan::call('cache:clear');
+	Artisan::call('config:clear');
+	Artisan::call('route:clear');
+	Artisan::call('view:clear');
+	Artisan::call('config:cache');
+	return "Cache Cleared!";
+ });
+ 
 //Reuse common tasks
 Route::get('common/filter-portfolio-items', [CommonController::class, 'filterItems'])->name('common.filter_portfolio_items');
 Route::get('common/sync-project-details/{id?}', [CommonController::class, 'syncProjectDetails'])->name('common.sync_project_details');

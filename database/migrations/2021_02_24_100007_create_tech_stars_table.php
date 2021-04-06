@@ -16,6 +16,7 @@ class CreateTechStarsTable extends Migration
         Schema::create('tech_stars', function (Blueprint $table) {
             $table->id();
             $table->text('description');
+            $table->integer('copied_counter')->default(0);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });

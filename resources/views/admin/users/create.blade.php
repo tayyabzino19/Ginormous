@@ -39,7 +39,7 @@
                                             <div class="image-input-wrapper"></div>
                                             <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
                                                     <i class="fa fa-pen icon-sm text-muted"></i>
-                                                    <input type="file" required id="picture" name="picture" accept=".png, .jpg, .jpeg" />
+                                                    <input type="file" id="picture" name="picture" accept=".png, .jpg, .jpeg" />
                                                     <input type="hidden" name="profile_avatar_remove" />
                                                 </label>
                                             <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
@@ -146,18 +146,18 @@
 
 
         $(".btn_submit").on("click", function(){
-            if($("#picture").get(0).files.length == 0){
-                $(".picture_error").html("Please select a picture.");
-            }else{
-                $(".picture_error").html("");
-            }
+            // if($("#picture").get(0).files.length == 0){
+            //     $(".picture_error").html("Please select a picture.");
+            // }else{
+            //     $(".picture_error").html("");
+            // }
         });
         
-        $("#picture").on('change', function(){
-            $(".picture_error").html("");
-        });
+        // $("#picture").on('change', function(){
+        //     $(".picture_error").html("");
+        // });
 
-        $('.kt_select2_3_modal').select2({
+            $('.kt_select2_3_modal').select2({
                 placeholder: "Please select a designation",
             });
 

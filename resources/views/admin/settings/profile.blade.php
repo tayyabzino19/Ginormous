@@ -95,7 +95,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="font-weight-bold">Email*</label>
-                                            <input readonly type="text" name="email" required value="{{ $user->email }}" class="form-control" placeholder="Enter email here">
+                                            <input type="text" name="email" required value="{{ $user->email }}" class="form-control" placeholder="Enter email here">
                                         </div>
                                     </div>
 

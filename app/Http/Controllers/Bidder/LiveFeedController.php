@@ -481,6 +481,30 @@ class LiveFeedController extends Controller
         $live_feed->LiveFeedDetail()->delete();
         $live_feed->LiveFeedProposals()->delete();
         $live_feed->delete();
+
+        if(isset($request->starter_id) && !empty($request->starter_id)){
+            $starter = Starter::findOrFail($request->starter_id);
+            $starter->increment('copied_counter');
+            $starter->save();
+        }
+
+        if(isset($request->ender_id) && !empty($request->ender_id)){
+            $ender = Ender::findOrFail($request->ender_id);
+            $ender->increment('copied_counter');
+            $ender->save();
+        }
+
+        if(isset($request->tech_star_id) && !empty($request->tech_star_id)){
+            $tech_star = TechStar::findOrFail($request->tech_star_id);
+            $tech_star->increment('copied_counter');
+            $tech_star->save();
+        }
+
+        if(isset($request->portfolio_initiator_id) && !empty($request->portfolio_initiator_id)){
+            $portfolio_initiator = PortfolioInitiator::findOrFail($request->portfolio_initiator_id);
+            $portfolio_initiator->increment('copied_counter');
+            $portfolio_initiator->save();
+        }
        
         return redirect(route('bidder.projects.live_feed'))->with('success', "Proposal has been sent.");
     }

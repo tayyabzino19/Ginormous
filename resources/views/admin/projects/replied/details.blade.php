@@ -92,13 +92,13 @@
 
 </div>
 
-
 @php
-    if(!isset($project->budget->maximum)){
-        $max = "...";
-    }else{
-        $max = $project->budget->maximum;
-    }
+$min_price = $project->currency->sign .  $project->budget->minimum;
+if(!isset($project->budget->maximum)){
+    $max_price = null;
+}else{
+    $max_price = ' - ' . $project->currency->sign .  $project->budget->maximum;
+}
 @endphp
 <div class="tab-content">
     <!--begin::Tab-->
@@ -119,7 +119,7 @@
                         </div>
                         
                         <div class="card-toolbar">
-                            <h6>{{ $project->currency->sign }}{{ $project->budget->minimum }} - {{ $project->currency->sign }}{{ $max }} ({{ $project->currency->code }})</h6>
+                            <h6>{{$min_price}} {{$max_price}} ({{ $project->currency->code }})</h6>
                         </div>
 
                     </div>
@@ -631,7 +631,7 @@
     </div>
 
 </div>
-@include('bidder.projects.partials.bid-later-bid-left-panel')
+{{-- @include('bidder.projects.partials.bid-later-bid-left-panel') --}}
 </div>
 
 <!--end::Section-->

@@ -43,6 +43,8 @@
                                     <th>#</th>
                                     <th>Title</th>
                                     <th>Skills</th>
+                                    <th>Industries</th>
+                                    <th>Types</th>
                                     <th>Created</th>
                                     <th>Action</th>
                                 </tr>
@@ -61,6 +63,8 @@
                                         {{ $item->name }}
                                     </td>
                                     <td><span class="label label-rounded label-light-primary cursor_alias" data-toggle="tooltip" title="@foreach($item->skills as $skill) {{ $skill->name }}@if(!$loop->last), @endif @endforeach">{{ $item->skills->count() }}</span></td>
+                                    <td><span class="label label-rounded label-light-primary cursor_alias" data-toggle="tooltip" title="@foreach($item->industries as $industry) {{ $industry->name }}@if(!$loop->last), @endif @endforeach">{{ $item->industries->count() }}</span></td>
+                                    <td><span class="label label-rounded label-light-primary cursor_alias" data-toggle="tooltip" title="@foreach($item->types as $type) {{ $type->name }}@if(!$loop->last), @endif @endforeach">{{ $item->types->count() }}</span></td>
                                     <td>{{ $item->created_at }}</td>
                                     <td nowrap="nowrap">
                                         <a href="{{ route('admin.portfolio.items.edit', $item->id) }}" title="View" data-toggle="tooltip" class="btn btn-sm btn-icon btn-light-primary mr-1"><i class="far fa-eye"></i></button>

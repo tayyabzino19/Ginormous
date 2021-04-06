@@ -267,7 +267,7 @@
                         <div class="text-dark-75">Total</div>
                     </div>
                     <div class="flex-grow-1 text-right">
-                        <h1 class="font-size-h4">340</h1>
+                        <h1 class="font-size-h4">{{ $users->count() }}</h1>
                     </div>
                     <!--end::Content-->
                 </div>
@@ -292,7 +292,7 @@
                         <div class="text-dark-75">Active</div>
                     </div>
                     <div class="flex-grow-1 text-right">
-                        <h1 class="font-size-h4">320</h1>
+                        <h1 class="font-size-h4">{{ $active_users_count }}</h1>
                     </div>
                     <!--end::Content-->
                 </div>
@@ -317,7 +317,7 @@
                         <div class="text-dark-75">Inactive</div>
                     </div>
                     <div class="flex-grow-1 text-right">
-                        <h1 class="font-size-h4">10</h1>
+                        <h1 class="font-size-h4">{{ $inactive_users_count }}</h1>
                     </div>
                     <!--end::Content-->
                 </div>
@@ -328,9 +328,6 @@
 </div>
 
 
-
-
-
 <div class="row mt-md-6">
 
 <div class="col-lg-4">
@@ -338,7 +335,7 @@
     <div class="card card-custom wave wave-primary card-stretch gutter-b">
         <!--begin::Header-->
         <div class="card-header border-0">
-            <h3 class="card-title text-primary font-weight-bolder">Latest 5 Users</h3>
+            <h3 class="card-title text-primary font-weight-bold">Latest 5 Users</h3>
             <div class="card-toolbar">
                 <i class="flaticon-users text-primary font-size-h3"></i>
             </div>
@@ -346,41 +343,15 @@
         <!--end::Header-->
         <!--begin::Body-->
         <div class="card-body pt-2">
-            <div class="d-flex align-items-center mb-10">
+            @foreach ($users->take(5) as $user)
+            <div class="d-flex align-items-center mb-8">
                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
-                    <a href="#" class="text-dark-50 mb-1 font-size-lg">Ahsan Zahid</a>
-                    <span class="text-muted">ahsanzahid@gmail.com</span>
+                    <a target="_blank" href="{{ route('admin.users.edit', $user->id) }}" class="text-dark-50 mb-1 font-size-lg">{{ $user->name }}</a>
+                    <span class="text-muted">{{ $user->email }}</span>
                 </div>
-                <a href="javascript:;" ><i class="far fa-eye text-dark-50"></i></a>
+                <a target="_blank" href="{{ route('admin.users.edit', $user->id) }}" ><i class="far fa-eye text-dark-50"></i></a>
             </div>
-            <div class="d-flex align-items-center mb-10">
-                <div class="d-flex flex-column flex-grow-1 font-weight-bold">
-                    <a href="#" class="text-dark-50 mb-1 font-size-lg">Ahsan Zahid</a>
-                    <span class="text-muted">ahsanzahid@gmail.com</span>
-                </div>
-                <a href="javascript:;" ><i class="far fa-eye text-dark-50"></i></a>
-            </div>
-            <div class="d-flex align-items-center mb-10">
-                <div class="d-flex flex-column flex-grow-1 font-weight-bold">
-                    <a href="#" class="text-dark-50 mb-1 font-size-lg">Ahsan Zahid</a>
-                    <span class="text-muted">ahsanzahid@gmail.com</span>
-                </div>
-                <a href="javascript:;" ><i class="far fa-eye text-dark-50"></i></a>
-            </div>
-            <div class="d-flex align-items-center mb-10">
-                <div class="d-flex flex-column flex-grow-1 font-weight-bold">
-                    <a href="#" class="text-dark-50 mb-1 font-size-lg">Ahsan Zahid</a>
-                    <span class="text-muted">ahsanzahid@gmail.com</span>
-                </div>
-                <a href="javascript:;" ><i class="far fa-eye text-dark-50"></i></a>
-            </div>
-            <div class="d-flex align-items-center mb-10">
-                <div class="d-flex flex-column flex-grow-1 font-weight-bold">
-                    <a href="#" class="text-dark-50 mb-1 font-size-lg">Ahsan Zahid</a>
-                    <span class="text-muted">ahsanzahid@gmail.com</span>
-                </div>
-                <a href="javascript:;" ><i class="far fa-eye text-dark-50"></i></a>
-            </div>
+            @endforeach
         </div>
         <!--end::Body-->
     </div>
@@ -390,12 +361,12 @@
 
 <div class="col-lg-8">
     <!--begin::List Widget 3-->
-    <div class="card card-custom wave wave-warning card-stretch gutter-b">
+    <div class="card card-custom wave wave-primary card-stretch gutter-b">
         <!--begin::Header-->
         <div class="card-header border-0">
-            <h3 class="card-title text-warning font-weight-bolder">Latest 5 Leaves Requests</h3>
+            <h3 class="card-title text-primary font-weight-bold">Latest 5 Leaves Requests</h3>
             <div class="card-toolbar">
-                <i class="flaticon-calendar-3 text-warning font-size-h3"></i>
+                <i class="flaticon-calendar-3 text-primary font-size-h3"></i>
             </div>
         </div>
         <!--end::Header-->
@@ -404,6 +375,7 @@
             
             <table class="table borderless">
                 <thead>
+                    @if(count($latest_5_leaves))
                     <tr>
                         <th>
                             User
@@ -413,55 +385,26 @@
                             View
                         </th>
                     </tr>
-
+                    @endif
                 </thead>
                 <tbody>
+                @foreach ($latest_5_leaves as $leave)
                 <tr>
                     <td>
-                        Sohail Ahmad
+                        {{ $leave->user->name }}
                         <br />
-                        <span class="text-muted">sohailahmd@gmail.com</span>
+                        <span class="text-muted">{{ $leave->user->email }}</span>
                     </td>
-                    <td>Short Leave</td>
-                    <td><a href="javascript:;" ><i class="far fa-eye text-dark-50"></i></a></td>
-                </tr>
-                <tr>
+                    <td>{{ ucwords(str_replace('_', ' ', $leave->type)) }}</td>
                     <td>
-                        Sohail Ahmad
-                        <br />
-                        <span class="text-muted">sohailahmd@gmail.com</span>
+                        @if($leave->status != 'pending')
+                        <a target="_blank" href="{{ route('admin.leaves_management.leaves.edit', $leave->id) }}" ><i class="far fa-eye text-dark-50"></i></a>
+                        @else
+                        <a target="_blank" href="{{ route('admin.leaves_management.requests.edit', $leave->id) }}" ><i class="far fa-eye text-dark-50"></i></a>
+                        @endif
                     </td>
-                    <td>Short Leave</td>
-                    <td><a href="javascript:;" ><i class="far fa-eye text-dark-50"></i></a></td>
                 </tr>
-                <tr>
-                    <td>
-                        Sohail Ahmad
-                        <br />
-                        <span class="text-muted">sohailahmd@gmail.com</span>
-                    </td>
-                    <td>Short Leave</td>
-                    <td><a href="javascript:;" ><i class="far fa-eye text-dark-50"></i></a></td>
-                </tr>
-                <tr>
-                    <td>
-                        Sohail Ahmad
-                        <br />
-                        <span class="text-muted">sohailahmd@gmail.com</span>
-                    </td>
-                    <td>Short Leave</td>
-                    <td><a href="javascript:;" ><i class="far fa-eye text-dark-50"></i></a></td>
-                </tr>
-                <tr>
-                    <td>
-                        Sohail Ahmad
-                        <br />
-                        <span class="text-muted">sohailahmd@gmail.com</span>
-                    </td>
-                    <td>Short Leave</td>
-                    <td><a href="javascript:;" ><i class="far fa-eye text-dark-50"></i></a></td>
-                </tr>
-                                                
+                @endforeach
                 </tbody>
             </table>
 

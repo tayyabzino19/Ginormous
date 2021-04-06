@@ -33,7 +33,7 @@
                                             <div class="image-input-wrapper"></div>
                                             <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
                                                 <i class="fa fa-pen icon-sm text-muted"></i>
-                                                <input type="file" name="picture" accept=".png, .jpg, .jpeg" />
+                                                <input type="file" id="picture" name="picture" accept=".png, .jpg, .jpeg" />
                                                 <input type="hidden" name="profile_avatar_remove" />
                                             </label>
                                             <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
@@ -122,6 +122,13 @@
 
         $("#setting_form").on('submit', function(e) {
             e.preventDefault();
+
+            @if(empty(Auth::user()->getAttributes()['picture']))
+                if($("#picture").get(0).files.length == 0){
+                    toastr.error("Profile picture is required.");
+                    return false;
+                }
+            @endif
 
             //password confirmation check
             let password = $("input[name='password']");

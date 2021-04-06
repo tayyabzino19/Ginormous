@@ -19,7 +19,7 @@ class EnderController extends Controller
         
         //return $request->all();
         $validated = $request->validate([
-            'description' => "required|min:10|unique:enders",
+            'description' => "required|min:2|unique:enders",
             'status' => "required",
         ]);
 
@@ -50,7 +50,7 @@ class EnderController extends Controller
         //return $request->all();
 
         $validated = $request->validate([
-            'description' => ['required', 'min:10', Rule::unique('enders')->ignore($request->id)],
+            'description' => ['required', 'min:2', Rule::unique('enders')->ignore($request->id)],
             'status' => "required",
         ]);
 

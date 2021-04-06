@@ -19,7 +19,7 @@ class PortfolioInitiatorController extends Controller
         
         //return $request->all();
         $validated = $request->validate([
-            'description' => "required|min:10|unique:portfolio_initiators",
+            'description' => "required|min:2|unique:portfolio_initiators",
             'status' => "required",
         ]);
 
@@ -50,7 +50,7 @@ class PortfolioInitiatorController extends Controller
         //return $request->all();
 
         $validated = $request->validate([
-            'description' => ['required', 'min:10', Rule::unique('portfolio_initiators')->ignore($request->id)],
+            'description' => ['required', 'min:2', Rule::unique('portfolio_initiators')->ignore($request->id)],
             'status' => "required",
         ]);
 

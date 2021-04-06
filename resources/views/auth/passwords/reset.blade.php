@@ -3,7 +3,7 @@
 	<!--begin::Head-->
 	<head><base href="../../../">
 		<meta charset="utf-8" />
-		<title>Forgot Password</title>
+		<title>Ginormous | Let's beat the world</title>
 		<meta name="description" content="Login page example" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 		<link rel="canonical" href="https://keenthemes.com/metronic" />
@@ -24,11 +24,11 @@
 		<link href="{{ asset('metronic/dist/assets/css/themes/layout/brand/dark.css') }}" rel="stylesheet" type="text/css" />
 		<link href="{{ asset('metronic/dist/assets/css/themes/layout/aside/dark.css') }}" rel="stylesheet" type="text/css" />
         <!--end::Layout Themes-->
-		<link rel="shortcut icon" href="{{ asset('metronic/dist/assets/media/logos/favicon.ico') }}" />
+		<link rel="shortcut icon" href="{{ asset('images/fav-icon.png') }}" />
 		
 		<style>
 			.login-aside.d-flex.flex-column.flex-row-auto {
-                background-image: url("{{ asset('images/login-bg.jpeg') }}");
+                background-image: url("{{ asset('images/login-bg.png') }}");
                 background-size: cover;
                 min-height: 350px;
             }
@@ -59,7 +59,6 @@
                                 <input type="hidden" name="token" value="{{ $token }}">
 								<!--begin::Title-->
 								<div class="pb-13 pt-lg-0 pt-5">
-                                    <a href="{{ route('login') }}"><img width="160" src="{{ asset('images/logo-blue.png') }}"></a>
                                     <h3 class="font-weight-bolder font-size-h4 font-size-h3-lg mt-12">Reset Password</h3>
                                 </div>
 								<!--begin::Title-->
@@ -85,7 +84,6 @@
                                 <div class="form-group">
 									<input id="login_email" placeholder="Confirm Password" class="form-control form-control-solid h-auto py-6 px-6 rounded-lg font-size-h6" type="password" name="password_confirmation" pattern=".{8,}" required title="8 characters minimum" autocomplete="off" />
                                 </div>
-
 
 								<!--end::Form group-->
 								

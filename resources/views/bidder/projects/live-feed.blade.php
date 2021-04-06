@@ -44,10 +44,11 @@
 
         @foreach($projects as $project)
         @php
+            $min_price = $project->currency->sign .  $project->budget->minimum;
             if(!isset($project->budget->maximum)){
-                $max = "...";
+                $max_price = null;
             }else{
-                $max = $project->budget->maximum;
+                $max_price = ' - ' . $project->currency->sign .  $project->budget->maximum;
             }
         @endphp
         <div class="col-lg-12">
@@ -73,7 +74,7 @@
                                     <small class="text-muted font-weight-lighter">{{ \Carbon\Carbon::parse(date('Y-m-d H:i:s', $project->time_submitted))->diffForHumans() }} </small>
                                 </div>
                                 <div class="float-right">
-                                    <span class="font-weight-bolder">{{ $project->currency->sign }}{{ $project->budget->minimum }} - {{ $project->currency->sign }}{{ $max }} ({{ $project->currency->code }})</span>
+                                    <span class="font-weight-bolder">{{$min_price}} {{$max_price}} ({{ $project->currency->code }})</span>
                                 </div>
                                 <div class="clearfix"></div>
                             </p>

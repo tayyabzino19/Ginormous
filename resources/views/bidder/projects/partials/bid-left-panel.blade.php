@@ -13,9 +13,16 @@
         <div class="offcanvas-content pr-5 mr-n5">
             <form id="bid_now_form" method="post" action="{{ route('bidder.projects.bid_now') }}">
                 @csrf
+                
                 <input type="hidden" name="id" value="{{ $project->id }}">
                 <input type="hidden" name="project_id" value="{{ $project->project_id }}">
                 <input type="hidden" name="milestone_percentage" value="100">
+
+                <input type="hidden" name="starter_id" v-model="starter_id">
+                <input type="hidden" name="ender_id" v-model="ender_id">
+                <input type="hidden" name="tech_star_id" v-model="tech_star_id">
+                <input type="hidden" name="portfolio_initiator_id" v-model="portfolio_initiator_id">
+
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">

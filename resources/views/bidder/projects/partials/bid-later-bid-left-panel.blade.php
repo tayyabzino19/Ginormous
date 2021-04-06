@@ -18,6 +18,12 @@
 
                 <input type="hidden" name="freelancer_project_id" value="{{ $project->freelancer_project_id }}">
                 <input type="hidden" name="milestone_percentage" value="100">
+
+                <input type="hidden" name="starter_id" v-model="starter_id">
+                <input type="hidden" name="ender_id" v-model="ender_id">
+                <input type="hidden" name="tech_star_id" v-model="tech_star_id">
+                <input type="hidden" name="portfolio_initiator_id" v-model="portfolio_initiator_id">
+                
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">

@@ -55,8 +55,11 @@ class AdminController extends Controller
 
         $date_range = $this->date_range;
         $user_id = $this->user_id;
-        $users = User::where('role', 'bidder')->get();
-        return view('admin.dashboard.index', compact('users', 'user_id', 'date_range', 'leave_pending_count', 'leave_rejected_count', 'leave_accepted_count', 'leave_total_count', 'project_bidded_count', 'project_accepted_count', 'project_missed_count', 'project_replied_count'));
+        $users = User::where('role', 'bidder')->orderBy('id', 'desc')->get();
+        $active_users_count = $users->where('status', 'active')->count();
+        $inactive_users_count = $users->where('status', 'inactive')->count();
+        $latest_5_leaves = Leave::with('user')->orderBy('id', 'desc')->limit(5)->get();
+        return view('admin.dashboard.index', compact('latest_5_leaves', 'active_users_count', 'inactive_users_count', 'users', 'user_id', 'date_range', 'leave_pending_count', 'leave_rejected_count', 'leave_accepted_count', 'leave_total_count', 'project_bidded_count', 'project_accepted_count', 'project_missed_count', 'project_replied_count'));
     }
 
     public function profile(){
@@ -78,6 +81,7 @@ class AdminController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|min:3|max:50',
+            'email' => 'required|email',
             'password' => 'nullable|sometimes|confirmed|min:8',
             'picture' => 'nullable|sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
@@ -88,7 +92,7 @@ class AdminController extends Controller
         
         $user = User::find(Auth::user()->id);
         $user->name = $request->name;
-        
+        $user->email = $request->email;
 
         if($request->password != ''){
             $user->password = Hash::make($request->password);

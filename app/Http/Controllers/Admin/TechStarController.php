@@ -19,7 +19,7 @@ class TechStarController extends Controller
         
         //return $request->all();
         $validated = $request->validate([
-            'description' => "required|min:10|unique:tech_stars",
+            'description' => "required|min:2|unique:tech_stars",
             'status' => "required",
         ]);
 
@@ -50,7 +50,7 @@ class TechStarController extends Controller
         //return $request->all();
 
         $validated = $request->validate([
-            'description' => ['required', 'min:10', Rule::unique('tech_stars')->ignore($request->id)],
+            'description' => ['required', 'min:2', Rule::unique('tech_stars')->ignore($request->id)],
             'status' => "required",
         ]);
 

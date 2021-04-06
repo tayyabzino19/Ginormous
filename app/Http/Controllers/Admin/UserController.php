@@ -14,7 +14,6 @@ use Hash;
 class UserController extends Controller
 {
     public function index(){
-
         $users = User::with('designation')->where('role', '!=', 'admin')->orderBy('id', 'desc')->get();
         return view('admin.users.index', compact('users'));
     }
@@ -35,7 +34,7 @@ class UserController extends Controller
             'designation_id' => 'required',
             'status' => ['required', Rule::in(['active', 'inactive'])],
             //'picture' => 'nullable|sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-            'picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            //'picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ], ['designation_id.required' => 'Designation is required']);
 
         $user = new User;

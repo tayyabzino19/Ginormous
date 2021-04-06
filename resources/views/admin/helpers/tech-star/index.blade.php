@@ -52,7 +52,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>@if(strlen($tech_star->description) > 80) {{ substr($tech_star->description, 0, 80) }}.. @else {{ $tech_star->description }} @endif</td>
-                                    <td><span class="label label-rounded label-light-primary">16</span></td>
+                                    <td><span class="label label-rounded label-light-primary">{{ $tech_star->copied_counter }}</span></td>
                                     <td>
                                         @if($tech_star->status == 'active')
                                         <span class="label font-weight-bold label-light-success label-inline">Active</span>

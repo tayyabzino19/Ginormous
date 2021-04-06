@@ -89,12 +89,14 @@
     </div>
 
 
+   
     @php
-        if(!isset($project->budget->maximum)){
-            $max = "...";
-        }else{
-            $max = $project->budget->maximum;
-        }
+    $min_price = $project->currency->sign .  $project->budget->minimum;
+    if(!isset($project->budget->maximum)){
+        $max_price = null;
+    }else{
+        $max_price = ' - ' . $project->currency->sign .  $project->budget->maximum;
+    }
     @endphp
     <div class="tab-content">
         <!--begin::Tab-->
@@ -115,7 +117,7 @@
                             </div>
                             
                             <div class="card-toolbar">
-                                <h6>{{ $project->currency->sign }}{{ $project->budget->minimum }} - {{ $project->currency->sign }}{{ $max }} ({{ $project->currency->code }})</h6>
+                                <h6>{{$min_price}} {{$max_price}} ({{ $project->currency->code }})</h6>
                             </div>
 
                         </div>
@@ -361,7 +363,7 @@
                                     <div >
                                         @foreach($starters as $starter)
                                         <div>
-                                            <i data-text="{{ $starter->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_starter'></i>
+                                            <i data-id="{{ $starter->id }}" data-text="{{ $starter->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_starter'></i>
                                             @if(strlen($starter->description) > 120)
                                             {{ substr($starter->description, 0, 120) }}<span class="dots">...</span><div class="more d-none">{{ substr($starter->description, 120) }}</div>
                                             <button class="btn btn-link p-0 readmore">Read More</button>
@@ -377,7 +379,7 @@
                                     <div >
                                         @foreach($tech_stars as $tech_star)
                                         <div>
-                                            <i data-text="{{ $tech_star->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_tech_star'></i>
+                                            <i data-id="{{ $tech_star->id }}" data-text="{{ $tech_star->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_tech_star'></i>
                                             @if(strlen($tech_star->description) > 120)
                                             {{ substr($tech_star->description, 0, 120) }}<span class="dots">...</span><div class="more d-none">{{ substr($tech_star->description, 120) }}</div>
                                             <button class="btn btn-link p-0 readmore">Read More</button>
@@ -393,7 +395,7 @@
                                     <div >
                                         @foreach($portfolio_initiators as $portfolio_initiator)
                                         <div>
-                                            <i data-text="{{ $portfolio_initiator->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_portfolio_initiator'></i>
+                                            <i data-id="{{ $portfolio_initiator->id }}" data-text="{{ $portfolio_initiator->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_portfolio_initiator'></i>
                                             @if(strlen($portfolio_initiator->description) > 120)
                                             {{ substr($portfolio_initiator->description, 0, 120) }}<span class="dots">...</span><div class="more d-none">{{ substr($portfolio_initiator->description, 120) }}</div>
                                             <button class="btn btn-link p-0 readmore">Read More</button>
@@ -452,7 +454,7 @@
                                     <div>
                                         @foreach($enders as $ender)
                                         <div>
-                                            <i data-text="{{ $ender->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_ender'></i>
+                                            <i data-id="{{ $ender->id }}" data-text="{{ $ender->description }}" class='fa fa-copy float-right position-absolute right-0 text-hover-dark-50 cursor-pointer btn_copy_ender'></i>
                                             @if(strlen($ender->description) > 120)
                                             {{ substr($ender->description, 0, 120) }}<span class="dots">...</span><div class="more d-none">{{ substr($ender->description, 120) }}</div>
                                             <button class="btn btn-link p-0 readmore">Read More</button>
@@ -743,24 +745,36 @@
             ender: '',
             days: '',
             budget: '',
-            redirect_path: ''
+            redirect_path: '',
+            starter_id: '',
+            ender_id: '',
+            tech_star_id: '',
+            portfolio_initiator_id: '',
         }
     });
 
     $(".btn_copy_starter").on("click", function(){
         let text = $(this).attr('data-text');
+        let id = $(this).attr('data-id');
+        app.starter_id = id;
         app.starter = text;
     });
     $(".btn_copy_tech_star").on("click", function(){
         let text = $(this).attr('data-text');
+        let id = $(this).attr('data-id');
+        app.tech_star_id = id;
         app.tech_star = text;
     });
     $(".btn_copy_portfolio_initiator").on("click", function(){
         let text = $(this).attr('data-text');
+        let id = $(this).attr('data-id');
+        app.portfolio_initiator_id = id;
         app.portfolio_initiator = text;
     });
     $(".btn_copy_ender").on("click", function(){
         let text = $(this).attr('data-text');
+        let id = $(this).attr('data-id');
+        app.ender_id = id;
         app.ender = text;
     });
 

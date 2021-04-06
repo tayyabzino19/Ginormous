@@ -52,7 +52,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>@if(strlen($portfolio_initiator->description) > 80) {{ substr($portfolio_initiator->description, 0, 80) }}.. @else {{ $portfolio_initiator->description }} @endif</td>
-                                    <td><span class="label label-rounded label-light-primary">16</span></td>
+                                    <td><span class="label label-rounded label-light-primary">{{ $portfolio_initiator->copied_counter }}</span></td>
                                     <td>
                                         @if($portfolio_initiator->status == 'active')
                                         <span class="label font-weight-bold label-light-success label-inline">Active</span>

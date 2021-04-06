@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\PortfolioInitiator;
+use App\Models\TechStar;
+use App\Models\Starter;
+use App\Models\Ender;
 use App\Models\Item;
 use App\Models\Skill;
 use App\Models\Project;
@@ -26,28 +29,22 @@ class CommonController extends Controller
         $items = Item::select("url");
   
         if(isset($request->types)){
-          foreach($request->types as $type_id){
-              $items->whereHas('types', function($query) use ($type_id){
-                  $query->where('type_id', $type_id);
-              });
-            }
+            $items->whereHas('types', function($query) use ($request){
+                $query->whereIn('type_id', $request->types);
+            });
         }
         
         if(isset($request->skills)){
             $skills = Skill::whereIn('freelancer_job_id', $request->skills)->pluck('id');
-          foreach($skills as $type_id){
-              $items->whereHas('skills', function($query) use ($type_id){
-                  $query->where('skill_id', $type_id);
-              });
-            }
+            $items->whereHas('skills', function($query) use ($skills){
+                $query->whereIn('skill_id', $skills);
+            });
         }
   
         if(isset($request->industries)){
-          foreach($request->industries as $type_id){
-              $items->whereHas('industries', function($query) use ($type_id){
-                  $query->where('industry_id', $type_id);
-              });
-            }
+            $items->whereHas('industries', function($query) use ($request){
+                $query->whereIn('industry_id', $request->industries);
+            });
         }
         
         $items = $items->where("status", "active")->inRandomOrder()->limit(5)->get();
@@ -227,6 +224,31 @@ class CommonController extends Controller
         }
 
         if($request->redirect_path != ''){
+
+            if(isset($request->starter_id) && !empty($request->starter_id)){
+                $starter = Starter::findOrFail($request->starter_id);
+                $starter->increment('copied_counter');
+                $starter->save();
+            }
+
+            if(isset($request->ender_id) && !empty($request->ender_id)){
+                $ender = Ender::findOrFail($request->ender_id);
+                $ender->increment('copied_counter');
+                $ender->save();
+            }
+
+            if(isset($request->tech_star_id) && !empty($request->tech_star_id)){
+                $tech_star = TechStar::findOrFail($request->tech_star_id);
+                $tech_star->increment('copied_counter');
+                $tech_star->save();
+            }
+
+            if(isset($request->portfolio_initiator_id) && !empty($request->portfolio_initiator_id)){
+                $portfolio_initiator = PortfolioInitiator::findOrFail($request->portfolio_initiator_id);
+                $portfolio_initiator->increment('copied_counter');
+                $portfolio_initiator->save();
+            }
+
             return redirect($request->redirect_path)->with('success', "Proposal has been sent.");
         }
 

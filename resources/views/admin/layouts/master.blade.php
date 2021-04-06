@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name = "csrf-token" content="{{ csrf_token() }}" />
-    <title>@yield('page_title', 'Ginormous')</title>
+    <title>@yield('page_title', "Ginormous | Let's beat the world")</title>
     <meta name="description" content="No subheader example" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="canonical" href="https://keenthemes.com/metronic" />
@@ -28,7 +28,7 @@
     <link href="{{ asset('metronic/dist/assets/css/themes/layout/brand/dark.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('metronic/dist/assets/css/themes/layout/aside/dark.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Layout Themes-->
-    <link rel="shortcut icon" href="{{ asset('metronic/dist/assets/media/logos/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('images/fav-icon.png') }}" />
     
     <style>
         .header_user_icon {
@@ -59,7 +59,7 @@
     <div id="kt_header_mobile" class="header-mobile align-items-center header-mobile-fixed">
         <!--begin::Logo-->
         <a href="{{ route('admin.index') }}">
-            <img width="100" alt="Logo" src="{{ asset('images/logo-white.png') }}" />
+            <img width="130" alt="Logo" src="{{ asset('images/logo-white.png') }}" />
         </a>
         <!--end::Logo-->
         <!--begin::Toolbar-->
@@ -98,7 +98,7 @@
                 <div class="brand flex-column-auto" id="kt_brand">
                     <!--begin::Logo-->
                     <a href="{{ route('admin.index') }}" class="brand-logo">
-                        <img width="100" alt="Logo" src="{{ asset('images/logo-white.png') }}" />
+                        <img width="140" alt="Logo" src="{{ asset('images/logo-white.png') }}" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Toggle-->

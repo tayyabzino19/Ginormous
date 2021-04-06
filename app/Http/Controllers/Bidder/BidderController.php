@@ -66,6 +66,10 @@ class BidderController extends Controller
             'picture' => 'nullable|sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
+        if(empty(Auth::user()->getAttributes()['picture']) && !request()->file('picture')){
+            return redirect(route('bidder.settings.index'))->with("error", "Profile picture is required.");
+        }
+
         $user = User::find(Auth::user()->id);
         $user->name = $request->name;
 
