@@ -84,6 +84,7 @@ class UserController extends Controller
 
         $user->name = $request->name;
         $user->status = $request->status;
+        $user->email = $request->email;
         $user->designation_id = $request->designation_id;
 
         if($user->save()){
